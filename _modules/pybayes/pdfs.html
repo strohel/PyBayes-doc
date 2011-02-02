@@ -67,7 +67,7 @@
 <div class="viewcode-block" id="RVComp"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.RVComp">[docs]</a><span class="k">class</span> <span class="nc">RVComp</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Atomic component of a random value&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">dimension</span><span class="p">):</span>
+<div class="viewcode-block" id="RVComp.__init__"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.RVComp.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">dimension</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialise new component of a random variable.</span>
 <span class="sd">        </span>
 <span class="sd">        :param name: name of the component. Pass None for an anonymous component</span>
@@ -85,12 +85,12 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;dimension must be non-zero positive&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dimension</span> <span class="o">=</span> <span class="n">dimension</span>
 
-</div>
+</div></div>
 <div class="viewcode-block" id="RV"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.RV">[docs]</a><span class="k">class</span> <span class="nc">RV</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Representation of a random variable made of one or more components</span>
 <span class="sd">    (see RVComp)&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">components</span><span class="p">):</span>
+<div class="viewcode-block" id="RV.__init__"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.RV.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">components</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialise new random variable made of one or more components. You may</span>
 <span class="sd">        also pass one or more existing RVs, whose components will be reused&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dimension</span> <span class="o">=</span> <span class="mi">0</span>
@@ -106,7 +106,7 @@
                 <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&#39;component &#39;</span> <span class="o">+</span> <span class="n">component</span> <span class="o">+</span> <span class="s">&#39; is neither an instance &#39;</span>
                               <span class="o">+</span> <span class="s">&#39;of RVComp or RV&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;]&#39;</span>
-
+</div>
     <span class="k">def</span> <span class="nf">_add_component</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">component</span><span class="p">):</span>
         <span class="c"># TODO: check if component is already contained? (does it matter somewhere?)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">component</span><span class="p">)</span>
@@ -178,7 +178,7 @@
 <span class="s">    .. math:: f(x) = \Theta(x - a) \Theta(b - x) \prod_{i=1}^n \frac{1}{b_i-a_i}</span>
 <span class="s">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<div class="viewcode-block" id="UniPdf.__init__"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.UniPdf.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialise uniform distribution with left point a and right point b</span>
 
 <span class="sd">        a must be greater (in each dimension) than b</span>
@@ -191,7 +191,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;a must have same shape as b&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">np_any</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;b must be greater than a in each dimension&quot;</span><span class="p">)</span>
-
+</div>
     <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
@@ -218,7 +218,7 @@
 <span class="s">    .. math:: f(x) \propto \exp \left( - \left( x-\mu \right)&#39; R^{-1} \left( x-\mu \right) \right)</span>
 <span class="s">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">]),</span> <span class="n">covariance</span><span class="o">=</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">]])):</span>
+<div class="viewcode-block" id="GaussPdf.__init__"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.GaussPdf.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">]),</span> <span class="n">covariance</span><span class="o">=</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">]])):</span>
         <span class="sd">&quot;&quot;&quot;Initialise Gaussian pdf with mean value mean and covariance matrix covariance</span>
 
 <span class="sd">        mean should be 1D array and covariance must be a matrix (2D array). To make</span>
@@ -242,7 +242,7 @@
         <span class="c"># TODO: covariance must be positive definite</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <span class="n">mean</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="n">covariance</span>
-
+</div>
     <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
@@ -282,7 +282,7 @@
 <span class="s">    .. math:: f(x_1 x_2 x_3) = f_1(x_1) f_2(x_2) f_3(x_3)</span>
 <span class="s">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factors</span><span class="p">):</span>
+<div class="viewcode-block" id="ProdPdf.__init__"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.ProdPdf.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factors</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Construct product of unconditional pdfs.</span>
 
 <span class="sd">        .. factors: nunpy.ndarray whose elements are Pdf objects</span>
@@ -299,7 +299,7 @@
 
         <span class="c"># pre-calclate shape</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shapes</span><span class="p">)</span>
-
+</div>
     <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span>
 
@@ -347,7 +347,7 @@
 <span class="s">       \quad \quad \text{where} ~ \mu := A c + b</span>
 <span class="s">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">covariance</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<div class="viewcode-block" id="MLinGaussCPdf.__init__"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.MLinGaussCPdf.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">covariance</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialise Mean-Linear Gaussian conditional pdf.</span>
 
 <span class="sd">        covariance - covariance of underlying Gaussian pdf</span>
@@ -364,7 +364,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;b must have same number of cols as covariance&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;A must have same number of rows as covariance&quot;</span><span class="p">)</span>
-
+</div>
     <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
@@ -396,7 +396,7 @@
 <span class="s">    .. math:: f(x_1 x_2 x_3 | c) = f_1(x_1 | x_2 x_3 c) f_2(x_2 | x_3 c) f_3(x_3 | c)</span>
 <span class="s">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factors</span><span class="p">):</span>
+<div class="viewcode-block" id="ProdCPdf.__init__"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.ProdCPdf.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factors</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Construct chain rule of multiple cpdfs.</span>
 
 <span class="sd">        .. factors - 1D numpy.ndarray of objects of type CPdf (or subclasses)</span>
@@ -428,7 +428,7 @@
 
         <span class="c"># pre-calculate shape</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shapes</span><span class="p">)</span>
-
+</div>
     <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span>
 
