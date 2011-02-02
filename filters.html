@@ -1,0 +1,131 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Bayesian Filters &mdash; PyBayes v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="PyBayes v0.1 documentation" href="index.html" />
+    <link rel="prev" title="Probability Density Functions" href="pdfs.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pdfs.html" title="Probability Density Functions"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyBayes v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-pybayes.filters">
+<span id="bayesian-filters"></span><h1>Bayesian Filters<a class="headerlink" href="#module-pybayes.filters" title="Permalink to this headline">¶</a></h1>
+<p>This module contains Bayesian filters.</p>
+<p>All classes from this module are currently imported to top-level pybayes module,
+so instead of <tt class="docutils literal"><span class="pre">from</span> <span class="pre">pybayes.filters</span> <span class="pre">import</span> <span class="pre">Kalman</span></tt> you can type <tt class="docutils literal"><span class="pre">from</span> <span class="pre">pybayes</span> <span class="pre">import</span>
+<span class="pre">Kalman</span></tt>.</p>
+<dl class="class">
+<dt id="pybayes.filters.Kalman">
+<em class="property">class </em><tt class="descclassname">pybayes.filters.</tt><tt class="descname">Kalman</tt><big>(</big><em>A</em>, <em>B</em>, <em>C</em>, <em>D</em>, <em>Q</em>, <em>R</em>, <em>state_pdf</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#Kalman"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.Kalman" title="Permalink to this definition">¶</a></dt>
+<dd><p>Kalman filter</p>
+<p>TODO: documentation</p>
+<dl class="method">
+<dt id="pybayes.filters.Kalman.bayes">
+<tt class="descname">bayes</tt><big>(</big><em>yt</em>, <em>ut</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#Kalman.bayes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.Kalman.bayes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Approximate Bayes rule</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pybayes.filters.ParticleFilter">
+<em class="property">class </em><tt class="descclassname">pybayes.filters.</tt><tt class="descname">ParticleFilter</tt><big>(</big><em>n</em>, <em>p_0</em>, <em>p_x_x</em>, <em>p_x_y</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#ParticleFilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.ParticleFilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>A filter whose aposteriori density takes the form</p>
+<div class="math">
+<p><img src="_images/math/c0235906c6a9aee3db07ef413c36c3fbb2d273a4.png" alt="p(x_t|y_{1:t}) = \sum_{i=1}^n \omega_i \delta ( x_t - x_t^{(i)} )" /></p>
+</div><p>Initialise particle filter.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pdfs.html"
+                        title="previous chapter">Probability Density Functions</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/filters.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pdfs.html" title="Probability Density Functions"
+             >previous</a> |</li>
+        <li><a href="index.html">PyBayes v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, Matěj Laitl.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
+    </div>
+  </body>
+</html>
