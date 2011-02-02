@@ -137,49 +137,119 @@ the component</p>
 <dl class="class">
 <dt id="pybayes.pdfs.CPdf">
 <em class="property">class </em><tt class="descclassname">pybayes.pdfs.</tt><tt class="descname">CPdf</tt><a class="reference internal" href="_modules/pybayes/pdfs.html#CPdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.CPdf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Base class for all Conditional Probability Density Functions</p>
-<p>When you evaluate a CPdf the result also depends on condition (vector), in
-PyBayes named cond.</p>
+<dd><p>Base class for all Conditional Probability Density Functions.</p>
+<p>When you evaluate a CPdf the result generally also depends on a condition
+(vector) named <cite>cond</cite> in PyBayes. For CPdfs that are Pdfs this is not the
+case, the result is unconditional.</p>
 <dl class="method">
 <dt id="pybayes.pdfs.CPdf.shape">
 <tt class="descname">shape</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#CPdf.shape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.CPdf.shape" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return shape of the random variable (and mean) as int</p>
+<dd><p>Return shape of the random variable (and mean).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="pybayes.pdfs.CPdf.cond_shape">
 <tt class="descname">cond_shape</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#CPdf.cond_shape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.CPdf.cond_shape" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return shape of the condition as int</p>
+<dd><p>Return shape of the condition.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="pybayes.pdfs.CPdf.mean">
 <tt class="descname">mean</tt><big>(</big><em>cond=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#CPdf.mean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.CPdf.mean" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return conditional mean value (a vector) of the pdf</p>
+<dd><p>Return (conditional) mean value of the pdf.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">numpy.ndarray</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="pybayes.pdfs.CPdf.variance">
 <tt class="descname">variance</tt><big>(</big><em>cond=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#CPdf.variance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.CPdf.variance" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return conditional variance (diagonal elements of covariance)</p>
+<dd><p>Return (conditional) variance (diagonal elements of covariance).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">numpy.ndarray</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="pybayes.pdfs.CPdf.eval_log">
 <tt class="descname">eval_log</tt><big>(</big><em>x</em>, <em>cond=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#CPdf.eval_log"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.CPdf.eval_log" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return logarithm of conditional likelihood function in point x</p>
+<dd><p>Return logarithm of (conditional) likelihood function in point x.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> (<em>numpy.ndarray</em>) &#8211; point which to evaluate the function in</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">double</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="pybayes.pdfs.CPdf.sample">
 <tt class="descname">sample</tt><big>(</big><em>cond=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#CPdf.sample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.CPdf.sample" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return one random conditional sample. Density of samples should adhere to this density</p>
+<dd><p>Return one random (conditional) sample from this distribution</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">numpy.ndarray</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="pybayes.pdfs.CPdf.check_cond">
 <tt class="descname">check_cond</tt><big>(</big><em>cond</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#CPdf.check_cond"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.CPdf.check_cond" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return True if cond has correct type and shape, raise Error otherwise</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
+<li><strong>TypeError</strong> &#8211; cond is not of correct type</li>
+<li><strong>ValueError</strong> &#8211; cond doesn&#8217;t have appropriate shape</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
