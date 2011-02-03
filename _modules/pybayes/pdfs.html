@@ -65,20 +65,26 @@
 
 
 <div class="viewcode-block" id="RVComp"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.RVComp">[docs]</a><span class="k">class</span> <span class="nc">RVComp</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Atomic component of a random value&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Atomic component of a random variable.</span>
 
-<div class="viewcode-block" id="RVComp.__init__"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.RVComp.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">dimension</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Initialise new component of a random variable.</span>
-<span class="sd">        </span>
-<span class="sd">        :param name: name of the component. Pass None for an anonymous component</span>
-<span class="sd">        :type name: string or None</span>
+<span class="sd">    :var int dimension: dimension; do not change unless you know what you are doing</span>
+<span class="sd">    :var str name: name; can be changed as long as it remains a string (warn: parent RVs are not updated)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="RVComp.__init__"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.RVComp.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialise new component of a random variable :class:`RV`.</span>
+
 <span class="sd">        :param dimension: number of vector components this component occupies</span>
 <span class="sd">        :type dimension: positive integer</span>
-<span class="sd">        :raises TypeError: non-integer dimension</span>
-<span class="sd">        :raises ValueError: invalid dimension</span>
+<span class="sd">        :param name: name of the component; default: None for anonymous component</span>
+<span class="sd">        :type name: string or None</span>
+<span class="sd">        :raises TypeError: non-integer dimension or non-string name</span>
+<span class="sd">        :raises ValueError: non-positive dimension</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;name must be either None or a string&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dimension</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;dimension must be integer (int)&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">dimension</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
@@ -87,15 +93,37 @@
 
 </div></div>
 <div class="viewcode-block" id="RV"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.RV">[docs]</a><span class="k">class</span> <span class="nc">RV</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Representation of a random variable made of one or more components</span>
-<span class="sd">    (see RVComp)&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Representation of a random variable made of one or more components. See</span>
+<span class="sd">    :class:`RVComp`.</span>
+
+<span class="sd">    :var int dimension: cummulative dimension; do not change</span>
+<span class="sd">    :var str name: pretty name, can be changed but needs to be a string</span>
+<span class="sd">    :var list components: list of RVComps; do not change</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="RV.__init__"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.RV.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">components</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Initialise new random variable made of one or more components. You may</span>
-<span class="sd">        also pass one or more existing RVs, whose components will be reused&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Initialise new random variable.</span>
+
+<span class="sd">        :param \*components: components that should form the random vector. You may</span>
+<span class="sd">            also pass another RVs which is a shotrcut for adding all their components.</span>
+<span class="sd">        :type \*components: :class:`RV` or :class:`RVComp`</span>
+<span class="sd">        :raises TypeError: invalid object passed (neither a :class:`RV` or a :class:`RVComp`)</span>
+<span class="sd">        :raises ValueError: zero components passed, or the same component passed twice (currently unsupported, speak up if you need it)</span>
+
+<span class="sd">        Usual way of creating RV could be:</span>
+
+<span class="sd">        &gt;&gt;&gt; x = RV(RVComp(1, &#39;x_1&#39;), RVComp(1, &#39;x_2&#39;))</span>
+<span class="sd">        &gt;&gt;&gt; x.name</span>
+<span class="sd">        &#39;[x_1, x_2]&#39;</span>
+<span class="sd">        &gt;&gt;&gt; xy = RV(x, RVComp(2, &#39;y&#39;))</span>
+<span class="sd">        &gt;&gt;&gt; xy.name</span>
+<span class="sd">        &#39;[x_1, x_2, y]&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dimension</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;[&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">components</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">components</span><span class="p">)</span> <span class="ow">is</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;at least one component must be passed&quot;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="n">components</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">component</span><span class="p">,</span> <span class="n">RVComp</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_add_component</span><span class="p">(</span><span class="n">component</span><span class="p">)</span>
@@ -108,14 +136,26 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;]&#39;</span>
 </div>
     <span class="k">def</span> <span class="nf">_add_component</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">component</span><span class="p">):</span>
-        <span class="c"># TODO: check if component is already contained? (does it matter somewhere?)</span>
+        <span class="sd">&quot;&quot;&quot;Add new component to this random variable.</span>
+
+<span class="sd">        Internal function, do not use outside of PyBayes&quot;&quot;&quot;</span>
+        <span class="c"># fail if component is already present</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">component</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Attempt to add the exact same component twice. This &#39;</span>
+                           <span class="o">+</span> <span class="s">&#39;is currently unsupported, but if you have a reason &#39;</span>
+                           <span class="o">+</span> <span class="s">&#39;for this, it may get allowed in future versions.&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">component</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dimension</span> <span class="o">+=</span> <span class="n">component</span><span class="o">.</span><span class="n">dimension</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+=</span> <span class="n">component</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s">&quot;, &quot;</span>
 
 <div class="viewcode-block" id="RV.contains"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.RV.contains">[docs]</a>    <span class="k">def</span> <span class="nf">contains</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">component</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return True is this random value contains the exact same instance of</span>
-<span class="sd">        the `component`&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Return True if this random variable contains the exact same instance of</span>
+<span class="sd">        the component</span>
+
+<span class="sd">        :param component: component whose presence is tested</span>
+<span class="sd">        :type component: :class:`RVComp`</span>
+<span class="sd">        :rtype: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">comp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">id</span><span class="p">(</span><span class="n">comp</span><span class="p">)</span> <span class="o">==</span> <span class="nb">id</span><span class="p">(</span><span class="n">component</span><span class="p">):</span>
                 <span class="k">return</span> <span class="bp">True</span>
@@ -123,38 +163,57 @@
 
 </div></div>
 <div class="viewcode-block" id="CPdf"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.CPdf">[docs]</a><span class="k">class</span> <span class="nc">CPdf</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Base class for all Conditional Probability Density Functions</span>
+    <span class="sd">&quot;&quot;&quot;Base class for all Conditional Probability Density Functions.</span>
 
-<span class="sd">    When you evaluate a CPdf the result also depends on condition (vector), in</span>
-<span class="sd">    PyBayes named cond.</span>
+<span class="sd">    When you evaluate a CPdf the result generally also depends on a condition</span>
+<span class="sd">    (vector) named `cond` in PyBayes. For a CPdf that is a :class:`Pdf` this is</span>
+<span class="sd">    not the case, the result is unconditional.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="CPdf.shape"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.CPdf.shape">[docs]</a>    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return shape of the random variable (and mean) as int&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Return shape of the random variable (and mean).</span>
+
+<span class="sd">        :rtype: int&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Derived classes must implement this function&quot;</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="CPdf.cond_shape"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.CPdf.cond_shape">[docs]</a>    <span class="k">def</span> <span class="nf">cond_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return shape of the condition as int&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Return shape of the condition.</span>
+
+<span class="sd">        :rtype: int&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Derived classes must implement this function&quot;</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="CPdf.mean"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.CPdf.mean">[docs]</a>    <span class="k">def</span> <span class="nf">mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return conditional mean value (a vector) of the pdf&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Return (conditional) mean value of the pdf.</span>
+
+<span class="sd">        :rtype: numpy.ndarray&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Derived classes must implement this function&quot;</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="CPdf.variance"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.CPdf.variance">[docs]</a>    <span class="k">def</span> <span class="nf">variance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return conditional variance (diagonal elements of covariance)&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Return (conditional) variance (diagonal elements of covariance).</span>
+
+<span class="sd">        :rtype: numpy.ndarray&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Derived classes must implement this function&quot;</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="CPdf.eval_log"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.CPdf.eval_log">[docs]</a>    <span class="k">def</span> <span class="nf">eval_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return logarithm of conditional likelihood function in point x&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Return logarithm of (conditional) likelihood function in point x.</span>
+
+<span class="sd">        :param x: point which to evaluate the function in</span>
+<span class="sd">        :type x: numpy.ndarray</span>
+<span class="sd">        :rtype: double&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Derived classes must implement this function&quot;</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="CPdf.sample"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.CPdf.sample">[docs]</a>    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return one random conditional sample. Density of samples should adhere to this density&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Return one random (conditional) sample from this distribution</span>
+
+<span class="sd">        :rtype: numpy.ndarray&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Derived classes must implement this function&quot;</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="CPdf.check_cond"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.CPdf.check_cond">[docs]</a>    <span class="k">def</span> <span class="nf">check_cond</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return True if cond has correct type and shape, raise Error otherwise&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Return True if cond has correct type and shape, raise Error otherwise</span>
+
+<span class="sd">        :raises TypeError: cond is not of correct type</span>
+<span class="sd">        :raises ValueError: cond doesn&#39;t have appropriate shape</span>
+<span class="sd">        :rtype: bool&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">cond</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>  <span class="c"># cython-specific</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;cond must be numpy.ndarray&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">cond</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
@@ -165,23 +224,35 @@
 
 </div></div>
 <div class="viewcode-block" id="Pdf"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.Pdf">[docs]</a><span class="k">class</span> <span class="nc">Pdf</span><span class="p">(</span><span class="n">CPdf</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Base class for all unconditional (static) multivariate Probability Density Functions&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Base class for all unconditional (static) multivariate Probability Density</span>
+<span class="sd">    Functions. Subclass of CPdf.&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Pdf.cond_shape"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.Pdf.cond_shape">[docs]</a>    <span class="k">def</span> <span class="nf">cond_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return shape of the condition, which is zero for unconditional Pdfs&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Return zero as Pdfs have no condition.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="mi">0</span>
 
 </div></div>
 <div class="viewcode-block" id="UniPdf"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.UniPdf">[docs]</a><span class="k">class</span> <span class="nc">UniPdf</span><span class="p">(</span><span class="n">Pdf</span><span class="p">):</span>
-    <span class="s">r&quot;&quot;&quot;Simple uniform multivariate probability density function</span>
+    <span class="s">r&quot;&quot;&quot;Simple uniform multivariate probability density function.</span>
 
 <span class="s">    .. math:: f(x) = \Theta(x - a) \Theta(b - x) \prod_{i=1}^n \frac{1}{b_i-a_i}</span>
+
+<span class="s">    :var numpy.ndarray a: left border</span>
+<span class="s">    :var numpy.ndarray b: right border</span>
+
+<span class="s">    You may modify these attributes as long as you don&#39;t change their shape and</span>
+<span class="s">    assumption **a** &lt; **b** still holds.</span>
 <span class="s">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="UniPdf.__init__"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.UniPdf.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Initialise uniform distribution with left point a and right point b</span>
+        <span class="sd">&quot;&quot;&quot;Initialise uniform distribution.</span>
 
-<span class="sd">        a must be greater (in each dimension) than b</span>
+<span class="sd">        :param a: left border</span>
+<span class="sd">        :type a: numpy.ndarray</span>
+<span class="sd">        :param b: right border</span>
+<span class="sd">        :type b: numpy.ndarray</span>
+
+<span class="sd">        **b** must be greater (in each dimension) than **a**</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">asarray</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">asarray</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
@@ -213,21 +284,26 @@
 
 </div>
 <div class="viewcode-block" id="GaussPdf"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.GaussPdf">[docs]</a><span class="k">class</span> <span class="nc">GaussPdf</span><span class="p">(</span><span class="n">Pdf</span><span class="p">):</span>
-    <span class="s">r&quot;&quot;&quot;Unconditional Gaussian (normal) probability density function</span>
+    <span class="s">r&quot;&quot;&quot;Unconditional Gaussian (normal) probability density function.</span>
 
 <span class="s">    .. math:: f(x) \propto \exp \left( - \left( x-\mu \right)&#39; R^{-1} \left( x-\mu \right) \right)</span>
+
+<span class="s">    :var numpy.ndarray mu: mean value</span>
+<span class="s">    :var numpy.ndarray R: covariance matrix</span>
+
+<span class="s">    You can modify object parameters only if you are absolutely sure that you</span>
+<span class="s">    pass allowable values, because parameters are only checked once in constructor.</span>
 <span class="s">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="GaussPdf.__init__"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.GaussPdf.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">]),</span> <span class="n">covariance</span><span class="o">=</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">]])):</span>
-        <span class="sd">&quot;&quot;&quot;Initialise Gaussian pdf with mean value mean and covariance matrix covariance</span>
+<div class="viewcode-block" id="GaussPdf.__init__"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.GaussPdf.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">covariance</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialise Gaussian pdf.</span>
 
-<span class="sd">        mean should be 1D array and covariance must be a matrix (2D array). To make</span>
-<span class="sd">        1D GaussPdf, pass [[number]] as covariance.</span>
+<span class="sd">        :param numpy.ndarray mean: mean value (1D array)</span>
+<span class="sd">        :param numpy.ndarray covariance: covariance matrix (2D array)</span>
 
-<span class="sd">        mean is stored in mu attribute</span>
-<span class="sd">        covariance is stored in R attribute</span>
-<span class="sd">        you can modify object parameters only if you are absolutely sure that you</span>
-<span class="sd">        pass correct values, because parameters are only checked once in constructor</span>
+<span class="sd">        To create standard normal distribution:</span>
+
+<span class="sd">        &gt;&gt;&gt; norm = GaussPdf(np.array([0.]), np.array([[1.]]))  # note the shape of covariance</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">mean</span> <span class="o">=</span> <span class="n">asarray</span><span class="p">(</span><span class="n">mean</span><span class="p">)</span>
         <span class="n">covariance</span> <span class="o">=</span> <span class="n">asarray</span><span class="p">(</span><span class="n">covariance</span><span class="p">)</span>
@@ -282,15 +358,19 @@
 <span class="s">    .. math:: f(x_1 x_2 x_3) = f_1(x_1) f_2(x_2) f_3(x_3)</span>
 <span class="s">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="ProdPdf.__init__"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.ProdPdf.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factors</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Construct product of unconditional pdfs.</span>
+<div class="viewcode-block" id="ProdPdf.__init__"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.ProdPdf.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">factors</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialise product of unconditional pdfs.</span>
 
-<span class="sd">        .. factors: nunpy.ndarray whose elements are Pdf objects</span>
-<span class="sd">        &gt;&gt;&gt; prod = ProdPdf(numpy.array([UniPdf(...), GaussPdf(...)]))</span>
+<span class="sd">        :param \*factors: sub-distributions</span>
+<span class="sd">        :type \*factors: :class:`Pdf`</span>
+
+<span class="sd">        Usual way of creating ProdPdf could be:</span>
+
+<span class="sd">        &gt;&gt;&gt; prod = ProdPdf(UniPdf(...), GaussPdf(...))</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">factors</span> <span class="o">=</span> <span class="n">asarray</span><span class="p">(</span><span class="n">factors</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;factors must be 1D numpy.ndarray&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">factors</span><span class="p">)</span> <span class="ow">is</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;at least one factor must be passed&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">factors</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">factors</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">Pdf</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">shapes</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>  <span class="c"># array of factor shapes</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">Pdf</span><span class="p">):</span>
@@ -339,7 +419,7 @@
 
 </div>
 <div class="viewcode-block" id="MLinGaussCPdf"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.MLinGaussCPdf">[docs]</a><span class="k">class</span> <span class="nc">MLinGaussCPdf</span><span class="p">(</span><span class="n">CPdf</span><span class="p">):</span>
-    <span class="s">r&quot;&quot;&quot;Conditional Gaussian pdf whose mean is a linear function of condition</span>
+    <span class="s">r&quot;&quot;&quot;Conditional Gaussian pdf whose mean is a linear function of condition.</span>
 
 <span class="s">    .. math::</span>
 
@@ -390,21 +470,84 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gauss</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
 
 </div>
+<div class="viewcode-block" id="LinGaussCPdf"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.LinGaussCPdf">[docs]</a><span class="k">class</span> <span class="nc">LinGaussCPdf</span><span class="p">(</span><span class="n">CPdf</span><span class="p">):</span>
+    <span class="s">r&quot;&quot;&quot;Conditional one-dimensional Gaussian pdf whose mean and covariance are</span>
+<span class="s">    linear functions of condition.</span>
+
+<span class="s">    .. math::</span>
+
+<span class="s">       f(x|c_1 c_2) \propto \exp \left( - \frac{\left( x-\mu \right)^2}{2\sigma^2} \right)</span>
+<span class="s">       \quad \quad \text{where} \quad \mu := a c_1 + b \quad \text{and}</span>
+<span class="s">       \quad \sigma^2 := c c_2 + d</span>
+<span class="s">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="LinGaussCPdf.__init__"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.LinGaussCPdf.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialise Linear Gaussian conditional pdf.</span>
+
+<span class="sd">        :param double a, b: mean = a*cond_1 + b</span>
+<span class="sd">        :param double c, d: covariance = c*cond_2 + d</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;all parameters must be floats&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">a</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;all parameters must be floats&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">b</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;all parameters must be floats&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="n">c</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;all parameters must be floats&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="n">d</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gauss</span> <span class="o">=</span> <span class="n">GaussPdf</span><span class="p">(</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">array</span><span class="p">([[</span><span class="mf">1.</span><span class="p">]]))</span>
+</div>
+    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">cond_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">2</span>
+
+    <span class="k">def</span> <span class="nf">mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_cond</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gauss</span><span class="o">.</span><span class="n">mu</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">*</span><span class="n">cond</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span>  <span class="c"># gauss.mu is used just as a holder</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gauss</span><span class="o">.</span><span class="n">mu</span>
+
+    <span class="k">def</span> <span class="nf">variance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_cond</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="o">*</span><span class="n">cond</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">eval_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_cond</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gauss</span><span class="o">.</span><span class="n">mu</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">*</span><span class="n">cond</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gauss</span><span class="o">.</span><span class="n">R</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="o">*</span><span class="n">cond</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gauss</span><span class="o">.</span><span class="n">eval_log</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_cond</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gauss</span><span class="o">.</span><span class="n">mu</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">*</span><span class="n">cond</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gauss</span><span class="o">.</span><span class="n">R</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="o">*</span><span class="n">cond</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gauss</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+
+</div>
 <div class="viewcode-block" id="ProdCPdf"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.ProdCPdf">[docs]</a><span class="k">class</span> <span class="nc">ProdCPdf</span><span class="p">(</span><span class="n">CPdf</span><span class="p">):</span>
     <span class="s">r&quot;&quot;&quot;Pdf that is formed as a chain rule of multiple conditional pdfs.</span>
 
 <span class="s">    .. math:: f(x_1 x_2 x_3 | c) = f_1(x_1 | x_2 x_3 c) f_2(x_2 | x_3 c) f_3(x_3 | c)</span>
 <span class="s">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="ProdCPdf.__init__"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.ProdCPdf.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factors</span><span class="p">):</span>
+<div class="viewcode-block" id="ProdCPdf.__init__"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.ProdCPdf.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">factors</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Construct chain rule of multiple cpdfs.</span>
 
-<span class="sd">        .. factors - 1D numpy.ndarray of objects of type CPdf (or subclasses)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">factors</span> <span class="o">=</span> <span class="n">asarray</span><span class="p">(</span><span class="n">factors</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;factors must be 1D numpy.ndarray&quot;</span><span class="p">)</span>
+<span class="sd">        :param \*factors: objects of type CPdf (or subclasses)</span>
+<span class="sd">        :type \*factors: :class:`CPdf`</span>
 
+<span class="sd">        Usual way of creating ProdCPdf could be:</span>
+
+<span class="sd">        &gt;&gt;&gt; prod = ProdCPdf(MLinGaussCPdf(..), UniPdf(...))</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">factors</span><span class="p">)</span> <span class="ow">is</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;at least one factor must be passed&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">factors</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">factors</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">Pdf</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">shapes</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>  <span class="c"># array of factor shapes</span>
 
         <span class="n">accumulate_cond_shape</span> <span class="o">=</span> <span class="mi">0</span>

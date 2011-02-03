@@ -64,7 +64,20 @@ so instead of <tt class="docutils literal"><span class="pre">from</span> <span c
 <dt id="pybayes.pdfs.RV">
 <em class="property">class </em><tt class="descclassname">pybayes.pdfs.</tt><tt class="descname">RV</tt><big>(</big><em>*components</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#RV"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.RV" title="Permalink to this definition">¶</a></dt>
 <dd><p>Representation of a random variable made of one or more components. See
-<a class="reference internal" href="#pybayes.pdfs.RVComp" title="pybayes.pdfs.RVComp"><tt class="xref py py-class docutils literal"><span class="pre">RVComp</span></tt></a></p>
+<a class="reference internal" href="#pybayes.pdfs.RVComp" title="pybayes.pdfs.RVComp"><tt class="xref py py-class docutils literal"><span class="pre">RVComp</span></tt></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>dimension</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; cummulative dimension; do not change</li>
+<li><strong>name</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; pretty name, can be changed but needs to be a string</li>
+<li><strong>components</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; list of RVComps; do not change</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="pybayes.pdfs.RV.__init__">
 <tt class="descname">__init__</tt><big>(</big><em>*components</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#RV.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.RV.__init__" title="Permalink to this definition">¶</a></dt>
@@ -81,17 +94,17 @@ also pass another RVs which is a shotrcut for adding all their components.</li>
 </tr>
 <tr class="field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
 <li><strong>TypeError</strong> &#8211; invalid object passed (neither a <a class="reference internal" href="#pybayes.pdfs.RV" title="pybayes.pdfs.RV"><tt class="xref py py-class docutils literal"><span class="pre">RV</span></tt></a> or a <a class="reference internal" href="#pybayes.pdfs.RVComp" title="pybayes.pdfs.RVComp"><tt class="xref py py-class docutils literal"><span class="pre">RVComp</span></tt></a>)</li>
-<li><strong>ValueError</strong> &#8211; zero components passed</li>
+<li><strong>ValueError</strong> &#8211; zero components passed, or the same component passed twice (currently unsupported, speak up if you need it)</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
 <p>Usual way of creating RV could be:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">RV</span><span class="p">(</span><span class="n">RVComp</span><span class="p">(</span><span class="s">&#39;x_1&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">RVComp</span><span class="p">(</span><span class="s">&#39;x_2&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">RV</span><span class="p">(</span><span class="n">RVComp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#39;x_1&#39;</span><span class="p">),</span> <span class="n">RVComp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#39;x_2&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">name</span>
 <span class="go">&#39;[x_1, x_2]&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">xy</span> <span class="o">=</span> <span class="n">RV</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">RVComp</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xy</span> <span class="o">=</span> <span class="n">RV</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">RVComp</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">xy</span><span class="o">.</span><span class="n">name</span>
 <span class="go">&#39;[x_1, x_2, y]&#39;</span>
 </pre></div>
@@ -108,7 +121,7 @@ the component</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>component</strong> (<a class="reference internal" href="#pybayes.pdfs.RVComp" title="pybayes.pdfs.RVComp"><tt class="xref py py-class docutils literal"><span class="pre">RVComp</span></tt></a>) &#8211; component whose presence you want to test</li>
+<li><strong>component</strong> (<a class="reference internal" href="#pybayes.pdfs.RVComp" title="pybayes.pdfs.RVComp"><tt class="xref py py-class docutils literal"><span class="pre">RVComp</span></tt></a>) &#8211; component whose presence is tested</li>
 </ul>
 </td>
 </tr>
@@ -123,25 +136,37 @@ the component</p>
 
 <dl class="class">
 <dt id="pybayes.pdfs.RVComp">
-<em class="property">class </em><tt class="descclassname">pybayes.pdfs.</tt><tt class="descname">RVComp</tt><big>(</big><em>name</em>, <em>dimension</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#RVComp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.RVComp" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pybayes.pdfs.</tt><tt class="descname">RVComp</tt><big>(</big><em>dimension</em>, <em>name=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#RVComp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.RVComp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Atomic component of a random variable.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>dimension</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; dimension; do not change unless you know what you are doing</li>
+<li><strong>name</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name; can be changed as long as it remains a string (warn: parent RVs are not updated)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="pybayes.pdfs.RVComp.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>name</em>, <em>dimension</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#RVComp.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.RVComp.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>dimension</em>, <em>name=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#RVComp.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.RVComp.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialise new component of a random variable <a class="reference internal" href="#pybayes.pdfs.RV" title="pybayes.pdfs.RV"><tt class="xref py py-class docutils literal"><span class="pre">RV</span></tt></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>name</strong> (<em>string or None</em>) &#8211; name of the component. Pass None for an anonymous component</li>
 <li><strong>dimension</strong> (<em>positive integer</em>) &#8211; number of vector components this component occupies</li>
+<li><strong>name</strong> (<em>string or None</em>) &#8211; name of the component; default: None for anonymous component</li>
 </ul>
 </td>
 </tr>
 <tr class="field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
 <li><strong>TypeError</strong> &#8211; non-integer dimension or non-string name</li>
-<li><strong>ValueError</strong> &#8211; invalid dimension</li>
+<li><strong>ValueError</strong> &#8211; non-positive dimension</li>
 </ul>
 </td>
 </tr>
@@ -431,7 +456,7 @@ A, b: given condition cond, mean = A*cond + b</p>
 
 <dl class="class">
 <dt id="pybayes.pdfs.LinGaussCPdf">
-<em class="property">class </em><tt class="descclassname">pybayes.pdfs.</tt><tt class="descname">LinGaussCPdf</tt><big>(</big><em>a</em>, <em>b</em>, <em>c</em>, <em>d</em><big>)</big><a class="headerlink" href="#pybayes.pdfs.LinGaussCPdf" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pybayes.pdfs.</tt><tt class="descname">LinGaussCPdf</tt><big>(</big><em>a</em>, <em>b</em>, <em>c</em>, <em>d</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#LinGaussCPdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.LinGaussCPdf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Conditional one-dimensional Gaussian pdf whose mean and covariance are
 linear functions of condition.</p>
 <div class="math">
@@ -440,7 +465,7 @@ linear functions of condition.</p>
 \quad \sigma^2 := c c_2 + d" /></p>
 </div><dl class="method">
 <dt id="pybayes.pdfs.LinGaussCPdf.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>a</em>, <em>b</em>, <em>c</em>, <em>d</em><big>)</big><a class="headerlink" href="#pybayes.pdfs.LinGaussCPdf.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>a</em>, <em>b</em>, <em>c</em>, <em>d</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#LinGaussCPdf.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.LinGaussCPdf.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialise Linear Gaussian conditional pdf.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
