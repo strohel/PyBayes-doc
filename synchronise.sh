@@ -12,5 +12,6 @@ rsync -am -v --delete "${PYBAYES_DIR}/doc/_build/html/" \
 	--exclude /.git --exclude /synchronise.sh --exclude README \
 	--exclude /.nojekyll --exclude /.buildinfo \
 	./
+git add .
 git commit -a -m "synchronise.sh: regenerate documentation for PyBayes ${rev}"
 git push
