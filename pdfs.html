@@ -182,10 +182,44 @@ the component</p>
 <dl class="class">
 <dt id="pybayes.pdfs.CPdf">
 <em class="property">class </em><tt class="descclassname">pybayes.pdfs.</tt><tt class="descname">CPdf</tt><a class="reference internal" href="_modules/pybayes/pdfs.html#CPdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.CPdf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Base class for all Conditional Probability Density Functions.</p>
+<dd><p>Base class for all Conditional (in general) Probability Density Functions.</p>
 <p>When you evaluate a CPdf the result generally also depends on a condition
 (vector) named <cite>cond</cite> in PyBayes. For a CPdf that is a <a class="reference internal" href="#pybayes.pdfs.Pdf" title="pybayes.pdfs.Pdf"><tt class="xref py py-class docutils literal"><span class="pre">Pdf</span></tt></a> this is
 not the case, the result is unconditional.</p>
+<p>Every CPdf takes (apart from others) 2 optional arguments to constructor:
+<strong>rv</strong> (<a class="reference internal" href="#pybayes.pdfs.RV" title="pybayes.pdfs.RV"><tt class="xref py py-class docutils literal"><span class="pre">RV</span></tt></a>) and <strong>cond_rv</strong> (<a class="reference internal" href="#pybayes.pdfs.RV" title="pybayes.pdfs.RV"><tt class="xref py py-class docutils literal"><span class="pre">RV</span></tt></a>). When specified, they
+denote that the CPdf is associated with particular random variable (respectively
+its condition is associated with particular random variable); when unspecified,
+<em>anonymous</em> random variable is assumed (exceptions exist, see <a class="reference internal" href="#pybayes.pdfs.ProdPdf" title="pybayes.pdfs.ProdPdf"><tt class="xref py py-class docutils literal"><span class="pre">ProdPdf</span></tt></a>).
+It is an error to pass RV whose dimension is not same as CPdf&#8217;s dimension
+(or cond dimension respectively). These arguments must be generally passed
+as <em>keyword arguments</em> i.e. <tt class="docutils literal"><span class="pre">Pdf(...,</span> <span class="pre">rv=RV(...))</span></tt> and not
+<tt class="docutils literal"><span class="pre">Pdf(...,</span> <span class="pre">RV(...))</span></tt>.</p>
+<p>While entire idea of random variable associations may not be needed in simple
+cases, it allows you to express more complicated situations, assume the state
+variable is composed of 2 components <img class="math" src="_images/math/79c18f8eed1cf8786ef8c7fc1f3b49492427ba00.png" alt="x_t = [a_t, b_t]"/> and following
+distribution is to be modelled:</p>
+<div class="math">
+<p><img src="_images/math/9829ba9f4be2df663b09b52ec6c7658169d150cb.png" alt="p(x_t|x_{t-1}) &amp;:= p_1(a_t|a_{t-1}, b_t) p_2(b_t|b_{t-1}) \\
+p_1(a_t|a_{t-1}, b_t) &amp;:= \mathcal{N}(a_{t-1}, b_t) \\
+p_2(b_t|b_{t-1}) &amp;:= \mathcal{N}(b_{t-1}, 0.0001)" /></p>
+</div><p>This is done in PyBayes with associated RVs:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a_t</span><span class="p">,</span> <span class="n">b_t</span> <span class="o">=</span> <span class="n">RVComp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#39;a_t&#39;</span><span class="p">),</span> <span class="n">RVComp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#39;b_t&#39;</span><span class="p">)</span>  <span class="c"># create RV components</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a_tp</span><span class="p">,</span> <span class="n">b_tp</span> <span class="o">=</span> <span class="n">RVComp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#39;a_{t-1}&#39;</span><span class="p">),</span> <span class="n">RVComp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#39;b_{t-1}&#39;</span><span class="p">)</span>  <span class="c"># t-1 case</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">p1</span> <span class="o">=</span> <span class="n">LinGaussPdf</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">rv</span><span class="o">=</span><span class="n">RV</span><span class="p">(</span><span class="n">a_t</span><span class="p">),</span> <span class="n">rv_cond</span><span class="o">=</span><span class="n">RV</span><span class="p">(</span><span class="n">a_tp</span><span class="p">,</span> <span class="n">b_t</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cov</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.0001</span><span class="p">]]),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.</span><span class="p">]]),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">])</span>  <span class="c"># params for p2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p2</span> <span class="o">=</span> <span class="n">MLinGaussPdf</span><span class="p">(</span><span class="n">cov</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">rv</span><span class="o">=</span><span class="n">RV</span><span class="p">(</span><span class="n">b_t</span><span class="p">),</span> <span class="n">rv_cond</span><span class="o">=</span><span class="n">RV</span><span class="p">(</span><span class="n">b_tp</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ProdCPdf</span><span class="p">((</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">),</span> <span class="n">rv</span><span class="o">=</span><span class="n">RV</span><span class="p">(</span><span class="n">a_t</span><span class="p">,</span> <span class="n">b_t</span><span class="p">),</span> <span class="n">rv_cond</span><span class="o">=</span><span class="n">RV</span><span class="p">(</span><span class="n">a_tp</span><span class="p">,</span> <span class="n">b_tp</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">eval_log</span><span class="p">()</span>
+</pre></div>
+</div>
 <dl class="method">
 <dt id="pybayes.pdfs.CPdf.shape">
 <tt class="descname">shape</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#CPdf.shape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.CPdf.shape" title="Permalink to this definition">¶</a></dt>
@@ -276,34 +310,16 @@ not the case, the result is unconditional.</p>
 </table>
 </dd></dl>
 
-<dl class="method">
-<dt id="pybayes.pdfs.CPdf.check_cond">
-<tt class="descname">check_cond</tt><big>(</big><em>cond</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#CPdf.check_cond"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.CPdf.check_cond" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return True if cond has correct type and shape, raise Error otherwise</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
-<li><strong>TypeError</strong> &#8211; cond is not of correct type</li>
-<li><strong>ValueError</strong> &#8211; cond doesn&#8217;t have appropriate shape</li>
-</ul>
-</td>
-</tr>
-<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="class">
 <dt id="pybayes.pdfs.Pdf">
 <em class="property">class </em><tt class="descclassname">pybayes.pdfs.</tt><tt class="descname">Pdf</tt><a class="reference internal" href="_modules/pybayes/pdfs.html#Pdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.Pdf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base class for all unconditional (static) multivariate Probability Density
-Functions. Subclass of CPdf.</p>
+Functions. Subclass of <a class="reference internal" href="#pybayes.pdfs.CPdf" title="pybayes.pdfs.CPdf"><tt class="xref py py-class docutils literal"><span class="pre">CPdf</span></tt></a>.</p>
+<p>As in CPdf, constructor of every Pdf takes optional <strong>rv</strong> (<a class="reference internal" href="#pybayes.pdfs.RV" title="pybayes.pdfs.RV"><tt class="xref py py-class docutils literal"><span class="pre">RV</span></tt></a>)
+keyword argument (and no <em>cond_rv</em> argument as it would make no sense). For
+discussion about associated random variables see <a class="reference internal" href="#pybayes.pdfs.CPdf" title="pybayes.pdfs.CPdf"><tt class="xref py py-class docutils literal"><span class="pre">CPdf</span></tt></a>.</p>
 <dl class="method">
 <dt id="pybayes.pdfs.Pdf.cond_shape">
 <tt class="descname">cond_shape</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#Pdf.cond_shape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.Pdf.cond_shape" title="Permalink to this definition">¶</a></dt>
@@ -317,7 +333,7 @@ Functions. Subclass of CPdf.</p>
 <h2>Unconditional Probability Density Functions (pdfs)<a class="headerlink" href="#unconditional-probability-density-functions-pdfs" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="pybayes.pdfs.UniPdf">
-<em class="property">class </em><tt class="descclassname">pybayes.pdfs.</tt><tt class="descname">UniPdf</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#UniPdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.UniPdf" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pybayes.pdfs.</tt><tt class="descname">UniPdf</tt><big>(</big><em>a</em>, <em>b</em>, <em>rv=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#UniPdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.UniPdf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Simple uniform multivariate probability density function.</p>
 <div class="math">
 <p><img src="_images/math/3858042ed11875892a5e418f49b096d8e8f6bf17.png" alt="f(x) = \Theta(x - a) \Theta(b - x) \prod_{i=1}^n \frac{1}{b_i-a_i}" /></p>
@@ -337,7 +353,7 @@ Functions. Subclass of CPdf.</p>
 assumption <strong>a</strong> &lt; <strong>b</strong> still holds.</p>
 <dl class="method">
 <dt id="pybayes.pdfs.UniPdf.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#UniPdf.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.UniPdf.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>a</em>, <em>b</em>, <em>rv=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#UniPdf.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.UniPdf.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialise uniform distribution.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -358,7 +374,7 @@ assumption <strong>a</strong> &lt; <strong>b</strong> still holds.</p>
 
 <dl class="class">
 <dt id="pybayes.pdfs.GaussPdf">
-<em class="property">class </em><tt class="descclassname">pybayes.pdfs.</tt><tt class="descname">GaussPdf</tt><big>(</big><em>mean</em>, <em>covariance</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#GaussPdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.GaussPdf" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pybayes.pdfs.</tt><tt class="descname">GaussPdf</tt><big>(</big><em>mean</em>, <em>covariance</em>, <em>rv=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#GaussPdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.GaussPdf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unconditional Gaussian (normal) probability density function.</p>
 <div class="math">
 <p><img src="_images/math/271ad99f5f3b0e679312328b911f22bf04a11ce7.png" alt="f(x) \propto \exp \left( - \left( x-\mu \right)' R^{-1} \left( x-\mu \right) \right)" /></p>
@@ -378,7 +394,7 @@ assumption <strong>a</strong> &lt; <strong>b</strong> still holds.</p>
 pass allowable values, because parameters are only checked once in constructor.</p>
 <dl class="method">
 <dt id="pybayes.pdfs.GaussPdf.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>mean</em>, <em>covariance</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#GaussPdf.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.GaussPdf.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>mean</em>, <em>covariance</em>, <em>rv=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#GaussPdf.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.GaussPdf.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialise Gaussian pdf.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -402,7 +418,7 @@ pass allowable values, because parameters are only checked once in constructor.<
 
 <dl class="class">
 <dt id="pybayes.pdfs.ProdPdf">
-<em class="property">class </em><tt class="descclassname">pybayes.pdfs.</tt><tt class="descname">ProdPdf</tt><big>(</big><em>*factors</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#ProdPdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.ProdPdf" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pybayes.pdfs.</tt><tt class="descname">ProdPdf</tt><big>(</big><em>factors</em>, <em>rv=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#ProdPdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.ProdPdf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unconditional product of multiple unconditional pdfs.</p>
 <p>You can for example create a pdf that has uniform distribution with regards
 to x-axis and normal distribution along y-axis. The caller (you) must ensure
@@ -412,21 +428,21 @@ have no mathematical sense.</p>
 <p><img src="_images/math/d24655330f9abfc2aebbd429b0436b4ede9c42fc.png" alt="f(x_1 x_2 x_3) = f_1(x_1) f_2(x_2) f_3(x_3)" /></p>
 </div><dl class="method">
 <dt id="pybayes.pdfs.ProdPdf.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>*factors</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#ProdPdf.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.ProdPdf.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>factors</em>, <em>rv=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#ProdPdf.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.ProdPdf.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialise product of unconditional pdfs.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>*factors</strong> (<a class="reference internal" href="#pybayes.pdfs.Pdf" title="pybayes.pdfs.Pdf"><tt class="xref py py-class docutils literal"><span class="pre">Pdf</span></tt></a>) &#8211; sub-distributions</li>
+<li><strong>factors</strong> (sequence of <a class="reference internal" href="#pybayes.pdfs.Pdf" title="pybayes.pdfs.Pdf"><tt class="xref py py-class docutils literal"><span class="pre">Pdf</span></tt></a>) &#8211; sequence of sub-distributions</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
 <p>Usual way of creating ProdPdf could be:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">prod</span> <span class="o">=</span> <span class="n">ProdPdf</span><span class="p">(</span><span class="n">UniPdf</span><span class="p">(</span><span class="o">...</span><span class="p">),</span> <span class="n">GaussPdf</span><span class="p">(</span><span class="o">...</span><span class="p">))</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">prod</span> <span class="o">=</span> <span class="n">ProdPdf</span><span class="p">((</span><span class="n">UniPdf</span><span class="p">(</span><span class="o">...</span><span class="p">),</span> <span class="n">GaussPdf</span><span class="p">(</span><span class="o">...</span><span class="p">)))</span>  <span class="c"># note the double (( and ))</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -439,14 +455,14 @@ have no mathematical sense.</p>
 <p>In this section, variable <img class="math" src="_images/math/3372c1cb6d68cf97c2d231acc0b47b95a9ed04cc.png" alt="c"/> in math exressions denotes condition.</p>
 <dl class="class">
 <dt id="pybayes.pdfs.MLinGaussCPdf">
-<em class="property">class </em><tt class="descclassname">pybayes.pdfs.</tt><tt class="descname">MLinGaussCPdf</tt><big>(</big><em>covariance</em>, <em>A</em>, <em>b</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#MLinGaussCPdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.MLinGaussCPdf" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pybayes.pdfs.</tt><tt class="descname">MLinGaussCPdf</tt><big>(</big><em>covariance</em>, <em>A</em>, <em>b</em>, <em>rv=None</em>, <em>cond_rv=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#MLinGaussCPdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.MLinGaussCPdf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Conditional Gaussian pdf whose mean is a linear function of condition.</p>
 <div class="math">
 <p><img src="_images/math/52c01696b5821aa17282bf7be2b093e71d9bb238.png" alt="f(x|c) \propto \exp \left( - \left( x-\mu \right)' R^{-1} \left( x-\mu \right) \right)
 \quad \quad \text{where} ~ \mu := A c + b" /></p>
 </div><dl class="method">
 <dt id="pybayes.pdfs.MLinGaussCPdf.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>covariance</em>, <em>A</em>, <em>b</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#MLinGaussCPdf.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.MLinGaussCPdf.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>covariance</em>, <em>A</em>, <em>b</em>, <em>rv=None</em>, <em>cond_rv=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#MLinGaussCPdf.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.MLinGaussCPdf.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialise Mean-Linear Gaussian conditional pdf.</p>
 <p>covariance - covariance of underlying Gaussian pdf
 A, b: given condition cond, mean = A*cond + b</p>
@@ -456,7 +472,7 @@ A, b: given condition cond, mean = A*cond + b</p>
 
 <dl class="class">
 <dt id="pybayes.pdfs.LinGaussCPdf">
-<em class="property">class </em><tt class="descclassname">pybayes.pdfs.</tt><tt class="descname">LinGaussCPdf</tt><big>(</big><em>a</em>, <em>b</em>, <em>c</em>, <em>d</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#LinGaussCPdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.LinGaussCPdf" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pybayes.pdfs.</tt><tt class="descname">LinGaussCPdf</tt><big>(</big><em>a</em>, <em>b</em>, <em>c</em>, <em>d</em>, <em>rv=None</em>, <em>cond_rv=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#LinGaussCPdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.LinGaussCPdf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Conditional one-dimensional Gaussian pdf whose mean and covariance are
 linear functions of condition.</p>
 <div class="math">
@@ -465,7 +481,7 @@ linear functions of condition.</p>
 \quad \sigma^2 := c c_2 + d" /></p>
 </div><dl class="method">
 <dt id="pybayes.pdfs.LinGaussCPdf.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>a</em>, <em>b</em>, <em>c</em>, <em>d</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#LinGaussCPdf.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.LinGaussCPdf.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>a</em>, <em>b</em>, <em>c</em>, <em>d</em>, <em>rv=None</em>, <em>cond_rv=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#LinGaussCPdf.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.LinGaussCPdf.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialise Linear Gaussian conditional pdf.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -485,27 +501,27 @@ linear functions of condition.</p>
 
 <dl class="class">
 <dt id="pybayes.pdfs.ProdCPdf">
-<em class="property">class </em><tt class="descclassname">pybayes.pdfs.</tt><tt class="descname">ProdCPdf</tt><big>(</big><em>*factors</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#ProdCPdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.ProdCPdf" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pybayes.pdfs.</tt><tt class="descname">ProdCPdf</tt><big>(</big><em>factors</em>, <em>rv=None</em>, <em>cond_rv=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#ProdCPdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.ProdCPdf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Pdf that is formed as a chain rule of multiple conditional pdfs.</p>
 <div class="math">
 <p><img src="_images/math/12a9f191b4591af01230f9594a6c09c7b9ea4d13.png" alt="f(x_1 x_2 x_3 | c) = f_1(x_1 | x_2 x_3 c) f_2(x_2 | x_3 c) f_3(x_3 | c)" /></p>
 </div><dl class="method">
 <dt id="pybayes.pdfs.ProdCPdf.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>*factors</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#ProdCPdf.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.ProdCPdf.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>factors</em>, <em>rv=None</em>, <em>cond_rv=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#ProdCPdf.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.ProdCPdf.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Construct chain rule of multiple cpdfs.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>*factors</strong> (<a class="reference internal" href="#pybayes.pdfs.CPdf" title="pybayes.pdfs.CPdf"><tt class="xref py py-class docutils literal"><span class="pre">CPdf</span></tt></a>) &#8211; objects of type CPdf (or subclasses)</li>
+<li><strong>factors</strong> (sequence of <a class="reference internal" href="#pybayes.pdfs.CPdf" title="pybayes.pdfs.CPdf"><tt class="xref py py-class docutils literal"><span class="pre">CPdf</span></tt></a>) &#8211; sequence of densities that will form the product</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
 <p>Usual way of creating ProdCPdf could be:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">prod</span> <span class="o">=</span> <span class="n">ProdCPdf</span><span class="p">(</span><span class="n">MLinGaussCPdf</span><span class="p">(</span><span class="o">..</span><span class="p">),</span> <span class="n">UniPdf</span><span class="p">(</span><span class="o">...</span><span class="p">))</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">prod</span> <span class="o">=</span> <span class="n">ProdCPdf</span><span class="p">((</span><span class="n">MLinGaussCPdf</span><span class="p">(</span><span class="o">..</span><span class="p">),</span> <span class="n">UniPdf</span><span class="p">(</span><span class="o">..</span><span class="p">)),</span> <span class="n">rv</span><span class="o">=</span><span class="n">RV</span><span class="p">(</span><span class="o">..</span><span class="p">),</span> <span class="n">rv_cond</span><span class="o">=</span><span class="n">RV</span><span class="p">(</span><span class="o">..</span><span class="p">))</span>
 </pre></div>
 </div>
 </dd></dl>
