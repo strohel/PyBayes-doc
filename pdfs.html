@@ -92,10 +92,8 @@ also pass another RVs which is a shotrcut for adding all their components.</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><strong>TypeError</strong> &#8211; invalid object passed (neither a <a class="reference internal" href="#pybayes.pdfs.RV" title="pybayes.pdfs.RV"><tt class="xref py py-class docutils literal"><span class="pre">RV</span></tt></a> or a <a class="reference internal" href="#pybayes.pdfs.RVComp" title="pybayes.pdfs.RVComp"><tt class="xref py py-class docutils literal"><span class="pre">RVComp</span></tt></a>)</li>
-<li><strong>ValueError</strong> &#8211; zero components passed, or the same component passed twice (currently unsupported, speak up if you need it)</li>
-</ul>
+<tr class="field"><th class="field-name" colspan="2">Raises TypeError:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"><p class="first last">invalid object passed (neither a <a class="reference internal" href="#pybayes.pdfs.RV" title="pybayes.pdfs.RV"><tt class="xref py py-class docutils literal"><span class="pre">RV</span></tt></a> or a <a class="reference internal" href="#pybayes.pdfs.RVComp" title="pybayes.pdfs.RVComp"><tt class="xref py py-class docutils literal"><span class="pre">RVComp</span></tt></a>)</p>
 </td>
 </tr>
 </tbody>
@@ -192,13 +190,25 @@ denote that the CPdf is associated with particular random variable (respectively
 its condition is associated with particular random variable); when unspecified,
 <em>anonymous</em> random variable is assumed (exceptions exist, see <a class="reference internal" href="#pybayes.pdfs.ProdPdf" title="pybayes.pdfs.ProdPdf"><tt class="xref py py-class docutils literal"><span class="pre">ProdPdf</span></tt></a>).
 It is an error to pass RV whose dimension is not same as CPdf&#8217;s dimension
-(or cond dimension respectively). These arguments must be generally passed
-as <em>keyword arguments</em> i.e. <tt class="docutils literal"><span class="pre">Pdf(...,</span> <span class="pre">rv=RV(...))</span></tt> and not
-<tt class="docutils literal"><span class="pre">Pdf(...,</span> <span class="pre">RV(...))</span></tt>.</p>
+(or cond dimension respectively).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>rv</strong> (<em>RV</em>) &#8211; associated random variable (always set in constructor, contains at least one RVComp)</li>
+<li><strong>cond_rv</strong> (<em>RV</em>) &#8211; associated condition random variable (set in constructor to potentially empty RV)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><em>While you can assign different rv and cond_rv to a CPdf, you should be
+cautious because sanity checks are only performed in constructor.</em></p>
 <p>While entire idea of random variable associations may not be needed in simple
 cases, it allows you to express more complicated situations, assume the state
 variable is composed of 2 components <img class="math" src="_images/math/79c18f8eed1cf8786ef8c7fc1f3b49492427ba00.png" alt="x_t = [a_t, b_t]"/> and following
-distribution is to be modelled:</p>
+probability density function has to be modelled:</p>
 <div class="math">
 <p><img src="_images/math/9829ba9f4be2df663b09b52ec6c7658169d150cb.png" alt="p(x_t|x_{t-1}) &amp;:= p_1(a_t|a_{t-1}, b_t) p_2(b_t|b_{t-1}) \\
 p_1(a_t|a_{t-1}, b_t) &amp;:= \mathcal{N}(a_{t-1}, b_t) \\
@@ -208,12 +218,12 @@ p_2(b_t|b_{t-1}) &amp;:= \mathcal{N}(b_{t-1}, 0.0001)" /></p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a_tp</span><span class="p">,</span> <span class="n">b_tp</span> <span class="o">=</span> <span class="n">RVComp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#39;a_{t-1}&#39;</span><span class="p">),</span> <span class="n">RVComp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#39;b_{t-1}&#39;</span><span class="p">)</span>  <span class="c"># t-1 case</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">p1</span> <span class="o">=</span> <span class="n">LinGaussPdf</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">rv</span><span class="o">=</span><span class="n">RV</span><span class="p">(</span><span class="n">a_t</span><span class="p">),</span> <span class="n">rv_cond</span><span class="o">=</span><span class="n">RV</span><span class="p">(</span><span class="n">a_tp</span><span class="p">,</span> <span class="n">b_t</span><span class="p">))</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">p1</span> <span class="o">=</span> <span class="n">LinGaussPdf</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">RV</span><span class="p">(</span><span class="n">a_t</span><span class="p">),</span> <span class="n">RV</span><span class="p">(</span><span class="n">a_tp</span><span class="p">,</span> <span class="n">b_t</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cov</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.0001</span><span class="p">]]),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.</span><span class="p">]]),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">])</span>  <span class="c"># params for p2</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p2</span> <span class="o">=</span> <span class="n">MLinGaussPdf</span><span class="p">(</span><span class="n">cov</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">rv</span><span class="o">=</span><span class="n">RV</span><span class="p">(</span><span class="n">b_t</span><span class="p">),</span> <span class="n">rv_cond</span><span class="o">=</span><span class="n">RV</span><span class="p">(</span><span class="n">b_tp</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p2</span> <span class="o">=</span> <span class="n">MLinGaussPdf</span><span class="p">(</span><span class="n">cov</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">RV</span><span class="p">(</span><span class="n">b_t</span><span class="p">),</span> <span class="n">RV</span><span class="p">(</span><span class="n">b_tp</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ProdCPdf</span><span class="p">((</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">),</span> <span class="n">rv</span><span class="o">=</span><span class="n">RV</span><span class="p">(</span><span class="n">a_t</span><span class="p">,</span> <span class="n">b_t</span><span class="p">),</span> <span class="n">rv_cond</span><span class="o">=</span><span class="n">RV</span><span class="p">(</span><span class="n">a_tp</span><span class="p">,</span> <span class="n">b_tp</span><span class="p">))</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ProdCPdf</span><span class="p">((</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">),</span> <span class="n">RV</span><span class="p">(</span><span class="n">a_t</span><span class="p">,</span> <span class="n">b_t</span><span class="p">),</span> <span class="n">RV</span><span class="p">(</span><span class="n">a_tp</span><span class="p">,</span> <span class="n">b_tp</span><span class="p">))</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">]))</span>
@@ -441,6 +451,10 @@ have no mathematical sense.</p>
 </tr>
 </tbody>
 </table>
+<p>As an exception from the general rule, ProdPdf does not create anonymous
+associated random variable if you do not supply it in constructor - it
+rather reuses components of underlying factor pdfs. (You can of course
+override this behaviour by bassing custom <strong>rv</strong>.)</p>
 <p>Usual way of creating ProdPdf could be:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">prod</span> <span class="o">=</span> <span class="n">ProdPdf</span><span class="p">((</span><span class="n">UniPdf</span><span class="p">(</span><span class="o">...</span><span class="p">),</span> <span class="n">GaussPdf</span><span class="p">(</span><span class="o">...</span><span class="p">)))</span>  <span class="c"># note the double (( and ))</span>
 </pre></div>
@@ -521,7 +535,7 @@ linear functions of condition.</p>
 </tbody>
 </table>
 <p>Usual way of creating ProdCPdf could be:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">prod</span> <span class="o">=</span> <span class="n">ProdCPdf</span><span class="p">((</span><span class="n">MLinGaussCPdf</span><span class="p">(</span><span class="o">..</span><span class="p">),</span> <span class="n">UniPdf</span><span class="p">(</span><span class="o">..</span><span class="p">)),</span> <span class="n">rv</span><span class="o">=</span><span class="n">RV</span><span class="p">(</span><span class="o">..</span><span class="p">),</span> <span class="n">rv_cond</span><span class="o">=</span><span class="n">RV</span><span class="p">(</span><span class="o">..</span><span class="p">))</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">prod</span> <span class="o">=</span> <span class="n">ProdCPdf</span><span class="p">((</span><span class="n">MLinGaussCPdf</span><span class="p">(</span><span class="o">..</span><span class="p">),</span> <span class="n">UniPdf</span><span class="p">(</span><span class="o">..</span><span class="p">)),</span> <span class="n">RV</span><span class="p">(</span><span class="o">..</span><span class="p">),</span> <span class="n">RV</span><span class="p">(</span><span class="o">..</span><span class="p">))</span>
 </pre></div>
 </div>
 </dd></dl>
