@@ -92,10 +92,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">dimension</span> <span class="o">=</span> <span class="n">dimension</span>
 
     <span class="c">#def __eq__(self, other):</span>
-        <span class="sd">&quot;&quot;&quot;We want RVComp have to be hashable</span>
-<span class="sd">        (http://docs.python.org/glossary.html#term-hashable), but default __eq__()</span>
-<span class="sd">        and __hash__() implementations suffice, as they are instance-based.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c">#&quot;&quot;&quot;We want RVComp have to be hashable</span>
+        <span class="c">#(http://docs.python.org/glossary.html#term-hashable), but default __eq__()</span>
+        <span class="c">#and __hash__() implementations suffice, as they are instance-based.</span>
+        <span class="c">#&quot;&quot;&quot;</span>
 
 </div></div>
 <div class="viewcode-block" id="RV"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.RV">[docs]</a><span class="k">class</span> <span class="nc">RV</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -128,7 +128,7 @@
 
 <span class="sd">        :param \*components: components that should form the random vector. You may</span>
 <span class="sd">            also pass another RVs which is a shotrcut for adding all their components.</span>
-<span class="sd">        :type \*components: :class:`RV` or :class:`RVComp`</span>
+<span class="sd">        :type \*components: :class:`RV`, :class:`RVComp` or a sequence of :class:`RVComp` items</span>
 <span class="sd">        :raises TypeError: invalid object passed (neither a :class:`RV` or a :class:`RVComp`)</span>
 
 <span class="sd">        Usual way of creating RV could be:</span>
@@ -209,12 +209,12 @@
 </div>
 <div class="viewcode-block" id="RV.indexed_in"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.RV.indexed_in">[docs]</a>    <span class="k">def</span> <span class="nf">indexed_in</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">super_rv</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return index array such that this rv is indexed in **super_rv**, which</span>
-<span class="sd">        must be superset of this rv. Resulting array can be used with numpy.take()</span>
-<span class="sd">        and numpy.put().</span>
+<span class="sd">        must be superset of this rv. Resulting array can be used with :func:`numpy.take`</span>
+<span class="sd">        and :func:`numpy.put`.</span>
 
 <span class="sd">        :param super_rv: returned indices apply to this rv</span>
 <span class="sd">        :type super_rv: :class:`RV`</span>
-<span class="sd">        :rtype: 1-D numpy.ndarray of ints with dimension = self.dimension</span>
+<span class="sd">        :rtype: 1-D :class:`numpy.ndarray` of ints with dimension = self.dimension</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ret</span> <span class="o">=</span> <span class="n">ndarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dimension</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
         <span class="n">ret_ind</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c"># current index in returned index array</span>
@@ -298,27 +298,27 @@
 <div class="viewcode-block" id="CPdf.mean"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.CPdf.mean">[docs]</a>    <span class="k">def</span> <span class="nf">mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return (conditional) mean value of the pdf.</span>
 
-<span class="sd">        :rtype: numpy.ndarray&quot;&quot;&quot;</span>
+<span class="sd">        :rtype: :class:`numpy.ndarray`&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Derived classes must implement this function&quot;</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="CPdf.variance"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.CPdf.variance">[docs]</a>    <span class="k">def</span> <span class="nf">variance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return (conditional) variance (diagonal elements of covariance).</span>
 
-<span class="sd">        :rtype: numpy.ndarray&quot;&quot;&quot;</span>
+<span class="sd">        :rtype: :class:`numpy.ndarray`&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Derived classes must implement this function&quot;</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="CPdf.eval_log"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.CPdf.eval_log">[docs]</a>    <span class="k">def</span> <span class="nf">eval_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return logarithm of (conditional) likelihood function in point x.</span>
 
 <span class="sd">        :param x: point which to evaluate the function in</span>
-<span class="sd">        :type x: numpy.ndarray</span>
+<span class="sd">        :type x: :class:`numpy.ndarray`</span>
 <span class="sd">        :rtype: double&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Derived classes must implement this function&quot;</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="CPdf.sample"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.CPdf.sample">[docs]</a>    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return one random (conditional) sample from this distribution</span>
 
-<span class="sd">        :rtype: numpy.ndarray&quot;&quot;&quot;</span>
+<span class="sd">        :rtype: :class:`numpy.ndarray`&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Derived classes must implement this function&quot;</span><span class="p">)</span>
 </div>
     <span class="k">def</span> <span class="nf">_check_cond</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span><span class="p">):</span>
@@ -397,8 +397,10 @@
 
 <span class="sd">    .. math:: f(x) = \Theta(x - a) \Theta(b - x) \prod_{i=1}^n \frac{1}{b_i-a_i}</span>
 
-<span class="sd">    :var numpy.ndarray a: left border</span>
-<span class="sd">    :var numpy.ndarray b: right border</span>
+<span class="sd">    :var a: left border</span>
+<span class="sd">    :type a: :class:`numpy.ndarray`</span>
+<span class="sd">    :var b: right border</span>
+<span class="sd">    :type b: :class:`numpy.ndarray`</span>
 
 <span class="sd">    You may modify these attributes as long as you don&#39;t change their shape and</span>
 <span class="sd">    assumption **a** &lt; **b** still holds.</span>
@@ -408,9 +410,9 @@
         <span class="sd">&quot;&quot;&quot;Initialise uniform distribution.</span>
 
 <span class="sd">        :param a: left border</span>
-<span class="sd">        :type a: numpy.ndarray</span>
+<span class="sd">        :type a: :class:`numpy.ndarray`</span>
 <span class="sd">        :param b: right border</span>
-<span class="sd">        :type b: numpy.ndarray</span>
+<span class="sd">        :type b: :class:`numpy.ndarray`</span>
 
 <span class="sd">        **b** must be greater (in each dimension) than **a**</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -448,8 +450,10 @@
 
 <span class="sd">    .. math:: f(x) \propto \exp \left( - \left( x-\mu \right)&#39; R^{-1} \left( x-\mu \right) \right)</span>
 
-<span class="sd">    :var numpy.ndarray mu: mean value</span>
-<span class="sd">    :var numpy.ndarray R: covariance matrix</span>
+<span class="sd">    :var mu: mean value</span>
+<span class="sd">    :type mu: 1-D :class:`numpy.ndarray`</span>
+<span class="sd">    :var R: covariance matrix</span>
+<span class="sd">    :type R: 2-D :class:`numpy.ndarray`</span>
 
 <span class="sd">    You can modify object parameters only if you are absolutely sure that you</span>
 <span class="sd">    pass allowable values, because parameters are only checked once in constructor.</span>
@@ -458,8 +462,10 @@
 <div class="viewcode-block" id="GaussPdf.__init__"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.GaussPdf.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">covariance</span><span class="p">,</span> <span class="n">rv</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialise Gaussian pdf.</span>
 
-<span class="sd">        :param numpy.ndarray mean: mean value (1D array)</span>
-<span class="sd">        :param numpy.ndarray covariance: covariance matrix (2D array)</span>
+<span class="sd">        :param mean: mean value</span>
+<span class="sd">        :type mean: 1-D :class:`numpy.ndarray`</span>
+<span class="sd">        :param covariance: covariance matrix</span>
+<span class="sd">        :type covariance: 2-D :class:`numpy.ndarray`</span>
 
 <span class="sd">        To create standard normal distribution:</span>
 
@@ -886,7 +892,7 @@
         <span class="c"># process pdfs from right to left (they are arranged so that data flow</span>
         <span class="c"># is well defined in this case):</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-            <span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">out_indeces</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_indeces</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">out_indeces</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">in_indeces</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
 
         <span class="k">return</span> <span class="n">data</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">]</span>  <span class="c"># return right portion of data</span></div>
 </pre></div>
