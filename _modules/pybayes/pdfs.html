@@ -91,6 +91,12 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;dimension must be non-zero positive&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dimension</span> <span class="o">=</span> <span class="n">dimension</span>
 
+    <span class="c">#def __eq__(self, other):</span>
+        <span class="sd">&quot;&quot;&quot;We want RVComp have to be hashable</span>
+<span class="sd">        (http://docs.python.org/glossary.html#term-hashable), but default __eq__()</span>
+<span class="sd">        and __hash__() implementations suffice, as they are instance-based.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
 </div></div>
 <div class="viewcode-block" id="RV"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.RV">[docs]</a><span class="k">class</span> <span class="nc">RV</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Representation of a random variable made of one or more components. See</span>
@@ -99,6 +105,22 @@
 <span class="sd">    :var int dimension: cummulative dimension; do not change</span>
 <span class="sd">    :var str name: pretty name, can be changed but needs to be a string</span>
 <span class="sd">    :var list components: list of RVComps; do not change</span>
+
+<span class="sd">    *Please take into account that all RVComp comparisons inside RV are</span>
+<span class="sd">    instance-based and component names are purely informational. To demonstrate:*</span>
+
+<span class="sd">    &gt;&gt;&gt; rv = RV(RVComp(1, &quot;a&quot;))</span>
+<span class="sd">    &gt;&gt;&gt; ...</span>
+<span class="sd">    &gt;&gt;&gt; rv.contains(RVComp(1, &quot;a&quot;))</span>
+<span class="sd">    False</span>
+
+<span class="sd">    Right way to do this would be:</span>
+
+<span class="sd">    &gt;&gt;&gt; a = RVComp(1, &quot;arbitrary pretty name for a&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; rv = RV(a)</span>
+<span class="sd">    &gt;&gt;&gt; ...</span>
+<span class="sd">    &gt;&gt;&gt; rv.contains(a)</span>
+<span class="sd">    True</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="RV.__init__"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.RV.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">components</span><span class="p">):</span>
@@ -122,23 +144,30 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">components</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">components</span><span class="p">)</span> <span class="ow">is</span> <span class="mi">0</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;[]&#39;</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;[&#39;</span>
-            <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="n">components</span><span class="p">:</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">component</span><span class="p">,</span> <span class="n">RVComp</span><span class="p">):</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_add_component</span><span class="p">(</span><span class="n">component</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">component</span><span class="p">,</span> <span class="n">RV</span><span class="p">):</span>
-                    <span class="k">for</span> <span class="n">subcomp</span> <span class="ow">in</span> <span class="n">component</span><span class="o">.</span><span class="n">components</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;[&#39;</span>
+        <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="n">components</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">component</span><span class="p">,</span> <span class="n">RVComp</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_add_component</span><span class="p">(</span><span class="n">component</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">component</span><span class="p">,</span> <span class="n">RV</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">subcomp</span> <span class="ow">in</span> <span class="n">component</span><span class="o">.</span><span class="n">components</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_add_component</span><span class="p">(</span><span class="n">subcomp</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">subcomp</span> <span class="ow">in</span> <span class="n">component</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">_add_component</span><span class="p">(</span><span class="n">subcomp</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
+                <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&#39;component &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">component</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; is neither an instance &#39;</span>
-                                <span class="o">+</span> <span class="s">&#39;of RVComp or RV&#39;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;]&#39;</span>
+                                <span class="o">+</span> <span class="s">&#39;of RVComp or RV and is not iterable of RVComps&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;]&#39;</span>
 </div>
     <span class="k">def</span> <span class="nf">_add_component</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">component</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Add new component to this random variable.</span>
 
 <span class="sd">        Internal function, do not use outside of RV.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">component</span><span class="p">,</span> <span class="n">RVComp</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;component is not of type RVComp&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">component</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dimension</span> <span class="o">+=</span> <span class="n">component</span><span class="o">.</span><span class="n">dimension</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;{0}{1}, &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">component</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
@@ -152,12 +181,61 @@
 <span class="sd">        :type component: :class:`RVComp`</span>
 <span class="sd">        :rtype: bool</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">comp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">id</span><span class="p">(</span><span class="n">comp</span><span class="p">)</span> <span class="o">==</span> <span class="nb">id</span><span class="p">(</span><span class="n">component</span><span class="p">):</span>
-                <span class="k">return</span> <span class="bp">True</span>
-        <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">return</span> <span class="n">component</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span>
+</div>
+<div class="viewcode-block" id="RV.contains_all"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.RV.contains_all">[docs]</a>    <span class="k">def</span> <span class="nf">contains_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_components</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return True if this RV contains all RVComps from sequence</span>
+<span class="sd">        **components**.</span>
 
-</div></div>
+<span class="sd">        :param components: list of components whose presence is checked</span>
+<span class="sd">        :type components: sequence of :class:`RVComp` items</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">test_comp</span> <span class="ow">in</span> <span class="n">test_components</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">test_comp</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">return</span> <span class="bp">True</span><span class="p">;</span>
+</div>
+<div class="viewcode-block" id="RV.contained_in"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.RV.contained_in">[docs]</a>    <span class="k">def</span> <span class="nf">contained_in</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_components</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return True if sequence **components** contains all all components</span>
+<span class="sd">        from this RV (and perhaps more).</span>
+
+<span class="sd">        :param components: set of components whose presence is checked</span>
+<span class="sd">        :type components: sequence of :class:`RVComp` items</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">component</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">test_components</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">return</span> <span class="bp">True</span>
+</div>
+<div class="viewcode-block" id="RV.indexed_in"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.RV.indexed_in">[docs]</a>    <span class="k">def</span> <span class="nf">indexed_in</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">super_rv</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return index array such that this rv is indexed in **super_rv**, which</span>
+<span class="sd">        must be superset of this rv. Resulting array can be used with numpy.take()</span>
+<span class="sd">        and numpy.put().</span>
+
+<span class="sd">        :param super_rv: returned indices apply to this rv</span>
+<span class="sd">        :type super_rv: :class:`RV`</span>
+<span class="sd">        :rtype: 1-D numpy.ndarray of ints with dimension = self.dimension</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">ndarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dimension</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">ret_ind</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c"># current index in returned index array</span>
+        <span class="c"># process each component from target rv</span>
+        <span class="k">for</span> <span class="n">comp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">:</span>
+            <span class="c"># find associated component in source_rv components:</span>
+            <span class="n">src_ind</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c"># index in source vector</span>
+            <span class="k">for</span> <span class="n">source_comp</span> <span class="ow">in</span> <span class="n">super_rv</span><span class="o">.</span><span class="n">components</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">source_comp</span> <span class="ow">is</span> <span class="n">comp</span><span class="p">:</span>
+                    <span class="n">ret</span><span class="p">[</span><span class="n">ret_ind</span><span class="p">:]</span> <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="n">src_ind</span><span class="p">,</span> <span class="n">src_ind</span> <span class="o">+</span> <span class="n">comp</span><span class="o">.</span><span class="n">dimension</span><span class="p">)</span>
+                    <span class="n">ret_ind</span> <span class="o">+=</span> <span class="n">comp</span><span class="o">.</span><span class="n">dimension</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="n">src_ind</span> <span class="o">+=</span> <span class="n">source_comp</span><span class="o">.</span><span class="n">dimension</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&quot;Cannont find component &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">comp</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; in source_rv.components.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ret</span>
+</div>
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&quot;&lt;pybayes.pdfs.RV &#39;{0}&#39; dim={1} {2}&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimension</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">)</span>
+
+</div>
 <div class="viewcode-block" id="CPdf"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.CPdf">[docs]</a><span class="k">class</span> <span class="nc">CPdf</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">r&quot;&quot;&quot;Base class for all Conditional (in general) Probability Density Functions.</span>
 
@@ -295,7 +373,7 @@
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cond_rv</span><span class="p">,</span> <span class="n">RV</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;cond_rv (is specified) must be (a subclass of) RV&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">cond_rv</span><span class="o">.</span><span class="n">dimension</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">():</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;cond_rv has wrong dimension &quot;</span> <span class="o">+</span> <span class="n">cond_rv</span><span class="o">.</span><span class="n">dimension</span> <span class="o">+</span> <span class="s">&quot;, &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">()</span> <span class="o">+</span> <span class="s">&quot; expected&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;cond_rv has wrong dimension &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">cond_rv</span><span class="o">.</span><span class="n">dimension</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;, &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">())</span> <span class="o">+</span> <span class="s">&quot; expected&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">cond_rv</span> <span class="o">=</span> <span class="n">cond_rv</span>
         <span class="k">return</span> <span class="bp">True</span>
 
@@ -633,9 +711,32 @@
 
 </div>
 <div class="viewcode-block" id="ProdCPdf"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.ProdCPdf">[docs]</a><span class="k">class</span> <span class="nc">ProdCPdf</span><span class="p">(</span><span class="n">CPdf</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Pdf that is formed as a chain rule of multiple conditional pdfs.</span>
+    <span class="sd">r&quot;&quot;&quot;Pdf that is formed as a chain rule of multiple conditional pdfs. In a</span>
+<span class="sd">    simple textbook case denoted below it isn&#39;t needed to specify random variables</span>
+<span class="sd">    at all. In this case when no random variable associations are passed,</span>
+<span class="sd">    ProdCPdf ignores rv associations of its factors and everything is determined</span>
+<span class="sd">    from their order. (:math:`x_i` are arbitrary vectors)</span>
 
-<span class="sd">    .. math:: f(x_1 x_2 x_3 | c) = f_1(x_1 | x_2 x_3 c) f_2(x_2 | x_3 c) f_3(x_3 | c)</span>
+<span class="sd">    .. math::</span>
+
+<span class="sd">        f(x_1 x_2 x_3 | c) &amp;= f_1(x_1 | x_2 x_3 c) f_2(x_2 | x_3 c) f_3(x_3 | c) \\</span>
+<span class="sd">        \text{or} \quad f(x_1 x_2 x_3) &amp;= f_1(x_1 | x_2 x_3) f_2(x_2 | x_3) f_3(x_3)</span>
+
+<span class="sd">    &gt;&gt;&gt; f = ProdCPdf((f1, f2, f3))</span>
+
+<span class="sd">    For less simple situations, specifiying random value associations is needed</span>
+<span class="sd">    to estabilish data chain:</span>
+
+<span class="sd">    .. math:: p(x_1 x_2 | y_1 y_2) = p_1(x_1 | x_2) p_2(x_2 | y_2 y_1)</span>
+
+<span class="sd">    &gt;&gt;&gt; # prepare random variable components:</span>
+<span class="sd">    &gt;&gt;&gt; x_1, x_2 = RVComp(1), RVComp(1, &quot;name is optional&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; y_1, y_2 = RVComp(1), RVComp(1, &quot;but recommended&quot;)</span>
+
+<span class="sd">    &gt;&gt;&gt; p_1 = SomePdf(..., rv=RV(x_1), cond_rv=RV(x_2))</span>
+<span class="sd">    &gt;&gt;&gt; p_2 = SomePdf(..., rv=RV(x_2), cond_rv=RV(y_2, y_1))</span>
+<span class="sd">    &gt;&gt;&gt; p = ProdCPdf((p_2, p_1), rv=RV(x_1, x_2), cond_rv=RV(y_1, y_2))  # order of</span>
+<span class="sd">    &gt;&gt;&gt; # pdfs is insignificant - order of rv components determines data flow</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="ProdCPdf.__init__"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.ProdCPdf.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factors</span><span class="p">,</span> <span class="n">rv</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">cond_rv</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
@@ -650,31 +751,105 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">factors</span><span class="p">)</span> <span class="ow">is</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;at least one factor must be passed&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">factors</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">factors</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">Pdf</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">shapes</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>  <span class="c"># array of factor shapes</span>
 
-        <span class="n">accumulate_cond_shape</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">CPdf</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;all records in factors must be (subclasses of) CPdf&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">shapes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shapes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;ProdCPdf cannot contain zero-shaped factors (factor {0})&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
-            <span class="k">if</span> <span class="n">accumulate_cond_shape</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c"># the last factor</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_cond_shape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">()</span>
-                <span class="n">accumulate_cond_shape</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cond_shape</span>
-            <span class="k">else</span><span class="p">:</span>  <span class="c"># other factors</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">()</span> <span class="o">!=</span> <span class="n">accumulate_cond_shape</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Expected cond_shape() of factor {0} will be {1}, &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">accumulate_cond_shape</span><span class="p">)</span>
-                              <span class="o">+</span> <span class="s">&quot;got {0}. (because factor on the right has &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">())</span>
-                              <span class="o">+</span> <span class="s">&quot;shape() {0} and cond_shape() {1}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shapes</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">()))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_indeces</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c"># data link representations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out_indeces</span> <span class="o">=</span> <span class="p">[]</span>
 
-            <span class="c"># prepare for next iteration:</span>
-            <span class="n">accumulate_cond_shape</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shapes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">rv</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">cond_rv</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_init_anonymous</span><span class="p">(</span><span class="n">factors</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">rv</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">cond_rv</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_init_with_rvs</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">factors</span><span class="p">),</span> <span class="n">rv</span><span class="p">,</span> <span class="n">cond_rv</span><span class="p">)</span>  <span class="c"># needs factors as list</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&quot;Please pass both rv and cond_rv or none of them, other combinations not (yet) supported&quot;</span><span class="p">)</span>
 
-        <span class="c"># pre-calculate shape</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shapes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_rvs</span><span class="p">(</span><span class="n">rv</span><span class="p">,</span> <span class="n">cond_rv</span><span class="p">)</span>
 </div>
+    <span class="k">def</span> <span class="nf">_init_anonymous</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factors</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">factors</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">factors</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">CPdf</span><span class="p">)</span>
+
+        <span class="c"># overall cond shape equals last factor cond shape:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cond_shape</span> <span class="o">=</span> <span class="n">factors</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span> <span class="o">=</span> <span class="n">factors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span> <span class="o">+</span> <span class="n">factors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cond_shape</span>
+
+        <span class="n">start_ind</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c"># current start index in cummulate rv and cond_rv data array</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="n">factor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">factor</span><span class="p">,</span> <span class="n">CPdf</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;all records in factors must be (subclasses of) CPdf&quot;</span><span class="p">)</span>
+
+            <span class="n">shape</span> <span class="o">=</span> <span class="n">factor</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span>
+            <span class="n">cond_shape</span> <span class="o">=</span> <span class="n">factor</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">()</span>
+            <span class="c"># expected (normal + cond) shape:</span>
+            <span class="n">exp_shape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cond_shape</span> <span class="o">-</span> <span class="n">start_ind</span>
+            <span class="k">if</span> <span class="n">shape</span> <span class="o">+</span> <span class="n">cond_shape</span> <span class="o">!=</span> <span class="n">exp_shape</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Expected that pdf {0} will have shape (={1}) + &quot;</span><span class="o">.</span>
+                    <span class="n">format</span><span class="p">(</span><span class="n">factor</span><span class="p">,</span> <span class="n">shape</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;cond_shape (={0}) == {1}&quot;</span><span class="o">.</span>
+                    <span class="n">format</span><span class="p">(</span><span class="n">cond_shape</span><span class="p">,</span> <span class="n">exp_shape</span><span class="p">))</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">in_indeces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arange</span><span class="p">(</span><span class="n">start_ind</span> <span class="o">+</span> <span class="n">shape</span><span class="p">,</span> <span class="n">start_ind</span> <span class="o">+</span> <span class="n">shape</span> <span class="o">+</span> <span class="n">cond_shape</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">out_indeces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arange</span><span class="p">(</span><span class="n">start_ind</span><span class="p">,</span> <span class="n">start_ind</span> <span class="o">+</span> <span class="n">shape</span><span class="p">))</span>
+
+            <span class="n">start_ind</span> <span class="o">+=</span> <span class="n">shape</span>
+
+        <span class="k">if</span> <span class="n">start_ind</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Shapes do not match&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_init_with_rvs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factors</span><span class="p">,</span> <span class="n">rv</span><span class="p">,</span> <span class="n">cond_rv</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialise ProdCPdf using rv components for data chain construction.</span>
+
+<span class="sd">        :param factors: factor pdfs that will form the product</span>
+<span class="sd">        :type factors: :class:`list` of :class:`CPdf` items</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># gradually filled set of components that would be available in e.g.</span>
+        <span class="c"># sample() computation:</span>
+        <span class="n">avail_rvcomps</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">cond_rv</span><span class="o">.</span><span class="n">components</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">factors</span> <span class="o">=</span> <span class="n">ndarray</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">factors</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">CPdf</span><span class="p">)</span>  <span class="c"># initialise factor array</span>
+
+        <span class="n">i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c"># factors are filled from right to left</span>
+        <span class="c"># iterate until all input pdfs are processed</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">factors</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c"># find next pdf that can be added to data chain (all its cond</span>
+            <span class="c"># components can be already computed)</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">factors</span><span class="p">)):</span>
+                <span class="n">factor</span> <span class="o">=</span> <span class="n">factors</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">factor</span><span class="p">,</span> <span class="n">CPdf</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;all records in factors must be (subclasses of) CPdf&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">factor</span><span class="o">.</span><span class="n">cond_rv</span><span class="o">.</span><span class="n">contained_in</span><span class="p">(</span><span class="n">avail_rvcomps</span><span class="p">):</span>
+                    <span class="c"># one such pdf found</span>
+                    <span class="c">#DEBUG: print &quot;Appropriate pdf found:&quot;, factor, &quot;with rv:&quot;, factor.rv, &quot;and cond_rv:&quot;, factor.cond_rv</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">rv</span><span class="o">.</span><span class="n">contains_all</span><span class="p">(</span><span class="n">factor</span><span class="o">.</span><span class="n">rv</span><span class="o">.</span><span class="n">components</span><span class="p">):</span>
+                        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">((</span><span class="s">&quot;Some of {0}&#39;s associated rv components &quot;</span>
+                            <span class="o">+</span> <span class="s">&quot;({1}) aren&#39;t present in rv ({2})&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">factor</span><span class="p">,</span> <span class="n">factor</span><span class="o">.</span><span class="n">rv</span><span class="p">,</span> <span class="n">rv</span><span class="p">))</span>
+                    <span class="n">avail_rvcomps</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">factor</span><span class="o">.</span><span class="n">rv</span><span class="o">.</span><span class="n">components</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">factor</span>
+                    <span class="n">i</span> <span class="o">+=</span> <span class="o">-</span><span class="mi">1</span>
+                    <span class="k">del</span> <span class="n">factors</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                    <span class="k">break</span><span class="p">;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c"># we are stuck somewhere in data chain</span>
+                <span class="k">print</span> <span class="s">&quot;Appropriate pdf not found. avail_rvcomps:&quot;</span><span class="p">,</span> <span class="n">avail_rvcomps</span><span class="p">,</span> <span class="s">&quot;candidates:&quot;</span>
+                <span class="k">for</span> <span class="n">factor</span> <span class="ow">in</span> <span class="n">factors</span><span class="p">:</span>
+                    <span class="k">print</span> <span class="s">&quot;  &quot;</span><span class="p">,</span> <span class="n">factor</span><span class="p">,</span> <span class="s">&quot;with cond_rv:&quot;</span><span class="p">,</span> <span class="n">factor</span><span class="o">.</span><span class="n">cond_rv</span>
+                <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&quot;Cannont construct data chain. This means &quot;</span>
+                    <span class="o">+</span> <span class="s">&quot;that it is impossible to arrange factor pdfs into a DAG &quot;</span>
+                    <span class="o">+</span> <span class="s">&quot;that starts with ProdCPdf&#39;s cond_rv components. Please &quot;</span>
+                    <span class="o">+</span> <span class="s">&quot;check cond_rv and factor rvs and cond_rvs.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">rv</span><span class="o">.</span><span class="n">contained_in</span><span class="p">(</span><span class="n">avail_rvcomps</span><span class="p">):</span>
+            <span class="k">print</span> <span class="s">&quot;These components can be computed:&quot;</span><span class="p">,</span> <span class="n">avail_rvcomps</span>
+            <span class="k">print</span> <span class="s">&quot;... but we have to fill following rv:&quot;</span><span class="p">,</span> <span class="n">rv</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&quot;Data chain built, some components cannot be &quot;</span>
+                <span class="o">+</span> <span class="s">&quot;computed with it.&quot;</span><span class="p">)</span>
+
+        <span class="n">cummulate_rv</span> <span class="o">=</span> <span class="n">RV</span><span class="p">(</span><span class="n">rv</span><span class="p">,</span> <span class="n">cond_rv</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="n">factor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">in_indeces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">factor</span><span class="o">.</span><span class="n">cond_rv</span><span class="o">.</span><span class="n">indexed_in</span><span class="p">(</span><span class="n">cummulate_rv</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">out_indeces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">factor</span><span class="o">.</span><span class="n">rv</span><span class="o">.</span><span class="n">indexed_in</span><span class="p">(</span><span class="n">cummulate_rv</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span> <span class="o">=</span> <span class="n">rv</span><span class="o">.</span><span class="n">dimension</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cond_shape</span> <span class="o">=</span> <span class="n">cond_rv</span><span class="o">.</span><span class="n">dimension</span>
+
     <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span>
 
@@ -691,34 +866,29 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_x</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_cond</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span>
 
-        <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="n">cond_start</span> <span class="o">=</span> <span class="mi">0</span>
-
+        <span class="c"># combination of evaluation point and condition:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">ndarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cond_shape</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">:]</span> <span class="o">=</span> <span class="n">cond</span>
         <span class="n">ret</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="n">comb_input</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">())</span>  <span class="c"># combined x and cond</span>
-        <span class="n">comb_input</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">()]</span> <span class="o">=</span> <span class="n">x</span>
-        <span class="n">comb_input</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">():]</span> <span class="o">=</span> <span class="n">cond</span>
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-            <span class="n">cond_start</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shapes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-            <span class="n">ret</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">eval_log</span><span class="p">(</span><span class="n">comb_input</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">cond_start</span><span class="p">],</span> <span class="n">comb_input</span><span class="p">[</span><span class="n">cond_start</span><span class="p">:])</span>
-            <span class="n">start</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shapes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">ret</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">eval_log</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">out_indeces</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span> <span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">in_indeces</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
         <span class="k">return</span> <span class="n">ret</span>
 
     <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_cond</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span>
 
-        <span class="c"># combination of return value and condition</span>
-        <span class="n">comb</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">())</span>
-        <span class="n">start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span>
-        <span class="n">comb</span><span class="p">[</span><span class="n">start</span><span class="p">:]</span> <span class="o">=</span> <span class="n">cond</span>
+        <span class="c"># combination of sampled variables and condition:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">ndarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cond_shape</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">:]</span> <span class="o">=</span> <span class="n">cond</span>  <span class="c"># rest is undefined</span>
 
+        <span class="c"># process pdfs from right to left (they are arranged so that data flow</span>
+        <span class="c"># is well defined in this case):</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-            <span class="n">stop</span> <span class="o">=</span> <span class="n">start</span>
-            <span class="n">start</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shapes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-            <span class="n">comb</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">stop</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">comb</span><span class="p">[</span><span class="n">stop</span><span class="p">:])</span>
+            <span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">out_indeces</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_indeces</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
 
-        <span class="k">return</span> <span class="n">comb</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">()]</span></div>
+        <span class="k">return</span> <span class="n">data</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">]</span>  <span class="c"># return right portion of data</span></div>
 </pre></div>
 
           </div>
@@ -758,7 +928,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2010, Matěj Laitl.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

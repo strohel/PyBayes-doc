@@ -78,6 +78,22 @@ so instead of <tt class="docutils literal"><span class="pre">from</span> <span c
 </tr>
 </tbody>
 </table>
+<p><em>Please take into account that all RVComp comparisons inside RV are
+instance-based and component names are purely informational. To demonstrate:</em></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">rv</span> <span class="o">=</span> <span class="n">RV</span><span class="p">(</span><span class="n">RVComp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">&quot;a&quot;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="o">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rv</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">RVComp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">&quot;a&quot;</span><span class="p">))</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p>Right way to do this would be:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">RVComp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">&quot;arbitrary pretty name for a&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rv</span> <span class="o">=</span> <span class="n">RV</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="o">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rv</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
 <dl class="method">
 <dt id="pybayes.pdfs.RV.__init__">
 <tt class="descname">__init__</tt><big>(</big><em>*components</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#RV.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.RV.__init__" title="Permalink to this definition">¶</a></dt>
@@ -86,15 +102,11 @@ so instead of <tt class="docutils literal"><span class="pre">from</span> <span c
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>*components</strong> (<a class="reference internal" href="#pybayes.pdfs.RV" title="pybayes.pdfs.RV"><tt class="xref py py-class docutils literal"><span class="pre">RV</span></tt></a> or <a class="reference internal" href="#pybayes.pdfs.RVComp" title="pybayes.pdfs.RVComp"><tt class="xref py py-class docutils literal"><span class="pre">RVComp</span></tt></a>) &#8211; components that should form the random vector. You may
-also pass another RVs which is a shotrcut for adding all their components.</li>
-</ul>
-</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>*components</strong> (<a class="reference internal" href="#pybayes.pdfs.RV" title="pybayes.pdfs.RV"><tt class="xref py py-class docutils literal"><span class="pre">RV</span></tt></a> or <a class="reference internal" href="#pybayes.pdfs.RVComp" title="pybayes.pdfs.RVComp"><tt class="xref py py-class docutils literal"><span class="pre">RVComp</span></tt></a>) &#8211; components that should form the random vector. You may
+also pass another RVs which is a shotrcut for adding all their components.</td>
 </tr>
 <tr class="field"><th class="field-name" colspan="2">Raises TypeError:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><p class="first last">invalid object passed (neither a <a class="reference internal" href="#pybayes.pdfs.RV" title="pybayes.pdfs.RV"><tt class="xref py py-class docutils literal"><span class="pre">RV</span></tt></a> or a <a class="reference internal" href="#pybayes.pdfs.RVComp" title="pybayes.pdfs.RVComp"><tt class="xref py py-class docutils literal"><span class="pre">RVComp</span></tt></a>)</p>
-</td>
+<tr><td>&nbsp;</td><td class="field-body">invalid object passed (neither a <a class="reference internal" href="#pybayes.pdfs.RV" title="pybayes.pdfs.RV"><tt class="xref py py-class docutils literal"><span class="pre">RV</span></tt></a> or a <a class="reference internal" href="#pybayes.pdfs.RVComp" title="pybayes.pdfs.RVComp"><tt class="xref py py-class docutils literal"><span class="pre">RVComp</span></tt></a>)</td>
 </tr>
 </tbody>
 </table>
@@ -118,13 +130,57 @@ the component</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>component</strong> (<a class="reference internal" href="#pybayes.pdfs.RVComp" title="pybayes.pdfs.RVComp"><tt class="xref py py-class docutils literal"><span class="pre">RVComp</span></tt></a>) &#8211; component whose presence is tested</li>
-</ul>
-</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>component</strong> (<a class="reference internal" href="#pybayes.pdfs.RVComp" title="pybayes.pdfs.RVComp"><tt class="xref py py-class docutils literal"><span class="pre">RVComp</span></tt></a>) &#8211; component whose presence is tested</td>
 </tr>
-<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
-</td>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybayes.pdfs.RV.contains_all">
+<tt class="descname">contains_all</tt><big>(</big><em>test_components</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#RV.contains_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.RV.contains_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if this RV contains all RVComps from sequence
+<strong>components</strong>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>components</strong> (sequence of <a class="reference internal" href="#pybayes.pdfs.RVComp" title="pybayes.pdfs.RVComp"><tt class="xref py py-class docutils literal"><span class="pre">RVComp</span></tt></a> items) &#8211; list of components whose presence is checked</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybayes.pdfs.RV.contained_in">
+<tt class="descname">contained_in</tt><big>(</big><em>test_components</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#RV.contained_in"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.RV.contained_in" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if sequence <strong>components</strong> contains all all components
+from this RV (and perhaps more).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>components</strong> (sequence of <a class="reference internal" href="#pybayes.pdfs.RVComp" title="pybayes.pdfs.RVComp"><tt class="xref py py-class docutils literal"><span class="pre">RVComp</span></tt></a> items) &#8211; set of components whose presence is checked</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybayes.pdfs.RV.indexed_in">
+<tt class="descname">indexed_in</tt><big>(</big><em>super_rv</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#RV.indexed_in"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.RV.indexed_in" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return index array such that this rv is indexed in <strong>super_rv</strong>, which
+must be superset of this rv. Resulting array can be used with numpy.take()
+and numpy.put().</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>super_rv</strong> (<a class="reference internal" href="#pybayes.pdfs.RV" title="pybayes.pdfs.RV"><tt class="xref py py-class docutils literal"><span class="pre">RV</span></tt></a>) &#8211; returned indices apply to this rv</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">1-D numpy.ndarray of ints with dimension = self.dimension</td>
 </tr>
 </tbody>
 </table>
@@ -170,6 +226,14 @@ the component</p>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pybayes.pdfs.RVComp.dimension">
+<tt class="descname">dimension</tt><a class="headerlink" href="#pybayes.pdfs.RVComp.dimension" title="Permalink to this definition">¶</a></dt>
+<dd><p>We want RVComp have to be hashable
+(<a class="reference external" href="http://docs.python.org/glossary.html#term-hashable">http://docs.python.org/glossary.html#term-hashable</a>), but default __eq__()
+and __hash__() implementations suffice, as they are instance-based.</p>
 </dd></dl>
 
 </dd></dl>
@@ -294,13 +358,9 @@ p_2(b_t|b_{t-1}) &amp;:= \mathcal{N}(b_{t-1}, 0.0001)" /></p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>x</strong> (<em>numpy.ndarray</em>) &#8211; point which to evaluate the function in</li>
-</ul>
-</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<em>numpy.ndarray</em>) &#8211; point which to evaluate the function in</td>
 </tr>
-<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">double</p>
-</td>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">double</td>
 </tr>
 </tbody>
 </table>
@@ -444,10 +504,7 @@ have no mathematical sense.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>factors</strong> (sequence of <a class="reference internal" href="#pybayes.pdfs.Pdf" title="pybayes.pdfs.Pdf"><tt class="xref py py-class docutils literal"><span class="pre">Pdf</span></tt></a>) &#8211; sequence of sub-distributions</li>
-</ul>
-</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factors</strong> (sequence of <a class="reference internal" href="#pybayes.pdfs.Pdf" title="pybayes.pdfs.Pdf"><tt class="xref py py-class docutils literal"><span class="pre">Pdf</span></tt></a>) &#8211; sequence of sub-distributions</td>
 </tr>
 </tbody>
 </table>
@@ -516,10 +573,33 @@ linear functions of condition.</p>
 <dl class="class">
 <dt id="pybayes.pdfs.ProdCPdf">
 <em class="property">class </em><tt class="descclassname">pybayes.pdfs.</tt><tt class="descname">ProdCPdf</tt><big>(</big><em>factors</em>, <em>rv=None</em>, <em>cond_rv=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#ProdCPdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.ProdCPdf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Pdf that is formed as a chain rule of multiple conditional pdfs.</p>
+<dd><p>Pdf that is formed as a chain rule of multiple conditional pdfs. In a
+simple textbook case denoted below it isn&#8217;t needed to specify random variables
+at all. In this case when no random variable associations are passed,
+ProdCPdf ignores rv associations of its factors and everything is determined
+from their order. (<img class="math" src="_images/math/67bc6daa9d6b964201d6cef60cbeb1ac5fd26ead.png" alt="x_i"/> are arbitrary vectors)</p>
 <div class="math">
-<p><img src="_images/math/12a9f191b4591af01230f9594a6c09c7b9ea4d13.png" alt="f(x_1 x_2 x_3 | c) = f_1(x_1 | x_2 x_3 c) f_2(x_2 | x_3 c) f_3(x_3 | c)" /></p>
-</div><dl class="method">
+<p><img src="_images/math/d705ef7f8641e1806e7b44b68342dd5ce10ef42b.png" alt="f(x_1 x_2 x_3 | c) &amp;= f_1(x_1 | x_2 x_3 c) f_2(x_2 | x_3 c) f_3(x_3 | c) \\
+\text{or} \quad f(x_1 x_2 x_3) &amp;= f_1(x_1 | x_2 x_3) f_2(x_2 | x_3) f_3(x_3)" /></p>
+</div><div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">ProdCPdf</span><span class="p">((</span><span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">,</span> <span class="n">f3</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>For less simple situations, specifiying random value associations is needed
+to estabilish data chain:</p>
+<div class="math">
+<p><img src="_images/math/2532424f42b41a9142658258353fbb85a254e985.png" alt="p(x_1 x_2 | y_1 y_2) = p_1(x_1 | x_2) p_2(x_2 | y_2 y_1)" /></p>
+</div><div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># prepare random variable components:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x_1</span><span class="p">,</span> <span class="n">x_2</span> <span class="o">=</span> <span class="n">RVComp</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">RVComp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">&quot;name is optional&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_1</span><span class="p">,</span> <span class="n">y_2</span> <span class="o">=</span> <span class="n">RVComp</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">RVComp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">&quot;but recommended&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">p_1</span> <span class="o">=</span> <span class="n">SomePdf</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">rv</span><span class="o">=</span><span class="n">RV</span><span class="p">(</span><span class="n">x_1</span><span class="p">),</span> <span class="n">cond_rv</span><span class="o">=</span><span class="n">RV</span><span class="p">(</span><span class="n">x_2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p_2</span> <span class="o">=</span> <span class="n">SomePdf</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">rv</span><span class="o">=</span><span class="n">RV</span><span class="p">(</span><span class="n">x_2</span><span class="p">),</span> <span class="n">cond_rv</span><span class="o">=</span><span class="n">RV</span><span class="p">(</span><span class="n">y_2</span><span class="p">,</span> <span class="n">y_1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ProdCPdf</span><span class="p">((</span><span class="n">p_2</span><span class="p">,</span> <span class="n">p_1</span><span class="p">),</span> <span class="n">rv</span><span class="o">=</span><span class="n">RV</span><span class="p">(</span><span class="n">x_1</span><span class="p">,</span> <span class="n">x_2</span><span class="p">),</span> <span class="n">cond_rv</span><span class="o">=</span><span class="n">RV</span><span class="p">(</span><span class="n">y_1</span><span class="p">,</span> <span class="n">y_2</span><span class="p">))</span>  <span class="c"># order of</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># pdfs is insignificant - order of rv components determines data flow</span>
+</pre></div>
+</div>
+<dl class="method">
 <dt id="pybayes.pdfs.ProdCPdf.__init__">
 <tt class="descname">__init__</tt><big>(</big><em>factors</em>, <em>rv=None</em>, <em>cond_rv=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#ProdCPdf.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.ProdCPdf.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Construct chain rule of multiple cpdfs.</p>
@@ -527,10 +607,7 @@ linear functions of condition.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>factors</strong> (sequence of <a class="reference internal" href="#pybayes.pdfs.CPdf" title="pybayes.pdfs.CPdf"><tt class="xref py py-class docutils literal"><span class="pre">CPdf</span></tt></a>) &#8211; sequence of densities that will form the product</li>
-</ul>
-</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factors</strong> (sequence of <a class="reference internal" href="#pybayes.pdfs.CPdf" title="pybayes.pdfs.CPdf"><tt class="xref py py-class docutils literal"><span class="pre">CPdf</span></tt></a>) &#8211; sequence of densities that will form the product</td>
 </tr>
 </tbody>
 </table>
@@ -610,7 +687,7 @@ linear functions of condition.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2010, Matěj Laitl.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>
