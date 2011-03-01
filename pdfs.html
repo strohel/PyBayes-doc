@@ -172,15 +172,15 @@ from this RV (and perhaps more).</p>
 <dt id="pybayes.pdfs.RV.indexed_in">
 <tt class="descname">indexed_in</tt><big>(</big><em>super_rv</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#RV.indexed_in"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.RV.indexed_in" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return index array such that this rv is indexed in <strong>super_rv</strong>, which
-must be superset of this rv. Resulting array can be used with <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.take.html#numpy.take" title="(in NumPy v1.6.dev-c50af53)"><tt class="xref py py-func docutils literal"><span class="pre">numpy.take()</span></tt></a>
-and <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.put.html#numpy.put" title="(in NumPy v1.6.dev-c50af53)"><tt class="xref py py-func docutils literal"><span class="pre">numpy.put()</span></tt></a>.</p>
+must be superset of this rv. Resulting array can be used with <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.take.html#numpy.take" title="(in NumPy v1.6.dev-cbf7407)"><tt class="xref py py-func docutils literal"><span class="pre">numpy.take()</span></tt></a>
+and <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.put.html#numpy.put" title="(in NumPy v1.6.dev-cbf7407)"><tt class="xref py py-func docutils literal"><span class="pre">numpy.put()</span></tt></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>super_rv</strong> (<a class="reference internal" href="#pybayes.pdfs.RV" title="pybayes.pdfs.RV"><tt class="xref py py-class docutils literal"><span class="pre">RV</span></tt></a>) &#8211; returned indices apply to this rv</td>
 </tr>
-<tr class="field"><th class="field-name">Return type:</th><td class="field-body">1-D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.6.dev-c50af53)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a> of ints with dimension = self.dimension</td>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">1-D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.6.dev-cbf7407)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a> of ints with dimension = self.dimension</td>
 </tr>
 </tbody>
 </table>
@@ -322,7 +322,7 @@ p_2(b_t|b_{t-1}) &amp;:= \mathcal{N}(b_{t-1}, 0.0001)" /></p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.6.dev-c50af53)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a></td>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.6.dev-cbf7407)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -336,7 +336,7 @@ p_2(b_t|b_{t-1}) &amp;:= \mathcal{N}(b_{t-1}, 0.0001)" /></p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.6.dev-c50af53)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a></td>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.6.dev-cbf7407)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -350,7 +350,7 @@ p_2(b_t|b_{t-1}) &amp;:= \mathcal{N}(b_{t-1}, 0.0001)" /></p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.6.dev-c50af53)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; point which to evaluate the function in</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.6.dev-cbf7407)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; point which to evaluate the function in</td>
 </tr>
 <tr class="field"><th class="field-name">Return type:</th><td class="field-body">double</td>
 </tr>
@@ -366,7 +366,7 @@ p_2(b_t|b_{t-1}) &amp;:= \mathcal{N}(b_{t-1}, 0.0001)" /></p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.6.dev-c50af53)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a></td>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.6.dev-cbf7407)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -422,8 +422,8 @@ assumption <strong>a</strong> &lt; <strong>b</strong> still holds.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>a</strong> (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.6.dev-c50af53)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; left border</li>
-<li><strong>b</strong> (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.6.dev-c50af53)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; right border</li>
+<li><strong>a</strong> (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.6.dev-cbf7407)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; left border</li>
+<li><strong>b</strong> (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.6.dev-cbf7407)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; right border</li>
 </ul>
 </td>
 </tr>
@@ -463,8 +463,8 @@ pass allowable values, because parameters are only checked once in constructor.<
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>mean</strong> (1-D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.6.dev-c50af53)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; mean value</li>
-<li><strong>covariance</strong> (2-D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.6.dev-c50af53)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; covariance matrix</li>
+<li><strong>mean</strong> (1-D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.6.dev-cbf7407)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; mean value</li>
+<li><strong>covariance</strong> (2-D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.6.dev-cbf7407)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; covariance matrix</li>
 </ul>
 </td>
 </tr>

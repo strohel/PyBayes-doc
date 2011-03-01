@@ -51,27 +51,71 @@
 <span id="bayesian-filters"></span><h1>Bayesian Filters<a class="headerlink" href="#module-pybayes.filters" title="Permalink to this headline">¶</a></h1>
 <p>This module contains Bayesian filters.</p>
 <p>All classes from this module are currently imported to top-level pybayes module,
-so instead of <tt class="docutils literal"><span class="pre">from</span> <span class="pre">pybayes.filters</span> <span class="pre">import</span> <span class="pre">Kalman</span></tt> you can type <tt class="docutils literal"><span class="pre">from</span> <span class="pre">pybayes</span> <span class="pre">import</span>
-<span class="pre">Kalman</span></tt>.</p>
+so instead of <tt class="docutils literal"><span class="pre">from</span> <span class="pre">pybayes.filters</span> <span class="pre">import</span> <span class="pre">KalmanFilter</span></tt> you can type <tt class="docutils literal"><span class="pre">from</span>
+<span class="pre">pybayes</span> <span class="pre">import</span> <span class="pre">KalmanFilter</span></tt>.</p>
 <dl class="class">
-<dt id="pybayes.filters.Kalman">
-<em class="property">class </em><tt class="descclassname">pybayes.filters.</tt><tt class="descname">Kalman</tt><big>(</big><em>A</em>, <em>B</em>, <em>C</em>, <em>D</em>, <em>Q</em>, <em>R</em>, <em>state_pdf</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#Kalman"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.Kalman" title="Permalink to this definition">¶</a></dt>
+<dt id="pybayes.filters.Filter">
+<em class="property">class </em><tt class="descclassname">pybayes.filters.</tt><tt class="descname">Filter</tt><a class="reference internal" href="_modules/pybayes/filters.html#Filter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.Filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract prototype of a bayesian filter</p>
+<dl class="method">
+<dt id="pybayes.filters.Filter.bayes">
+<tt class="descname">bayes</tt><big>(</big><em>yt</em>, <em>ut=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#Filter.bayes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.Filter.bayes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Approximate or exact bayes rule (one iteration)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>yt</strong> (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.6.dev-cbf7407)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; observation at time t</li>
+<li><strong>ut</strong> (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.6.dev-cbf7407)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; intervence at time t (appliciable only to some filters)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pybayes.filters.KalmanFilter">
+<em class="property">class </em><tt class="descclassname">pybayes.filters.</tt><tt class="descname">KalmanFilter</tt><big>(</big><em>A</em>, <em>B</em>, <em>C</em>, <em>D</em>, <em>Q</em>, <em>R</em>, <em>state_pdf</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#KalmanFilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.KalmanFilter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Kalman filter</p>
 <dl class="method">
-<dt id="pybayes.filters.Kalman.bayes">
-<tt class="descname">bayes</tt><big>(</big><em>yt</em>, <em>ut</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#Kalman.bayes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.Kalman.bayes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Approximate Bayes rule</p>
+<dt id="pybayes.filters.KalmanFilter.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>A</em>, <em>B</em>, <em>C</em>, <em>D</em>, <em>Q</em>, <em>R</em>, <em>state_pdf</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#KalmanFilter.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.KalmanFilter.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO: documentation</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="pybayes.filters.ParticleFilter">
-<em class="property">class </em><tt class="descclassname">pybayes.filters.</tt><tt class="descname">ParticleFilter</tt><big>(</big><em>n</em>, <em>p_0</em>, <em>p_x_x</em>, <em>p_x_y</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#ParticleFilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.ParticleFilter" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pybayes.filters.</tt><tt class="descname">ParticleFilter</tt><big>(</big><em>n</em>, <em>init_pdf</em>, <em>p_xt_xtp</em>, <em>p_xt_yt</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#ParticleFilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.ParticleFilter" title="Permalink to this definition">¶</a></dt>
 <dd><p>A filter whose aposteriori density takes the form</p>
 <div class="math">
 <p><img src="_images/math/c0235906c6a9aee3db07ef413c36c3fbb2d273a4.png" alt="p(x_t|y_{1:t}) = \sum_{i=1}^n \omega_i \delta ( x_t - x_t^{(i)} )" /></p>
-</div></dd></dl>
+</div><dl class="method">
+<dt id="pybayes.filters.ParticleFilter.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>n</em>, <em>init_pdf</em>, <em>p_xt_xtp</em>, <em>p_xt_yt</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#ParticleFilter.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.ParticleFilter.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialise particle filter.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>n</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; number of particles</li>
+<li><strong>init_pdf</strong> (<a class="reference internal" href="pdfs.html#pybayes.pdfs.Pdf" title="pybayes.pdfs.Pdf"><tt class="xref py py-class docutils literal"><span class="pre">Pdf</span></tt></a>) &#8211; probability density which initial particles are sampled from</li>
+<li><strong>p_xt_xtp</strong> (<a class="reference internal" href="pdfs.html#pybayes.pdfs.CPdf" title="pybayes.pdfs.CPdf"><tt class="xref py py-class docutils literal"><span class="pre">CPdf</span></tt></a>) &#8211; <img class="math" src="_images/math/2301679dc44b0ba5393ec09837b89d77ee5cdf1a.png" alt="p(x_t|x_{t-1})"/> pdf of state in <em>t</em> given state in <em>t-1</em></li>
+<li><strong>p_xt_yt</strong> (<a class="reference internal" href="pdfs.html#pybayes.pdfs.CPdf" title="pybayes.pdfs.CPdf"><tt class="xref py py-class docutils literal"><span class="pre">CPdf</span></tt></a>) &#8211; <img class="math" src="_images/math/19bf5a57162c9ced3ce54e1ab03959c9adabedb3.png" alt="p(x_t|y_t)"/> pdf of state in <em>t</em> given observation in <em>t</em></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
 
 </div>
 

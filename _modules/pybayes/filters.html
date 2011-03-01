@@ -54,8 +54,8 @@
 <span class="sd">This module contains Bayesian filters.</span>
 
 <span class="sd">All classes from this module are currently imported to top-level pybayes module,</span>
-<span class="sd">so instead of ``from pybayes.filters import Kalman`` you can type ``from pybayes import</span>
-<span class="sd">Kalman``.</span>
+<span class="sd">so instead of ``from pybayes.filters import KalmanFilter`` you can type ``from</span>
+<span class="sd">pybayes import KalmanFilter``.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 
@@ -64,10 +64,24 @@
 <span class="kn">from</span> <span class="nn">pybayes.pdfs</span> <span class="kn">import</span> <span class="n">GaussPdf</span>
 
 
-<div class="viewcode-block" id="Kalman"><a class="viewcode-back" href="../../filters.html#pybayes.filters.Kalman">[docs]</a><span class="k">class</span> <span class="nc">Kalman</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Filter"><a class="viewcode-back" href="../../filters.html#pybayes.filters.Filter">[docs]</a><span class="k">class</span> <span class="nc">Filter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Abstract prototype of a bayesian filter&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Filter.bayes"><a class="viewcode-back" href="../../filters.html#pybayes.filters.Filter.bayes">[docs]</a>    <span class="k">def</span> <span class="nf">bayes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yt</span><span class="p">,</span> <span class="n">ut</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Approximate or exact bayes rule (one iteration)</span>
+
+<span class="sd">        :param yt: observation at time t</span>
+<span class="sd">        :type yt: :class:`numpy.ndarray`</span>
+<span class="sd">        :param ut: intervence at time t (appliciable only to some filters)</span>
+<span class="sd">        :type ut: :class:`numpy.ndarray`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Derived classes must implement this method&quot;</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="KalmanFilter"><a class="viewcode-back" href="../../filters.html#pybayes.filters.KalmanFilter">[docs]</a><span class="k">class</span> <span class="nc">KalmanFilter</span><span class="p">(</span><span class="n">Filter</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Kalman filter&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">state_pdf</span><span class="p">):</span>
+<div class="viewcode-block" id="KalmanFilter.__init__"><a class="viewcode-back" href="../../filters.html#pybayes.filters.KalmanFilter.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">state_pdf</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;TODO: documentation&quot;&quot;&quot;</span>
 
         <span class="c"># check type of pdf</span>
@@ -78,7 +92,7 @@
         <span class="n">matrices</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;A&quot;</span><span class="p">:</span><span class="n">A</span><span class="p">,</span> <span class="s">&quot;B&quot;</span><span class="p">:</span><span class="n">B</span><span class="p">,</span> <span class="s">&quot;C&quot;</span><span class="p">:</span><span class="n">C</span><span class="p">,</span> <span class="s">&quot;D&quot;</span><span class="p">:</span><span class="n">D</span><span class="p">,</span> <span class="s">&quot;Q&quot;</span><span class="p">:</span><span class="n">Q</span><span class="p">,</span> <span class="s">&quot;R&quot;</span><span class="p">:</span><span class="n">R</span><span class="p">}</span>
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">matrices</span><span class="p">:</span>
             <span class="n">matrix</span> <span class="o">=</span> <span class="n">matrices</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
-            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span> <span class="o">!=</span> <span class="n">ndarray</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span> <span class="o">!=</span> <span class="n">ndarray</span><span class="p">:</span>  <span class="c"># TODO: insinstance(), but has different semantics</span>
                 <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">name</span> <span class="o">+</span> <span class="s">&quot; must be (exactly) numpy.ndarray, &quot;</span> <span class="o">+</span>
                                 <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">matrix</span><span class="p">))</span> <span class="o">+</span> <span class="s">&quot; given&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">matrix</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
@@ -111,24 +125,17 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">P</span> <span class="o">=</span> <span class="n">state_pdf</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">S</span> <span class="o">=</span> <span class="n">GaussPdf</span><span class="p">(</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">]),</span> <span class="n">array</span><span class="p">([[</span><span class="mf">1.</span><span class="p">]]))</span>  <span class="c"># observation probability density function</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_bayes_type_check</span> <span class="o">=</span> <span class="bp">True</span>  <span class="c"># whether to check arguments in bayes() method</span>
-
-
-<div class="viewcode-block" id="Kalman.bayes"><a class="viewcode-back" href="../../filters.html#pybayes.filters.Kalman.bayes">[docs]</a>    <span class="k">def</span> <span class="nf">bayes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yt</span><span class="p">,</span> <span class="n">ut</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Approximate Bayes rule&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bayes_type_check</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">yt</span><span class="p">)</span> <span class="o">!=</span> <span class="n">ndarray</span> <span class="ow">or</span> <span class="nb">type</span><span class="p">(</span><span class="n">ut</span><span class="p">)</span> <span class="o">!=</span> <span class="n">ndarray</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;Both yt and ut must be numpy.ndarray. &quot;</span> <span class="o">+</span>
-                                <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">yt</span><span class="p">))</span> <span class="o">+</span> <span class="s">&quot; and &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">ut</span><span class="p">))</span> <span class="o">+</span> <span class="s">&quot; given&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">yt</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">yt</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">j</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;yt must have shape &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">j</span><span class="p">,))</span> <span class="o">+</span> <span class="s">&quot;. (&quot;</span> <span class="o">+</span>
-                                <span class="nb">str</span><span class="p">(</span><span class="n">yt</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&quot;,) given&quot;</span><span class="p">)</span>  <span class="c"># TODO</span>
-            <span class="k">if</span> <span class="n">ut</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">ut</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;yt must have shape &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">,))</span> <span class="o">+</span> <span class="s">&quot;. (&quot;</span> <span class="o">+</span>
-                                <span class="nb">str</span><span class="p">(</span><span class="n">ut</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&quot;,) given&quot;</span><span class="p">)</span>  <span class="c"># TODO</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_bayes_type_check</span> <span class="o">=</span> <span class="bp">False</span>  <span class="c"># for performance reasons check only first time</span>
+</div>
+    <span class="k">def</span> <span class="nf">bayes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yt</span><span class="p">,</span> <span class="n">ut</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">yt</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ut</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;Both yt and ut must be numpy.ndarray. &quot;</span> <span class="o">+</span>
+                            <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">yt</span><span class="p">))</span> <span class="o">+</span> <span class="s">&quot; and &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">ut</span><span class="p">))</span> <span class="o">+</span> <span class="s">&quot; given&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">yt</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">yt</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">j</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;yt must have shape &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">j</span><span class="p">,))</span> <span class="o">+</span> <span class="s">&quot;. (&quot;</span> <span class="o">+</span>
+                            <span class="nb">str</span><span class="p">(</span><span class="n">yt</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&quot;,) given&quot;</span><span class="p">)</span>  <span class="c"># TODO</span>
+        <span class="k">if</span> <span class="n">ut</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">ut</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;yt must have shape &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">,))</span> <span class="o">+</span> <span class="s">&quot;. (&quot;</span> <span class="o">+</span>
+                            <span class="nb">str</span><span class="p">(</span><span class="n">ut</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&quot;,) given&quot;</span><span class="p">)</span>  <span class="c"># TODO</span>
 
         <span class="c"># predict</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">mu</span><span class="p">)</span> <span class="o">+</span> <span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">,</span> <span class="n">ut</span><span class="p">)</span>  <span class="c"># a priori estimate</span>
@@ -144,20 +151,40 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">mu</span> <span class="o">+=</span> <span class="n">dot</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="p">(</span><span class="n">yt</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">mu</span><span class="p">))</span>  <span class="c"># a posteriori estimate</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">R</span> <span class="o">-=</span> <span class="n">dot</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">R</span><span class="p">)</span>  <span class="c"># a posteriori variance</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">mu</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span>
 
-</div></div>
-<div class="viewcode-block" id="ParticleFilter"><a class="viewcode-back" href="../../filters.html#pybayes.filters.ParticleFilter">[docs]</a><span class="k">class</span> <span class="nc">ParticleFilter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A filter whose aposteriori density takes the form</span>
+</div>
+<div class="viewcode-block" id="ParticleFilter"><a class="viewcode-back" href="../../filters.html#pybayes.filters.ParticleFilter">[docs]</a><span class="k">class</span> <span class="nc">ParticleFilter</span><span class="p">(</span><span class="n">Filter</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;A filter whose aposteriori density takes the form</span>
 
 <span class="sd">    .. math:: p(x_t|y_{1:t}) = \sum_{i=1}^n \omega_i \delta ( x_t - x_t^{(i)} )</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">p_0</span><span class="p">,</span> <span class="n">p_x_x</span><span class="p">,</span> <span class="n">p_x_y</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Initialise particle filter.</span>
+<div class="viewcode-block" id="ParticleFilter.__init__"><a class="viewcode-back" href="../../filters.html#pybayes.filters.ParticleFilter.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">init_pdf</span><span class="p">,</span> <span class="n">p_xt_xtp</span><span class="p">,</span> <span class="n">p_xt_yt</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Initialise particle filter.</span>
 
+<span class="sd">        :param int n: number of particles</span>
+<span class="sd">        :param init_pdf: probability density which initial particles are sampled from</span>
+<span class="sd">        :type init_pdf: :class:`~pybayes.pdfs.Pdf`</span>
+<span class="sd">        :param p_xt_xtp: :math:`p(x_t|x_{t-1})` pdf of state in *t* given state in *t-1*</span>
+<span class="sd">        :type p_xt_xtp: :class:`~pybayes.pdfs.CPdf`</span>
+<span class="sd">        :param p_xt_yt: :math:`p(x_t|y_t)` pdf of state in *t* given observation in *t*</span>
+<span class="sd">        :type p_xt_yt: :class:`~pybayes.pdfs.CPdf`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">pass</span></div>
+        <span class="n">dim</span> <span class="o">=</span> <span class="n">init_pdf</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span>  <span class="c"># dimension of state</span>
+        <span class="k">if</span> <span class="n">p_xt_xtp</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span> <span class="o">!=</span> <span class="n">dim</span> <span class="ow">or</span> <span class="n">p_xt_xtp</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">()</span> <span class="o">!=</span> <span class="n">dim</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Expected shape() and cond_shape() of p_xt_xtp() will &quot;</span>
+                <span class="o">+</span> <span class="s">&quot;be {0}; ({1}, {2}) given.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">p_xt_xtp</span><span class="o">.</span><span class="n">shape</span><span class="p">(),</span>
+                <span class="n">p_xt_xtp</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">()))</span>
+        <span class="k">if</span> <span class="n">p_xt_yt</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span> <span class="o">!=</span> <span class="n">dim</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Expected shape() of p_xt_yt() will be {0}; {1} given.&quot;</span>
+                <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">p_xt_yt</span><span class="o">.</span><span class="n">shape</span><span class="p">()))</span>
+
+        <span class="c"># generate initial particles:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">particles</span> <span class="o">=</span> <span class="n">ndarray</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">dim</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">init_pdf</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+        <span class="k">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span></div></div>
 </pre></div>
 
           </div>
