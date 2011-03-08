@@ -68,7 +68,8 @@
     <span class="sd">&quot;&quot;&quot;Atomic component of a random variable.</span>
 
 <span class="sd">    :var int dimension: dimension; do not change unless you know what you are doing</span>
-<span class="sd">    :var str name: name; can be changed as long as it remains a string (warn: parent RVs are not updated)</span>
+<span class="sd">    :var str name: name; can be changed as long as it remains a string (warning:</span>
+<span class="sd">       parent RVs are not updated)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="RVComp.__init__"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.RVComp.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
@@ -251,8 +252,10 @@
 <span class="sd">    It is an error to pass RV whose dimension is not same as CPdf&#39;s dimension</span>
 <span class="sd">    (or cond dimension respectively).</span>
 
-<span class="sd">    :var RV rv: associated random variable (always set in constructor, contains at least one RVComp)</span>
-<span class="sd">    :var RV cond_rv: associated condition random variable (set in constructor to potentially empty RV)</span>
+<span class="sd">    :var RV rv: associated random variable (always set in constructor, contains</span>
+<span class="sd">       at least one RVComp)</span>
+<span class="sd">    :var RV cond_rv: associated condition random variable (set in constructor to</span>
+<span class="sd">       potentially empty RV)</span>
 
 <span class="sd">    *While you can assign different rv and cond_rv to a CPdf, you should be</span>
 <span class="sd">    cautious because sanity checks are only performed in constructor.*</span>
@@ -511,6 +514,58 @@
         <span class="n">z</span> <span class="o">=</span> <span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
         <span class="c"># NumPy&#39;s cholesky(R) is equivalent to Matlab&#39;s chol(R).transpose()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">+</span> <span class="n">dot</span><span class="p">(</span><span class="n">cholesky</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">),</span> <span class="n">z</span><span class="p">);</span>
+
+</div>
+<div class="viewcode-block" id="EmpPdf"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.EmpPdf">[docs]</a><span class="k">class</span> <span class="nc">EmpPdf</span><span class="p">(</span><span class="n">Pdf</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Weighted empirical probability density function.</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">       p(x) &amp;= \sum_{i=1}^n \omega_i \delta(x - x^{(i)}) \\</span>
+<span class="sd">       \text{where} \quad x^{(i)} &amp;\text{ is value of the i}^{th} \text{ particle} \\</span>
+<span class="sd">       \omega_i \geq 0 &amp;\text{ is weight of the i}^{th} \text{ particle} \quad \sum \omega_i = 1</span>
+
+<span class="sd">    :var numpy.ndarray particles: 2D array of particles; shape: (n, m) where n</span>
+<span class="sd">       is the number of particles, m dimension of this pdf</span>
+<span class="sd">    :var numpy.ndarray weights: 1D array of particle weights</span>
+
+<span class="sd">    *You may alter particles and weights, but you must ensure that their shapes</span>
+<span class="sd">    match and that weight constraints still hold.*</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EmpPdf.__init__"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.EmpPdf.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_particles</span><span class="p">,</span> <span class="n">rv</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Initialise empirical pdf.</span>
+
+<span class="sd">        :param init_particles: 2D array of initial particles; shape (*n*, *m*)</span>
+<span class="sd">           determines that *n* *m*-dimensioned particles will be used</span>
+<span class="sd">        :type init_particles: :class:`numpy.ndarray`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">particles</span> <span class="o">=</span> <span class="n">init_particles</span>
+        <span class="c"># set n weights to 1/n</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_rvs</span><span class="p">(</span><span class="n">rv</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+</div>
+    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="n">ret</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">ret</span>
+
+    <span class="k">def</span> <span class="nf">variance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="n">ret</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span>
+        <span class="k">return</span> <span class="n">ret</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">**</span><span class="mi">2</span>
+
+    <span class="k">def</span> <span class="nf">eval_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;eval_log doesn&#39;t make much sense for discrete distribution&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Sample for empirical pdf not (yet?) implemented&quot;</span><span class="p">)</span>
 
 </div>
 <div class="viewcode-block" id="ProdPdf"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.ProdPdf">[docs]</a><span class="k">class</span> <span class="nc">ProdPdf</span><span class="p">(</span><span class="n">Pdf</span><span class="p">):</span>
