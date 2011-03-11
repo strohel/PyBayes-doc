@@ -1,0 +1,279 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PyBayes &mdash; PyBayes v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="PyBayes v0.1 documentation" href="index.html" />
+    <link rel="next" title="Probability Density Functions" href="pdfs.html" />
+    <link rel="prev" title="PyBayes Documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pdfs.html" title="Probability Density Functions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="PyBayes Documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyBayes v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="pybayes">
+<h1>PyBayes<a class="headerlink" href="#pybayes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="about">
+<h2>About<a class="headerlink" href="#about" title="Permalink to this headline">¶</a></h2>
+<p>A long-term goal of PyBayes is to be the preferred python library for
+implementing Bayesian filtering (recursive estimation) and decision-making
+systems.</p>
+<p>Already done are classes for both basic static and conditional probability
+densities ([c]pdfs) and a special cpdf representing a chain rule. Particle
+filter that uses cpdfs extensively is implemented, Kalman filter is also present.</p>
+<p>Future plans include more specialised variants of Kalman/particle filters and
+speed optimisations. The project is also interesting technically as it is
+dual-mode: can be be used without cython at all or compiled to gain more speed
+- with nearly no code duplication.</p>
+<p>Automatically generated <strong>documentation</strong> can be found at
+<a class="reference external" href="http://strohel.github.com/PyBayes-doc/">http://strohel.github.com/PyBayes-doc/</a></p>
+<div class="section" id="licensing">
+<h3>Licensing<a class="headerlink" href="#licensing" title="Permalink to this headline">¶</a></h3>
+<p>PyBayes is currently distributed under GNU GPL v2+ license. The authors of
+PyBayes are however open to other licensing suggestions. (Do you want to use
+PyBayes in e.g. BSD-licensed project? Ask!)</p>
+</div>
+</div>
+<div class="section" id="obtaining-pybayes">
+<h2>Obtaining PyBayes<a class="headerlink" href="#obtaining-pybayes" title="Permalink to this headline">¶</a></h2>
+<p>Development of PyBayes happens on <a class="reference external" href="http://github.com/strohel/PyBayes">http://github.com/strohel/PyBayes</a> using git VCS
+and the most fresh development sources can be obtained using git. It should be noted that
+PyBayes uses git submodule to bundle Tokyo library, so the proper way to clone
+PyBayes repository would be:</p>
+<div class="highlight-python"><pre># cd path/to/projects
+# git clone git://github.com/strohel/PyBayes.git
+Cloning into PyBayes...
+(...)
+# cd PyBayes
+# git submodule update --init
+Submodule 'tokyo' (git://github.com/strohel/Tokyo.git) registered for path 'tokyo'
+Cloning into tokyo...
+(...)
+Submodule path 'tokyo': checked out '896d046b62cf50faf7faa7e58a8705fb2f22f19a'</pre>
+</div>
+<p>When updating your repository (using <tt class="docutils literal"><span class="pre">git</span> <span class="pre">pull</span></tt>), git should inform you that
+some submodules have became outdated. In that case you should issue
+<tt class="docutils literal"><span class="pre">git</span> <span class="pre">submodule</span> <span class="pre">update</span></tt>.</p>
+</div>
+<div class="section" id="installing-pybayes">
+<h2>Installing PyBayes<a class="headerlink" href="#installing-pybayes" title="Permalink to this headline">¶</a></h2>
+<p>PyBayes uses standard Python distutils for building and installation. Follow
+these steps in order to install PyBayes:</p>
+<ul>
+<li><p class="first">download PyBayes, let&#8217;s assume PyBayes-0.1.tar.gz filename</p>
+</li>
+<li><p class="first">unpack it:</p>
+<p><tt class="docutils literal"><span class="pre">tar</span> <span class="pre">-xvf</span> <span class="pre">PyBayes-0.1.tar.gz</span></tt></p>
+</li>
+<li><p class="first">change directory into PyBayes source:</p>
+<p><tt class="docutils literal"><span class="pre">cd</span> <span class="pre">Pybayes-0.1</span></tt></p>
+</li>
+<li><p class="first">build and install (either run as root or install to a user-writeable
+directory <a class="footnote-reference" href="#alternate-install" id="id1">[1]</a>):</p>
+<p><tt class="docutils literal"><span class="pre">./setup.py</span> <span class="pre">install</span></tt></p>
+</li>
+</ul>
+<table class="docutils footnote" frame="void" id="alternate-install" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td><a class="reference external" href="http://docs.python.org/install/#alternate-installation">http://docs.python.org/install/#alternate-installation</a></td></tr>
+</tbody>
+</table>
+<p><strong>And you&#8217;re done!</strong> However, if you want PyBayes to be <em>considerably
+faster</em>, please read the following section.</p>
+<div class="section" id="advanced-installation-options">
+<h3>Advanced installation options<a class="headerlink" href="#advanced-installation-options" title="Permalink to this headline">¶</a></h3>
+<p>PyBayes can use Cython to build itself into binary Python
+module. Such binary modules are transparent to Python in a way that Python
+treats then as any other modules (you can <tt class="docutils literal"><span class="pre">import</span></tt> them as usual).
+Interpreter overhead is avoided and many other optimisation options arise this
+way.</p>
+<p>In order to build optimised PyBayes, you&#8217;ll additionally need:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.cython.org">Cython</a> Python to C compiler</li>
+<li>working C compiler (GCC on Unix-like systems, MinGW or Microsoft Visual C on
+Windows <a class="footnote-reference" href="#install-cython" id="id2">[2]</a>)</li>
+<li><a class="reference external" href="http://numpy.scipy.org/">NumPy</a> numerical library for Python, version 1.5 or greater (NumPy is needed
+also in Python build, but older version suffice in that case)</li>
+<li>On some Debian-based Linux distributions (Ubuntu) you&#8217;ll need python-dev
+package that contains <tt class="docutils literal"><span class="pre">Python.h</span></tt> file that is needed by PyBayes</li>
+</ul>
+<table class="docutils footnote" frame="void" id="install-cython" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td><a class="reference external" href="http://docs.cython.org/src/quickstart/install.html">http://docs.cython.org/src/quickstart/install.html</a></td></tr>
+</tbody>
+</table>
+<p>Proceed with following steps:</p>
+<ol class="arabic">
+<li><p class="first">Install all required dependencies. They should be already available in your
+package manager if you use a modern Linux Distribution.</p>
+</li>
+<li><p class="first">Unpack and install PyBayes as described above, you should see following
+messages during build:</p>
+<blockquote>
+<div><p><tt class="docutils literal"><span class="pre">Notice:</span> <span class="pre">Cython</span> <span class="pre">found.</span></tt></p>
+<p><tt class="docutils literal"><span class="pre">Notice:</span> <span class="pre">NumPy</span> <span class="pre">found.</span></tt></p>
+</div></blockquote>
+<ul class="simple">
+<li>in order to be 100% sure that optimised build is used, you can add
+<tt class="docutils literal"><span class="pre">--use=cython=yes</span></tt> option to the <tt class="docutils literal"><span class="pre">./setup.py</span></tt> call. You can force pure
+Python mode even when Cython is installed, pass <tt class="docutils literal"><span class="pre">--use=cython=no</span></tt>. By
+default, PyBayes auto-detects Cython and NumPy presence on system.</li>
+<li>if you plan to profile code that uses optimised PyBayes, you may want to
+embed profiling information into PyBayes. This can be accomplished by
+passing <tt class="docutils literal"><span class="pre">--profile=yes</span></tt> to <tt class="docutils literal"><span class="pre">./setup.py</span></tt>. The default is to omit
+profiling information in order to avoid performance penalties.</li>
+</ul>
+</li>
+</ol>
+</div>
+<div class="section" id="building-documentation">
+<h3>Building Documentation<a class="headerlink" href="#building-documentation" title="Permalink to this headline">¶</a></h3>
+<p><em>There is no need to build documentation yourself, an online version is at</em>
+<a class="reference external" href="http://strohel.github.com/PyBayes-doc/">http://strohel.github.com/PyBayes-doc/</a></p>
+<p>PyBayes uses <a class="reference external" href="http://sphinx.pocoo.org/">Sphinx</a> to prepare documentation. The documentation is built separately.
+In order to build it, change directory to <cite>doc/</cite> under PyBayes source directory
+(<tt class="docutils literal"><span class="pre">cd</span> <span class="pre">[path_to_pybayes]/doc</span></tt>) and issue <tt class="docutils literal"><span class="pre">make</span></tt> command. This will present you
+with a list of available documentation formats. To generate html documentation,
+for example, run <tt class="docutils literal"><span class="pre">make</span> <span class="pre">html</span></tt> and then point your browser to
+<cite>[path_to_pybayes]/doc/_build/html/index.html</cite>.</p>
+<blockquote>
+<div>PyBayes docs contain many mathematical expressions; <a class="reference external" href="http://sphinx.pocoo.org/">Sphinx</a> can use <a class="reference external" href="http://www.latex-project.org/">LaTeX</a> to
+embed them as images into resulting HTML pages. Be sure to have LaTeX-enabled
+Sphinx if you want to see such nice things.</div></blockquote>
+</div>
+</div>
+<div class="section" id="testing-pybayes">
+<h2>Testing PyBayes<a class="headerlink" href="#testing-pybayes" title="Permalink to this headline">¶</a></h2>
+<p>Once PyBayes is installed, you may want to run its tests in order to ensure
+proper functionality. The <tt class="docutils literal"><span class="pre">examples</span></tt> directory contains <tt class="docutils literal"><span class="pre">run_tests.py</span></tt> and
+<tt class="docutils literal"><span class="pre">run_stresses.py</span></tt> scripts that execute all PyBayes tests and stress tests
+respectively. Run these scripts with <tt class="docutils literal"><span class="pre">-h</span></tt> option to see usage.</p>
+<blockquote>
+<div><em>Note: running tests from within source directory is discouraged and
+unsupported.</em></div></blockquote>
+<p>For even greater convenience, <tt class="docutils literal"><span class="pre">examples/install_test_stress.py</span></tt> python
+script can clear, build, install, test, stress both Python and Cython build in
+one go. It is especially suitable for PyBayes hackers. Run
+<tt class="docutils literal"><span class="pre">install_test_stress.py</span> <span class="pre">-h</span></tt> to get usage information. Please be sure to add
+<tt class="docutils literal"><span class="pre">--clean</span></tt> or <tt class="docutils literal"><span class="pre">-c</span></tt> flag when you mix Python and Cython builds.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">PyBayes</a><ul>
+<li><a class="reference internal" href="#about">About</a><ul>
+<li><a class="reference internal" href="#licensing">Licensing</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#obtaining-pybayes">Obtaining PyBayes</a></li>
+<li><a class="reference internal" href="#installing-pybayes">Installing PyBayes</a><ul>
+<li><a class="reference internal" href="#advanced-installation-options">Advanced installation options</a></li>
+<li><a class="reference internal" href="#building-documentation">Building Documentation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#testing-pybayes">Testing PyBayes</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">PyBayes Documentation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pdfs.html"
+                        title="next chapter">Probability Density Functions</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/README.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pdfs.html" title="Probability Density Functions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="PyBayes Documentation"
+             >previous</a> |</li>
+        <li><a href="index.html">PyBayes v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, Matěj Laitl.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

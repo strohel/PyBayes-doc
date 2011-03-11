@@ -1,0 +1,165 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PyBayes Development &mdash; PyBayes v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="PyBayes v0.1 documentation" href="index.html" />
+    <link rel="prev" title="Bayesian Filters" href="filters.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="filters.html" title="Bayesian Filters"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyBayes v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="pybayes-development">
+<h1>PyBayes Development<a class="headerlink" href="#pybayes-development" title="Permalink to this headline">¶</a></h1>
+<p>This document should serve as a reminder to me and other possible PyBayes
+hackers about PyBayes coding style and conventions.</p>
+<div class="section" id="general-layout-and-principles">
+<h2>General Layout and Principles<a class="headerlink" href="#general-layout-and-principles" title="Permalink to this headline">¶</a></h2>
+<p>PyBayes is developed with special dual-mode technique - it is both perfectly
+valid pure Python library and optimised cython-built binary python module.</p>
+<p>PyBayes modules are laid out with following rules:</p>
+<ul class="simple">
+<li>all modules go directly into <tt class="docutils literal"><span class="pre">pybayes/&lt;module&gt;.py</span></tt> (pure Python file) with
+cython augmentation file in <tt class="docutils literal"><span class="pre">pybayes/module.pxd</span></tt></li>
+<li>in future, bigger independent units can form subpackages</li>
+<li><tt class="docutils literal"><span class="pre">pybayes/numpywrap.{pyx,py,pxd}</span></tt> are special, it is the only module that
+has different implementation for cython and for python.</li>
+</ul>
+</div>
+<div class="section" id="tests-and-stress-tests">
+<h2>Tests and Stress Tests<a class="headerlink" href="#tests-and-stress-tests" title="Permalink to this headline">¶</a></h2>
+<p>All methods of all PyBayes classes should have a unit test. Suppose you have
+a module <tt class="docutils literal"><span class="pre">pybayes/modname.py</span></tt>, then unit tests for all classes in
+<tt class="docutils literal"><span class="pre">modname.py</span></tt> should go into <tt class="docutils literal"><span class="pre">pybayes/tests/test_modname.py</span></tt>. You can also
+write stress test (something that runs considerably longer than a test and
+perhaps provides a simple benchmark) that would go into
+<tt class="docutils literal"><span class="pre">pybayes/tests/stress_modname.py</span></tt>.</p>
+</div>
+<div class="section" id="imports-and-cimports">
+<h2>Imports and cimports<a class="headerlink" href="#imports-and-cimports" title="Permalink to this headline">¶</a></h2>
+<p><strong>No internal module</strong> can <tt class="docutils literal"><span class="pre">import</span> <span class="pre">pybayes</span></tt>! That would result in an infinite
+recursion. External PyBayes clients can and should, however, only <tt class="docutils literal"><span class="pre">import</span> <span class="pre">pybayes</span></tt>
+(and in future also <tt class="docutils literal"><span class="pre">import</span> <span class="pre">pybayes.subpackage</span></tt>). From insibe PyBayes just
+import relevant pybayes modules, e.g. <tt class="docutils literal"><span class="pre">import</span> <span class="pre">pdfs</span></tt>.</p>
+<p>Imports in *.py files should adhere to following rules:</p>
+<ul class="simple">
+<li>import first system modules (sys, io..), then external modules (matplotlib..)
+and then pybayes modules</li>
+<li><strong>never import numpy directly</strong>, import numpywrap instead (and perhaps extend
+symbols that numpywrap.{py,pyx} imports) [TODO: numpywrap handling should be
+refactored a bit]</li>
+<li><tt class="docutils literal"><span class="pre">from</span> <span class="pre">module</span> <span class="pre">import</span> <span class="pre">symbol1,</span> <span class="pre">symbol2</span></tt> syntax is the preferred one</li>
+<li><tt class="docutils literal"><span class="pre">from</span> <span class="pre">module</span> <span class="pre">import</span> <span class="pre">*</span></tt> is prohibited</li>
+</ul>
+<p>Following rules apply to *.pxd (cython augmentation) files:</p>
+<ul class="simple">
+<li>no imports, just cimports.</li>
+<li>use <tt class="docutils literal"><span class="pre">from</span> <span class="pre">module</span> <span class="pre">cimport</span> <span class="pre">symbol1,</span> <span class="pre">symbol2</span></tt> syntax</li>
+<li><tt class="docutils literal"><span class="pre">from</span> <span class="pre">module</span> <span class="pre">cimport</span> <span class="pre">*</span></tt> is forbidden, only exception is <tt class="docutils literal"><span class="pre">from</span> <span class="pre">numpywrap</span>
+<span class="pre">cimport</span> <span class="pre">*</span></tt>, which is mandatory</li>
+</ul>
+<p><em>Above rules do not apply to</em> <tt class="docutils literal"><span class="pre">pybayes/tests</span></tt>. <em>These modules are considered
+external and should behave as a client script.</em></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">PyBayes Development</a><ul>
+<li><a class="reference internal" href="#general-layout-and-principles">General Layout and Principles</a></li>
+<li><a class="reference internal" href="#tests-and-stress-tests">Tests and Stress Tests</a></li>
+<li><a class="reference internal" href="#imports-and-cimports">Imports and cimports</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="filters.html"
+                        title="previous chapter">Bayesian Filters</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/HACKING.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="filters.html" title="Bayesian Filters"
+             >previous</a> |</li>
+        <li><a href="index.html">PyBayes v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, Matěj Laitl.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>
