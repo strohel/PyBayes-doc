@@ -217,7 +217,7 @@
 <span class="sd">        :type super_rv: :class:`RV`</span>
 <span class="sd">        :rtype: 1-D :class:`numpy.ndarray` of ints with dimension = self.dimension</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">ret</span> <span class="o">=</span> <span class="n">ndarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dimension</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dimension</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
         <span class="n">ret_ind</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c"># current index in returned index array</span>
         <span class="c"># process each component from target rv</span>
         <span class="k">for</span> <span class="n">comp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">:</span>
@@ -323,6 +323,18 @@
 
 <span class="sd">        :rtype: :class:`numpy.ndarray`&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Derived classes must implement this function&quot;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="CPdf.samples"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.CPdf.samples">[docs]</a>    <span class="k">def</span> <span class="nf">samples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return n samples in an array. A convenience function that just calls</span>
+<span class="sd">        :meth:`shape` multiple times.</span>
+
+<span class="sd">        :param int n: number of samples to return</span>
+<span class="sd">        :rtype: 2D :class:`numpy.ndarray` of shape (*n*, m) where m is pdf</span>
+<span class="sd">           dimension&quot;&quot;&quot;</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">empty</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">()))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="n">ret</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ret</span>
 </div>
     <span class="k">def</span> <span class="nf">_check_cond</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return True if cond has correct type and shape, raise Error otherwise.</span>
@@ -529,8 +541,9 @@
 <span class="sd">       is the number of particles, m dimension of this pdf</span>
 <span class="sd">    :var numpy.ndarray weights: 1D array of particle weights</span>
 
-<span class="sd">    *You may alter particles and weights, but you must ensure that their shapes</span>
-<span class="sd">    match and that weight constraints still hold.*</span>
+<span class="sd">    You may alter particles and weights, but you must ensure that their shapes</span>
+<span class="sd">    match and that weight constraints still hold. You can use</span>
+<span class="sd">    :meth:`normalise_weights` to do some work for you.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="EmpPdf.__init__"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.EmpPdf.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_particles</span><span class="p">,</span> <span class="n">rv</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
@@ -562,12 +575,48 @@
         <span class="k">return</span> <span class="n">ret</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">**</span><span class="mi">2</span>
 
     <span class="k">def</span> <span class="nf">eval_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;eval_log doesn&#39;t make much sense for discrete distribution&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;eval_log doesn&#39;t make sense for discrete distribution&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Sample for empirical pdf not (yet?) implemented&quot;</span><span class="p">)</span>
 
+<div class="viewcode-block" id="EmpPdf.normalise_weights"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.EmpPdf.normalise_weights">[docs]</a>    <span class="k">def</span> <span class="nf">normalise_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Multiply weights by appropriate constant so that</span>
+<span class="sd">        :math:`\sum \omega_i = 1`</span>
+
+<span class="sd">        :raise AttributeError: when :math:`\exists i: \omega_i &lt; 0` or</span>
+<span class="sd">           :math:`\forall i: \omega_i = 0`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">np_any</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">&lt;</span> <span class="mf">0.</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&quot;Weights must not be negative&quot;</span><span class="p">)</span>
+        <span class="n">wsum</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">wsum</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&quot;Sum of weights == 0: weights cannot be normalised&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">*=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">wsum</span>
+        <span class="k">return</span> <span class="bp">True</span>
 </div>
+<div class="viewcode-block" id="EmpPdf.resample"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.EmpPdf.resample">[docs]</a>    <span class="k">def</span> <span class="nf">resample</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Drop low-weight particles, replace them with copies of more weighted</span>
+<span class="sd">        ones. Also reset weights to uniform.&quot;&quot;&quot;</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">cum_weights</span> <span class="o">=</span> <span class="n">cumsum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">)</span>
+
+        <span class="n">u</span> <span class="o">=</span> <span class="p">(</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="o">+</span> <span class="n">uniform</span><span class="p">())</span> <span class="o">/</span> <span class="n">n</span>
+        <span class="c"># u[i] = (i + fuzz) / n</span>
+
+        <span class="c"># calculate number of babies for each particle</span>
+        <span class="n">baby_indeces</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>  <span class="c"># index array: a[i] contains index of</span>
+        <span class="c"># original particle that should be at i-th place in new particle array</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="k">while</span> <span class="n">u</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">cum_weights</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>
+                <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">baby_indeces</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">j</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">particles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">baby_indeces</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">[:]</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">n</span>
+
+</div></div>
 <div class="viewcode-block" id="ProdPdf"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.ProdPdf">[docs]</a><span class="k">class</span> <span class="nc">ProdPdf</span><span class="p">(</span><span class="n">Pdf</span><span class="p">):</span>
     <span class="sd">r&quot;&quot;&quot;Unconditional product of multiple unconditional pdfs.</span>
 
@@ -865,7 +914,7 @@
         <span class="c"># sample() computation:</span>
         <span class="n">avail_rvcomps</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">cond_rv</span><span class="o">.</span><span class="n">components</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">factors</span> <span class="o">=</span> <span class="n">ndarray</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">factors</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">CPdf</span><span class="p">)</span>  <span class="c"># initialise factor array</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">factors</span> <span class="o">=</span> <span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">factors</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">CPdf</span><span class="p">)</span>  <span class="c"># initialise factor array</span>
 
         <span class="n">i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c"># factors are filled from right to left</span>
         <span class="c"># iterate until all input pdfs are processed</span>
@@ -928,7 +977,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_cond</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span>
 
         <span class="c"># combination of evaluation point and condition:</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">ndarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cond_shape</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cond_shape</span><span class="p">)</span>
         <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
         <span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">:]</span> <span class="o">=</span> <span class="n">cond</span>
         <span class="n">ret</span> <span class="o">=</span> <span class="mf">0.</span>
@@ -941,7 +990,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_cond</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span>
 
         <span class="c"># combination of sampled variables and condition:</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">ndarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cond_shape</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cond_shape</span><span class="p">)</span>
         <span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">:]</span> <span class="o">=</span> <span class="n">cond</span>  <span class="c"># rest is undefined</span>
 
         <span class="c"># process pdfs from right to left (they are arranged so that data flow</span>

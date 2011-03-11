@@ -58,10 +58,10 @@
 <span class="sd">pybayes import KalmanFilter``.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">exp</span>
 
 <span class="kn">from</span> <span class="nn">numpywrap</span> <span class="kn">import</span> <span class="o">*</span>
-
-<span class="kn">from</span> <span class="nn">pybayes.pdfs</span> <span class="kn">import</span> <span class="n">GaussPdf</span>
+<span class="kn">from</span> <span class="nn">pybayes.pdfs</span> <span class="kn">import</span> <span class="n">GaussPdf</span><span class="p">,</span> <span class="n">EmpPdf</span>
 
 
 <div class="viewcode-block" id="Filter"><a class="viewcode-back" href="../../filters.html#pybayes.filters.Filter">[docs]</a><span class="k">class</span> <span class="nc">Filter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -160,7 +160,7 @@
 <span class="sd">    .. math:: p(x_t|y_{1:t}) = \sum_{i=1}^n \omega_i \delta ( x_t - x_t^{(i)} )</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="ParticleFilter.__init__"><a class="viewcode-back" href="../../filters.html#pybayes.filters.ParticleFilter.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">init_pdf</span><span class="p">,</span> <span class="n">p_xt_xtp</span><span class="p">,</span> <span class="n">p_xt_yt</span><span class="p">):</span>
+<div class="viewcode-block" id="ParticleFilter.__init__"><a class="viewcode-back" href="../../filters.html#pybayes.filters.ParticleFilter.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">init_pdf</span><span class="p">,</span> <span class="n">p_xt_xtp</span><span class="p">,</span> <span class="n">p_yt_xt</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Initialise particle filter.</span>
 
 <span class="sd">        :param int n: number of particles</span>
@@ -168,22 +168,47 @@
 <span class="sd">        :type init_pdf: :class:`~pybayes.pdfs.Pdf`</span>
 <span class="sd">        :param p_xt_xtp: :math:`p(x_t|x_{t-1})` pdf of state in *t* given state in *t-1*</span>
 <span class="sd">        :type p_xt_xtp: :class:`~pybayes.pdfs.CPdf`</span>
-<span class="sd">        :param p_xt_yt: :math:`p(x_t|y_t)` pdf of state in *t* given observation in *t*</span>
-<span class="sd">        :type p_xt_yt: :class:`~pybayes.pdfs.CPdf`</span>
+<span class="sd">        :param p_yt_xt: :math:`p(y_t|x_t)` pdf of observation in *t* given state in *t*</span>
+<span class="sd">        :type p_yt_xt: :class:`~pybayes.pdfs.CPdf`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dim</span> <span class="o">=</span> <span class="n">init_pdf</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span>  <span class="c"># dimension of state</span>
         <span class="k">if</span> <span class="n">p_xt_xtp</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span> <span class="o">!=</span> <span class="n">dim</span> <span class="ow">or</span> <span class="n">p_xt_xtp</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">()</span> <span class="o">!=</span> <span class="n">dim</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Expected shape() and cond_shape() of p_xt_xtp() will &quot;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Expected shape() and cond_shape() of p_xt_xtp will &quot;</span>
                 <span class="o">+</span> <span class="s">&quot;be {0}; ({1}, {2}) given.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">p_xt_xtp</span><span class="o">.</span><span class="n">shape</span><span class="p">(),</span>
                 <span class="n">p_xt_xtp</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">()))</span>
-        <span class="k">if</span> <span class="n">p_xt_yt</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span> <span class="o">!=</span> <span class="n">dim</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Expected shape() of p_xt_yt() will be {0}; {1} given.&quot;</span>
-                <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">p_xt_yt</span><span class="o">.</span><span class="n">shape</span><span class="p">()))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p_xt_xtp</span> <span class="o">=</span> <span class="n">p_xt_xtp</span>
+        <span class="k">if</span> <span class="n">p_yt_xt</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">()</span> <span class="o">!=</span> <span class="n">dim</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Expected cond_shape() of p_yt_xt will be {0}; {1} given.&quot;</span>
+                <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">p_yt_xt</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">()))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p_yt_xt</span> <span class="o">=</span> <span class="n">p_yt_xt</span>
 
         <span class="c"># generate initial particles:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">particles</span> <span class="o">=</span> <span class="n">ndarray</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">dim</span><span class="p">))</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">init_pdf</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">emp</span> <span class="o">=</span> <span class="n">EmpPdf</span><span class="p">(</span><span class="n">init_pdf</span><span class="o">.</span><span class="n">samples</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="ParticleFilter.bayes"><a class="viewcode-back" href="../../filters.html#pybayes.filters.ParticleFilter.bayes">[docs]</a>    <span class="k">def</span> <span class="nf">bayes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yt</span><span class="p">,</span> <span class="n">ut</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Perform next iteration. The algorithm is as follows:</span>
+
+<span class="sd">        1. generate new particles: :math:`x_t^{(i)} = \text{sample from }</span>
+<span class="sd">           p(x_t^{(i)}|x_{t-1}^{(i)}) \quad \forall i`</span>
+<span class="sd">        2. recompute weights: :math:`\omega_i = p(y_t|x_t^{(i)})</span>
+<span class="sd">           \omega_i \quad \forall i`</span>
+<span class="sd">        3. normalise weights</span>
+<span class="sd">        4. resample particles</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">emp</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="c"># generate new ith particle:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">emp</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">p_xt_xtp</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">emp</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+            <span class="c"># recompute ith weight:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">emp</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*=</span> <span class="n">exp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p_yt_xt</span><span class="o">.</span><span class="n">eval_log</span><span class="p">(</span><span class="n">yt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">emp</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+
+        <span class="c"># assure that weights are normalised</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">emp</span><span class="o">.</span><span class="n">normalise_weights</span><span class="p">()</span>
+
+        <span class="c"># resample</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">emp</span><span class="o">.</span><span class="n">resample</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">emp</span></div></div>
 </pre></div>
 
           </div>
