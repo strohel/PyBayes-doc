@@ -74,6 +74,10 @@
 <span class="sd">        :type yt: :class:`numpy.ndarray`</span>
 <span class="sd">        :param ut: intervence at time t (appliciable only to some filters)</span>
 <span class="sd">        :type ut: :class:`numpy.ndarray`</span>
+<span class="sd">        :return: aposteriori pdf. *Warning: filters are allowed to return a</span>
+<span class="sd">           reference to their working pdf =&gt; it is not safe to modify returned</span>
+<span class="sd">           pdf in any way.*</span>
+<span class="sd">        :rtype: :class:`~pybayes.pdfs.Pdf`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Derived classes must implement this method&quot;</span><span class="p">)</span>
 
