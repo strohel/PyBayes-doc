@@ -97,12 +97,12 @@ instance-based and component names are purely informational. To demonstrate:</em
 <dl class="method">
 <dt id="pybayes.pdfs.RV.__init__">
 <tt class="descname">__init__</tt><big>(</big><em>*components</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#RV.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.RV.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialise new random variable.</p>
+<dd><p>Initialise random variable meta-representation.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>*components</strong> (<a class="reference internal" href="#pybayes.pdfs.RV" title="pybayes.pdfs.RV"><tt class="xref py py-class docutils literal"><span class="pre">RV</span></tt></a>, <a class="reference internal" href="#pybayes.pdfs.RVComp" title="pybayes.pdfs.RVComp"><tt class="xref py py-class docutils literal"><span class="pre">RVComp</span></tt></a> or a sequence of <a class="reference internal" href="#pybayes.pdfs.RVComp" title="pybayes.pdfs.RVComp"><tt class="xref py py-class docutils literal"><span class="pre">RVComp</span></tt></a> items) &#8211; components that should form the random vector. You may
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>*components</strong> (<a class="reference internal" href="#pybayes.pdfs.RV" title="pybayes.pdfs.RV"><tt class="xref py py-class docutils literal"><span class="pre">RV</span></tt></a>, <a class="reference internal" href="#pybayes.pdfs.RVComp" title="pybayes.pdfs.RVComp"><tt class="xref py py-class docutils literal"><span class="pre">RVComp</span></tt></a> or a sequence of <a class="reference internal" href="#pybayes.pdfs.RVComp" title="pybayes.pdfs.RVComp"><tt class="xref py py-class docutils literal"><span class="pre">RVComp</span></tt></a> items) &#8211; components that should form the random variable. You may
 also pass another RVs which is a shotrcut for adding all their components.</td>
 </tr>
 <tr class="field"><th class="field-name" colspan="2">Raises TypeError:</th></tr>
@@ -110,7 +110,7 @@ also pass another RVs which is a shotrcut for adding all their components.</td>
 </tr>
 </tbody>
 </table>
-<p>Usual way of creating RV could be:</p>
+<p>Usual way of creating a RV could be:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">RV</span><span class="p">(</span><span class="n">RVComp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#39;x_1&#39;</span><span class="p">),</span> <span class="n">RVComp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#39;x_2&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">name</span>
 <span class="go">&#39;[x_1, x_2]&#39;</span>
@@ -172,15 +172,15 @@ from this RV (and perhaps more).</p>
 <dt id="pybayes.pdfs.RV.indexed_in">
 <tt class="descname">indexed_in</tt><big>(</big><em>super_rv</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#RV.indexed_in"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.RV.indexed_in" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return index array such that this rv is indexed in <strong>super_rv</strong>, which
-must be superset of this rv. Resulting array can be used with <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.take.html#numpy.take" title="(in NumPy v1.6.dev-7ee96bd)"><tt class="xref py py-func docutils literal"><span class="pre">numpy.take()</span></tt></a>
-and <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.put.html#numpy.put" title="(in NumPy v1.6.dev-7ee96bd)"><tt class="xref py py-func docutils literal"><span class="pre">numpy.put()</span></tt></a>.</p>
+must be superset of this rv. Resulting array can be used with <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.take.html#numpy.take" title="(in NumPy v2.0.dev-3d00f4a)"><tt class="xref py py-func docutils literal"><span class="pre">numpy.take()</span></tt></a>
+and <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.put.html#numpy.put" title="(in NumPy v2.0.dev-3d00f4a)"><tt class="xref py py-func docutils literal"><span class="pre">numpy.put()</span></tt></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>super_rv</strong> (<a class="reference internal" href="#pybayes.pdfs.RV" title="pybayes.pdfs.RV"><tt class="xref py py-class docutils literal"><span class="pre">RV</span></tt></a>) &#8211; returned indices apply to this rv</td>
 </tr>
-<tr class="field"><th class="field-name">Return type:</th><td class="field-body">1-D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.6.dev-7ee96bd)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a> of ints with dimension = self.dimension</td>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">1-D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-3d00f4a)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a> of ints with dimension = self.dimension</td>
 </tr>
 </tbody>
 </table>
@@ -325,7 +325,7 @@ p_2(b_t|b_{t-1}) &amp;:= \mathcal{N}(b_{t-1}, 0.0001)" /></p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.6.dev-7ee96bd)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a></td>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-3d00f4a)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -339,7 +339,7 @@ p_2(b_t|b_{t-1}) &amp;:= \mathcal{N}(b_{t-1}, 0.0001)" /></p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.6.dev-7ee96bd)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a></td>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-3d00f4a)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -353,7 +353,7 @@ p_2(b_t|b_{t-1}) &amp;:= \mathcal{N}(b_{t-1}, 0.0001)" /></p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.6.dev-7ee96bd)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; point which to evaluate the function in</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-3d00f4a)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; point which to evaluate the function in</td>
 </tr>
 <tr class="field"><th class="field-name">Return type:</th><td class="field-body">double</td>
 </tr>
@@ -369,7 +369,7 @@ p_2(b_t|b_{t-1}) &amp;:= \mathcal{N}(b_{t-1}, 0.0001)" /></p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.6.dev-7ee96bd)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a></td>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-3d00f4a)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -386,7 +386,7 @@ p_2(b_t|b_{t-1}) &amp;:= \mathcal{N}(b_{t-1}, 0.0001)" /></p>
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>n</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; number of samples to return</td>
 </tr>
-<tr class="field"><th class="field-name">Return type:</th><td class="field-body">2D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.6.dev-7ee96bd)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a> of shape (<em>n</em>, m) where m is pdf
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">2D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-3d00f4a)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a> of shape (<em>n</em>, m) where m is pdf
 dimension</td>
 </tr>
 </tbody>
@@ -417,7 +417,8 @@ discussion about associated random variables see <a class="reference internal" h
 <dl class="class">
 <dt id="pybayes.pdfs.UniPdf">
 <em class="property">class </em><tt class="descclassname">pybayes.pdfs.</tt><tt class="descname">UniPdf</tt><big>(</big><em>a</em>, <em>b</em>, <em>rv=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#UniPdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.UniPdf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Simple uniform multivariate probability density function.</p>
+<dd><p>Simple uniform multivariate probability density function. Extends
+<a class="reference internal" href="#pybayes.pdfs.Pdf" title="pybayes.pdfs.Pdf"><tt class="xref py py-class docutils literal"><span class="pre">Pdf</span></tt></a>.</p>
 <div class="math">
 <p><img src="_images/math/3858042ed11875892a5e418f49b096d8e8f6bf17.png" alt="f(x) = \Theta(x - a) \Theta(b - x) \prod_{i=1}^n \frac{1}{b_i-a_i}" /></p>
 </div><table class="docutils field-list" frame="void" rules="none">
@@ -443,8 +444,8 @@ assumption <strong>a</strong> &lt; <strong>b</strong> still holds.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>a</strong> (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.6.dev-7ee96bd)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; left border</li>
-<li><strong>b</strong> (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.6.dev-7ee96bd)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; right border</li>
+<li><strong>a</strong> (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-3d00f4a)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; left border</li>
+<li><strong>b</strong> (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-3d00f4a)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; right border</li>
 </ul>
 </td>
 </tr>
@@ -456,12 +457,11 @@ assumption <strong>a</strong> &lt; <strong>b</strong> still holds.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="pybayes.pdfs.GaussPdf">
-<em class="property">class </em><tt class="descclassname">pybayes.pdfs.</tt><tt class="descname">GaussPdf</tt><big>(</big><em>mean</em>, <em>covariance</em>, <em>rv=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#GaussPdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.GaussPdf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Unconditional Gaussian (normal) probability density function.</p>
-<div class="math">
-<p><img src="_images/math/271ad99f5f3b0e679312328b911f22bf04a11ce7.png" alt="f(x) \propto \exp \left( - \left( x-\mu \right)' R^{-1} \left( x-\mu \right) \right)" /></p>
-</div><table class="docutils field-list" frame="void" rules="none">
+<dt id="pybayes.pdfs.AbstractGaussPdf">
+<em class="property">class </em><tt class="descclassname">pybayes.pdfs.</tt><tt class="descname">AbstractGaussPdf</tt><a class="reference internal" href="_modules/pybayes/pdfs.html#AbstractGaussPdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.AbstractGaussPdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract base for all Gaussian-like pdfs - the ones that take vector mean
+and matrix covariance parameters. Extends <a class="reference internal" href="#pybayes.pdfs.Pdf" title="pybayes.pdfs.Pdf"><tt class="xref py py-class docutils literal"><span class="pre">Pdf</span></tt></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
@@ -474,18 +474,27 @@ assumption <strong>a</strong> &lt; <strong>b</strong> still holds.</p>
 </tbody>
 </table>
 <p>You can modify object parameters only if you are absolutely sure that you
-pass allowable values, because parameters are only checked once in constructor.</p>
-<dl class="method">
+pass allowable values - parameters are only checked once in constructor.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pybayes.pdfs.GaussPdf">
+<em class="property">class </em><tt class="descclassname">pybayes.pdfs.</tt><tt class="descname">GaussPdf</tt><big>(</big><em>mean</em>, <em>cov</em>, <em>rv=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#GaussPdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.GaussPdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unconditional Gaussian (normal) probability density function. Extends
+<a class="reference internal" href="#pybayes.pdfs.AbstractGaussPdf" title="pybayes.pdfs.AbstractGaussPdf"><tt class="xref py py-class docutils literal"><span class="pre">AbstractGaussPdf</span></tt></a>.</p>
+<div class="math">
+<p><img src="_images/math/271ad99f5f3b0e679312328b911f22bf04a11ce7.png" alt="f(x) \propto \exp \left( - \left( x-\mu \right)' R^{-1} \left( x-\mu \right) \right)" /></p>
+</div><dl class="method">
 <dt id="pybayes.pdfs.GaussPdf.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>mean</em>, <em>covariance</em>, <em>rv=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#GaussPdf.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.GaussPdf.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>mean</em>, <em>cov</em>, <em>rv=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#GaussPdf.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.GaussPdf.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialise Gaussian pdf.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>mean</strong> (1-D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.6.dev-7ee96bd)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; mean value</li>
-<li><strong>covariance</strong> (2-D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.6.dev-7ee96bd)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; covariance matrix</li>
+<li><strong>mean</strong> (1-D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-3d00f4a)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; mean value</li>
+<li><strong>cov</strong> (2-D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-3d00f4a)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; covariance matrix</li>
 </ul>
 </td>
 </tr>
@@ -500,9 +509,41 @@ pass allowable values, because parameters are only checked once in constructor.<
 </dd></dl>
 
 <dl class="class">
+<dt id="pybayes.pdfs.LogNormPdf">
+<em class="property">class </em><tt class="descclassname">pybayes.pdfs.</tt><tt class="descname">LogNormPdf</tt><big>(</big><em>mean</em>, <em>cov</em>, <em>rv=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#LogNormPdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.LogNormPdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unconditional log-normal probability density function. Extends
+<a class="reference internal" href="#pybayes.pdfs.AbstractGaussPdf" title="pybayes.pdfs.AbstractGaussPdf"><tt class="xref py py-class docutils literal"><span class="pre">AbstractGaussPdf</span></tt></a>.</p>
+<p>More precisely, the density of random variable <img class="math" src="_images/math/ce58e4af225c93d08606c26554caaa5ae32edeba.png" alt="Y"/> where
+<img class="math" src="_images/math/e5950d593ffeb9600da0f2d92179df0c038ae7d3.png" alt="Y = exp(X); ~ X \sim \mathcal{N}(\mu, R)"/></p>
+<dl class="method">
+<dt id="pybayes.pdfs.LogNormPdf.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>mean</em>, <em>cov</em>, <em>rv=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#LogNormPdf.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.LogNormPdf.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialise log-normal pdf.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>mean</strong> (1-D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-3d00f4a)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; mean value of the <strong>logarithm</strong> of the associated random variable</li>
+<li><strong>cov</strong> (2-D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-3d00f4a)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; covariance matrix of the <strong>logarithm</strong> of the associated random variable</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>A current limitation is that LogNormPdf is only univariate. To create
+standard log-normal distribution:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lognorm</span> <span class="o">=</span> <span class="n">LogNormPdf</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.</span><span class="p">]]))</span>  <span class="c"># note the shape of covariance</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="pybayes.pdfs.EmpPdf">
 <em class="property">class </em><tt class="descclassname">pybayes.pdfs.</tt><tt class="descname">EmpPdf</tt><big>(</big><em>init_particles</em>, <em>rv=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#EmpPdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.EmpPdf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Weighted empirical probability density function.</p>
+<dd><p>Weighted empirical probability density function. Extends <a class="reference internal" href="#pybayes.pdfs.Pdf" title="pybayes.pdfs.Pdf"><tt class="xref py py-class docutils literal"><span class="pre">Pdf</span></tt></a>.</p>
 <div class="math">
 <p><img src="_images/math/4f1dd8922c1b9a5fe871afc9bee3d0a1b1a572a9.png" alt="p(x) &amp;= \sum_{i=1}^n \omega_i \delta(x - x^{(i)}) \\
 \text{where} \quad x^{(i)} &amp;\text{ is value of the i}^{th} \text{ particle} \\
@@ -512,9 +553,9 @@ pass allowable values, because parameters are only checked once in constructor.<
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
-<li><strong>particles</strong> (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.6.dev-7ee96bd)"><em>numpy.ndarray</em></a>) &#8211; 2D array of particles; shape: (n, m) where n
+<li><strong>particles</strong> (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-3d00f4a)"><em>numpy.ndarray</em></a>) &#8211; 2D array of particles; shape: (n, m) where n
 is the number of particles, m dimension of this pdf</li>
-<li><strong>weights</strong> (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.6.dev-7ee96bd)"><em>numpy.ndarray</em></a>) &#8211; 1D array of particle weights</li>
+<li><strong>weights</strong> (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-3d00f4a)"><em>numpy.ndarray</em></a>) &#8211; 1D array of particle weights</li>
 </ul>
 </td>
 </tr>
@@ -531,7 +572,7 @@ match and that weight constraints still hold. You can use
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>init_particles</strong> (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.6.dev-7ee96bd)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; 2D array of initial particles; shape (<em>n</em>, <em>m</em>)
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>init_particles</strong> (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-3d00f4a)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; 2D array of initial particles; shape (<em>n</em>, <em>m</em>)
 determines that <em>n</em> <em>m</em>-dimensioned particles will be used. <em>Warning:
 EmpPdf does not copy the particles - it rather uses passed array
 through its lifetime, so it is not safe to reuse it for other
@@ -574,7 +615,7 @@ ones. Also reset weights to uniform.</p>
 <p>You can for example create a pdf that has uniform distribution with regards
 to x-axis and normal distribution along y-axis. The caller (you) must ensure
 that individial random variables are independent, otherwise their product may
-have no mathematical sense.</p>
+have no mathematical sense. Extends <a class="reference internal" href="#pybayes.pdfs.Pdf" title="pybayes.pdfs.Pdf"><tt class="xref py py-class docutils literal"><span class="pre">Pdf</span></tt></a>.</p>
 <div class="math">
 <p><img src="_images/math/d24655330f9abfc2aebbd429b0436b4ede9c42fc.png" alt="f(x_1 x_2 x_3) = f_1(x_1) f_2(x_2) f_3(x_3)" /></p>
 </div><dl class="method">
@@ -608,7 +649,8 @@ override this behaviour by bassing custom <strong>rv</strong>.)</p>
 <dl class="class">
 <dt id="pybayes.pdfs.MLinGaussCPdf">
 <em class="property">class </em><tt class="descclassname">pybayes.pdfs.</tt><tt class="descname">MLinGaussCPdf</tt><big>(</big><em>covariance</em>, <em>A</em>, <em>b</em>, <em>rv=None</em>, <em>cond_rv=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#MLinGaussCPdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.MLinGaussCPdf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Conditional Gaussian pdf whose mean is a linear function of condition.</p>
+<dd><p>Conditional Gaussian pdf whose mean is a linear function of condition.
+Extends <a class="reference internal" href="#pybayes.pdfs.CPdf" title="pybayes.pdfs.CPdf"><tt class="xref py py-class docutils literal"><span class="pre">CPdf</span></tt></a>.</p>
 <div class="math">
 <p><img src="_images/math/52c01696b5821aa17282bf7be2b093e71d9bb238.png" alt="f(x|c) \propto \exp \left( - \left( x-\mu \right)' R^{-1} \left( x-\mu \right) \right)
 \quad \quad \text{where} ~ \mu := A c + b" /></p>
@@ -626,7 +668,7 @@ A, b: given condition cond, mean = A*cond + b</p>
 <dt id="pybayes.pdfs.LinGaussCPdf">
 <em class="property">class </em><tt class="descclassname">pybayes.pdfs.</tt><tt class="descname">LinGaussCPdf</tt><big>(</big><em>a</em>, <em>b</em>, <em>c</em>, <em>d</em>, <em>rv=None</em>, <em>cond_rv=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#LinGaussCPdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.LinGaussCPdf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Conditional one-dimensional Gaussian pdf whose mean and covariance are
-linear functions of condition.</p>
+linear functions of condition. Extends <a class="reference internal" href="#pybayes.pdfs.CPdf" title="pybayes.pdfs.CPdf"><tt class="xref py py-class docutils literal"><span class="pre">CPdf</span></tt></a>.</p>
 <div class="math">
 <p><img src="_images/math/702985189b7a8850df841fb1dd75d40c5a2d9a45.png" alt="f(x|c_1 c_2) \propto \exp \left( - \frac{\left( x-\mu \right)^2}{2\sigma^2} \right)
 \quad \quad \text{where} \quad \mu := a c_1 + b \quad \text{and}
@@ -656,7 +698,7 @@ linear functions of condition.</p>
 <em class="property">class </em><tt class="descclassname">pybayes.pdfs.</tt><tt class="descname">GaussCPdf</tt><big>(</big><em>shape</em>, <em>cond_shape</em>, <em>f</em>, <em>g</em>, <em>rv=None</em>, <em>cond_rv=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#GaussCPdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.GaussCPdf" title="Permalink to this definition">¶</a></dt>
 <dd><p>The most general normal conditional pdf. Use it only if you cannot use
 <a class="reference internal" href="#pybayes.pdfs.MLinGaussCPdf" title="pybayes.pdfs.MLinGaussCPdf"><tt class="xref py py-class docutils literal"><span class="pre">MLinGaussCPdf</span></tt></a> or <a class="reference internal" href="#pybayes.pdfs.LinGaussCPdf" title="pybayes.pdfs.LinGaussCPdf"><tt class="xref py py-class docutils literal"><span class="pre">LinGaussCPdf</span></tt></a> as this cpdf is least
-optimised.</p>
+optimised. Extends <a class="reference internal" href="#pybayes.pdfs.CPdf" title="pybayes.pdfs.CPdf"><tt class="xref py py-class docutils literal"><span class="pre">CPdf</span></tt></a>.</p>
 <div class="math">
 <p><img src="_images/math/580c5d9bf62ee6246c84817d15478624c184c9f7.png" alt="f(x|c) &amp;\propto \exp \left( - \left( x-\mu \right)' R^{-1} \left( x-\mu \right) \right) \\
 \text{where} \quad \mu &amp;:= f(c) \text{ (interpreted n-dimensional vector)} \\
@@ -687,7 +729,8 @@ R &amp;:= g(c) \text{ (interpreted as n*n matrix)}" /></p>
 <dl class="class">
 <dt id="pybayes.pdfs.ProdCPdf">
 <em class="property">class </em><tt class="descclassname">pybayes.pdfs.</tt><tt class="descname">ProdCPdf</tt><big>(</big><em>factors</em>, <em>rv=None</em>, <em>cond_rv=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#ProdCPdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.ProdCPdf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Pdf that is formed as a chain rule of multiple conditional pdfs. In a
+<dd><p>Pdf that is formed as a chain rule of multiple conditional pdfs.
+Extends <a class="reference internal" href="#pybayes.pdfs.CPdf" title="pybayes.pdfs.CPdf"><tt class="xref py py-class docutils literal"><span class="pre">CPdf</span></tt></a>. In a
 simple textbook case denoted below it isn&#8217;t needed to specify random variables
 at all. In this case when no random variable associations are passed,
 ProdCPdf ignores rv associations of its factors and everything is determined

@@ -59,7 +59,7 @@
 <span class="sd">Pdf``.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">log</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">log</span><span class="p">,</span> <span class="n">sqrt</span>  <span class="c"># TODO: use numpy versions?</span>
 
 <span class="kn">from</span> <span class="nn">numpywrap</span> <span class="kn">import</span> <span class="o">*</span>
 
@@ -125,14 +125,14 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="RV.__init__"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.RV.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">components</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Initialise new random variable.</span>
+        <span class="sd">&quot;&quot;&quot;Initialise random variable meta-representation.</span>
 
-<span class="sd">        :param \*components: components that should form the random vector. You may</span>
+<span class="sd">        :param \*components: components that should form the random variable. You may</span>
 <span class="sd">            also pass another RVs which is a shotrcut for adding all their components.</span>
 <span class="sd">        :type \*components: :class:`RV`, :class:`RVComp` or a sequence of :class:`RVComp` items</span>
 <span class="sd">        :raises TypeError: invalid object passed (neither a :class:`RV` or a :class:`RVComp`)</span>
 
-<span class="sd">        Usual way of creating RV could be:</span>
+<span class="sd">        Usual way of creating a RV could be:</span>
 
 <span class="sd">        &gt;&gt;&gt; x = RV(RVComp(1, &#39;x_1&#39;), RVComp(1, &#39;x_2&#39;))</span>
 <span class="sd">        &gt;&gt;&gt; x.name</span>
@@ -408,7 +408,8 @@
 
 </div></div>
 <div class="viewcode-block" id="UniPdf"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.UniPdf">[docs]</a><span class="k">class</span> <span class="nc">UniPdf</span><span class="p">(</span><span class="n">Pdf</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Simple uniform multivariate probability density function.</span>
+    <span class="sd">r&quot;&quot;&quot;Simple uniform multivariate probability density function. Extends</span>
+<span class="sd">    :class:`Pdf`.</span>
 
 <span class="sd">    .. math:: f(x) = \Theta(x - a) \Theta(b - x) \prod_{i=1}^n \frac{1}{b_i-a_i}</span>
 
@@ -457,13 +458,12 @@
         <span class="k">return</span> <span class="o">-</span><span class="n">log</span><span class="p">(</span><span class="n">prod</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">())</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">())</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 
 </div>
-<div class="viewcode-block" id="GaussPdf"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.GaussPdf">[docs]</a><span class="k">class</span> <span class="nc">GaussPdf</span><span class="p">(</span><span class="n">Pdf</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Unconditional Gaussian (normal) probability density function.</span>
-
-<span class="sd">    .. math:: f(x) \propto \exp \left( - \left( x-\mu \right)&#39; R^{-1} \left( x-\mu \right) \right)</span>
+<div class="viewcode-block" id="AbstractGaussPdf"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.AbstractGaussPdf">[docs]</a><span class="k">class</span> <span class="nc">AbstractGaussPdf</span><span class="p">(</span><span class="n">Pdf</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Abstract base for all Gaussian-like pdfs - the ones that take vector mean</span>
+<span class="sd">    and matrix covariance parameters. Extends :class:`Pdf`.</span>
 
 <span class="sd">    :var mu: mean value</span>
 <span class="sd">    :type mu: 1-D :class:`numpy.ndarray`</span>
@@ -471,34 +471,47 @@
 <span class="sd">    :type R: 2-D :class:`numpy.ndarray`</span>
 
 <span class="sd">    You can modify object parameters only if you are absolutely sure that you</span>
-<span class="sd">    pass allowable values, because parameters are only checked once in constructor.</span>
+<span class="sd">    pass allowable values - parameters are only checked once in constructor.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+</div>
+<div class="viewcode-block" id="GaussPdf"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.GaussPdf">[docs]</a><span class="k">class</span> <span class="nc">GaussPdf</span><span class="p">(</span><span class="n">AbstractGaussPdf</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Unconditional Gaussian (normal) probability density function. Extends</span>
+<span class="sd">    :class:`AbstractGaussPdf`.</span>
+
+<span class="sd">    .. math:: f(x) \propto \exp \left( - \left( x-\mu \right)&#39; R^{-1} \left( x-\mu \right) \right)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="GaussPdf.__init__"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.GaussPdf.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">covariance</span><span class="p">,</span> <span class="n">rv</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="GaussPdf.__init__"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.GaussPdf.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="n">rv</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialise Gaussian pdf.</span>
 
 <span class="sd">        :param mean: mean value</span>
 <span class="sd">        :type mean: 1-D :class:`numpy.ndarray`</span>
-<span class="sd">        :param covariance: covariance matrix</span>
-<span class="sd">        :type covariance: 2-D :class:`numpy.ndarray`</span>
+<span class="sd">        :param cov: covariance matrix</span>
+<span class="sd">        :type cov: 2-D :class:`numpy.ndarray`</span>
 
 <span class="sd">        To create standard normal distribution:</span>
 
 <span class="sd">        &gt;&gt;&gt; norm = GaussPdf(np.array([0.]), np.array([[1.]]))  # note the shape of covariance</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">mean</span> <span class="o">=</span> <span class="n">asarray</span><span class="p">(</span><span class="n">mean</span><span class="p">)</span>
-        <span class="n">covariance</span> <span class="o">=</span> <span class="n">asarray</span><span class="p">(</span><span class="n">covariance</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;mean must be numpy.ndarray&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cov</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;cov must be numpy.ndarray&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">mean</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;mean must be one-dimensional (&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">mean</span><span class="o">.</span><span class="n">ndim</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; dimensions encountered)&quot;</span><span class="p">)</span>
         <span class="n">n</span> <span class="o">=</span> <span class="n">mean</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">covariance</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;covariance must have shape (&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;, &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;), &quot;</span> <span class="o">+</span>
-                             <span class="nb">str</span><span class="p">(</span><span class="n">covariance</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; given&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">np_any</span><span class="p">(</span><span class="n">covariance</span> <span class="o">!=</span> <span class="n">covariance</span><span class="o">.</span><span class="n">T</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;covariance must be symmetric (complex covariance not supported)&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cov</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;cov must be two-dimensional&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cov</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">n</span> <span class="ow">or</span> <span class="n">cov</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">n</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;cov must have shape (&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;, &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;), &quot;</span> <span class="o">+</span>
+                             <span class="nb">str</span><span class="p">(</span><span class="n">cov</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; given&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">np_any</span><span class="p">(</span><span class="n">cov</span> <span class="o">!=</span> <span class="n">cov</span><span class="o">.</span><span class="n">T</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;cov must be symmetric (complex covariance not supported)&quot;</span><span class="p">)</span>
         <span class="c"># TODO: covariance must be positive definite</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <span class="n">mean</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="n">covariance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="n">cov</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_set_rvs</span><span class="p">(</span><span class="n">rv</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
 </div>
     <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -513,7 +526,7 @@
     <span class="k">def</span> <span class="nf">eval_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_x</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
-        <span class="c"># compute logarithm of normalization constant (can be cached in future)</span>
+        <span class="c"># compute logarithm of normalization constant (TODO: can be cached in future)</span>
         <span class="c"># log(2*Pi) = 1.83787706640935</span>
         <span class="c"># we ignore sign (first part of slogdet return value) as it must be positive</span>
         <span class="n">log_norm</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mf">2.</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mf">1.83787706640935</span> <span class="o">+</span> <span class="n">slogdet</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
@@ -523,13 +536,77 @@
         <span class="k">return</span> <span class="n">log_norm</span> <span class="o">+</span> <span class="n">log_val</span>  <span class="c"># = log(norm*val)</span>
 
     <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
-        <span class="n">z</span> <span class="o">=</span> <span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+        <span class="c"># TODO: in univariate case, random.normal() can be used directly</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
         <span class="c"># NumPy&#39;s cholesky(R) is equivalent to Matlab&#39;s chol(R).transpose()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">+</span> <span class="n">dot</span><span class="p">(</span><span class="n">cholesky</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">),</span> <span class="n">z</span><span class="p">);</span>
 
 </div>
+<div class="viewcode-block" id="LogNormPdf"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.LogNormPdf">[docs]</a><span class="k">class</span> <span class="nc">LogNormPdf</span><span class="p">(</span><span class="n">AbstractGaussPdf</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Unconditional log-normal probability density function. Extends</span>
+<span class="sd">    :class:`AbstractGaussPdf`.</span>
+
+<span class="sd">    More precisely, the density of random variable :math:`Y` where</span>
+<span class="sd">    :math:`Y = exp(X); ~ X \sim \mathcal{N}(\mu, R)`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="LogNormPdf.__init__"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.LogNormPdf.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="n">rv</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Initialise log-normal pdf.</span>
+
+<span class="sd">        :param mean: mean value of the **logarithm** of the associated random variable</span>
+<span class="sd">        :type mean: 1-D :class:`numpy.ndarray`</span>
+<span class="sd">        :param cov: covariance matrix of the **logarithm** of the associated random variable</span>
+<span class="sd">        :type cov: 2-D :class:`numpy.ndarray`</span>
+
+<span class="sd">        A current limitation is that LogNormPdf is only univariate. To create</span>
+<span class="sd">        standard log-normal distribution:</span>
+
+<span class="sd">        &gt;&gt;&gt; lognorm = LogNormPdf(np.array([0.]), np.array([[1.]]))  # note the shape of covariance</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;mean must be numpy.ndarray&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cov</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;cov must be numpy.ndarray&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">mean</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;mean must be one-dimensional (&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">mean</span><span class="o">.</span><span class="n">ndim</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; dimensions encountered)&quot;</span><span class="p">)</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">mean</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;LogNormPdf is currently limited to univariate random variables&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cov</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;cov must be two-dimensional&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cov</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">n</span> <span class="ow">or</span> <span class="n">cov</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">n</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;cov must have shape (&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;, &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;), &quot;</span> <span class="o">+</span>
+                             <span class="nb">str</span><span class="p">(</span><span class="n">cov</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; given&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cov</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mf">0.</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;cov must be positive&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <span class="n">mean</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="n">cov</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_rvs</span><span class="p">(</span><span class="n">rv</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+</div>
+    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">exp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">variance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">exp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">[</span><span class="mi">0</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mf">1.</span><span class="p">)</span><span class="o">*</span><span class="n">exp</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">eval_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_x</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>  <span class="c"># log-normal pdf support = (0, +inf)</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s">&#39;-inf&#39;</span><span class="p">)</span>
+
+        <span class="c"># 1/2.*log(2*pi) = 0.91893853320467</span>
+        <span class="k">return</span> <span class="o">-</span><span class="p">((</span><span class="n">log</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">2.</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="n">log</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span> <span class="o">-</span> <span class="mf">0.91893853320467</span>
+
+    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="c"># size parameter ( = 1) makes lognormal() return a ndarray</span>
+        <span class="k">return</span> <span class="n">random</span><span class="o">.</span><span class="n">lognormal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span> <span class="mi">1</span><span class="p">)</span>
+
+</div>
 <div class="viewcode-block" id="EmpPdf"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.EmpPdf">[docs]</a><span class="k">class</span> <span class="nc">EmpPdf</span><span class="p">(</span><span class="n">Pdf</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Weighted empirical probability density function.</span>
+    <span class="sd">r&quot;&quot;&quot;Weighted empirical probability density function. Extends :class:`Pdf`.</span>
 
 <span class="sd">    .. math::</span>
 
@@ -604,7 +681,7 @@
         <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">cum_weights</span> <span class="o">=</span> <span class="n">cumsum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">)</span>
 
-        <span class="n">u</span> <span class="o">=</span> <span class="p">(</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="o">+</span> <span class="n">uniform</span><span class="p">())</span> <span class="o">/</span> <span class="n">n</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="p">(</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="o">+</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">())</span> <span class="o">/</span> <span class="n">n</span>
         <span class="c"># u[i] = (i + fuzz) / n</span>
 
         <span class="c"># calculate number of babies for each particle</span>
@@ -627,7 +704,7 @@
 <span class="sd">    You can for example create a pdf that has uniform distribution with regards</span>
 <span class="sd">    to x-axis and normal distribution along y-axis. The caller (you) must ensure</span>
 <span class="sd">    that individial random variables are independent, otherwise their product may</span>
-<span class="sd">    have no mathematical sense.</span>
+<span class="sd">    have no mathematical sense. Extends :class:`Pdf`.</span>
 
 <span class="sd">    .. math:: f(x_1 x_2 x_3) = f_1(x_1) f_2(x_2) f_3(x_3)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -711,6 +788,7 @@
 </div>
 <div class="viewcode-block" id="MLinGaussCPdf"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.MLinGaussCPdf">[docs]</a><span class="k">class</span> <span class="nc">MLinGaussCPdf</span><span class="p">(</span><span class="n">CPdf</span><span class="p">):</span>
     <span class="sd">r&quot;&quot;&quot;Conditional Gaussian pdf whose mean is a linear function of condition.</span>
+<span class="sd">    Extends :class:`CPdf`.</span>
 
 <span class="sd">    .. math::</span>
 
@@ -765,7 +843,7 @@
 </div>
 <div class="viewcode-block" id="LinGaussCPdf"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.LinGaussCPdf">[docs]</a><span class="k">class</span> <span class="nc">LinGaussCPdf</span><span class="p">(</span><span class="n">CPdf</span><span class="p">):</span>
     <span class="sd">r&quot;&quot;&quot;Conditional one-dimensional Gaussian pdf whose mean and covariance are</span>
-<span class="sd">    linear functions of condition.</span>
+<span class="sd">    linear functions of condition. Extends :class:`CPdf`.</span>
 
 <span class="sd">    .. math::</span>
 
@@ -827,7 +905,7 @@
 <div class="viewcode-block" id="GaussCPdf"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.GaussCPdf">[docs]</a><span class="k">class</span> <span class="nc">GaussCPdf</span><span class="p">(</span><span class="n">CPdf</span><span class="p">):</span>
     <span class="sd">r&quot;&quot;&quot;The most general normal conditional pdf. Use it only if you cannot use</span>
 <span class="sd">    :class:`MLinGaussCPdf` or :class:`LinGaussCPdf` as this cpdf is least</span>
-<span class="sd">    optimised.</span>
+<span class="sd">    optimised. Extends :class:`CPdf`.</span>
 
 <span class="sd">    .. math::</span>
 
@@ -882,7 +960,8 @@
 
 </div>
 <div class="viewcode-block" id="ProdCPdf"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.ProdCPdf">[docs]</a><span class="k">class</span> <span class="nc">ProdCPdf</span><span class="p">(</span><span class="n">CPdf</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Pdf that is formed as a chain rule of multiple conditional pdfs. In a</span>
+    <span class="sd">r&quot;&quot;&quot;Pdf that is formed as a chain rule of multiple conditional pdfs.</span>
+<span class="sd">    Extends :class:`CPdf`. In a</span>
 <span class="sd">    simple textbook case denoted below it isn&#39;t needed to specify random variables</span>
 <span class="sd">    at all. In this case when no random variable associations are passed,</span>
 <span class="sd">    ProdCPdf ignores rv associations of its factors and everything is determined</span>
