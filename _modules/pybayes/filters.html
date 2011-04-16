@@ -58,6 +58,7 @@
 <span class="sd">pybayes import KalmanFilter``.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">exp</span>
 
 <span class="kn">from</span> <span class="nn">numpywrap</span> <span class="kn">import</span> <span class="o">*</span>
@@ -130,6 +131,38 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">P</span> <span class="o">=</span> <span class="n">state_pdf</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">S</span> <span class="o">=</span> <span class="n">GaussPdf</span><span class="p">(</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">]),</span> <span class="n">array</span><span class="p">([[</span><span class="mf">1.</span><span class="p">]]))</span>  <span class="c"># observation probability density function</span>
 </div>
+    <span class="k">def</span> <span class="nf">__copy__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># type(self) is used because this method may be called for a derived class</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">A</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">B</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">B</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">C</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">D</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">Q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">j</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">j</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">S</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">S</span>
+        <span class="k">return</span> <span class="n">ret</span>
+
+    <span class="k">def</span> <span class="nf">__deepcopy__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">memo</span><span class="p">):</span>
+        <span class="c"># type(self) is used because this method may be called for a derived class</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">,</span> <span class="n">memo</span><span class="p">)</span>  <span class="c"># numpy arrays</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">B</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">,</span> <span class="n">memo</span><span class="p">)</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">C</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="p">,</span> <span class="n">memo</span><span class="p">)</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">D</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="p">,</span> <span class="n">memo</span><span class="p">)</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">Q</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Q</span><span class="p">,</span> <span class="n">memo</span><span class="p">)</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="n">memo</span><span class="p">)</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span>  <span class="c"># no need to copy integers</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">j</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">j</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">P</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="p">,</span> <span class="n">memo</span><span class="p">)</span>  <span class="c"># GaussPdf</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">S</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="p">,</span> <span class="n">memo</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ret</span>
+
     <span class="k">def</span> <span class="nf">bayes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yt</span><span class="p">,</span> <span class="n">ut</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">yt</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ut</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;Both yt and ut must be numpy.ndarray. &quot;</span> <span class="o">+</span>
