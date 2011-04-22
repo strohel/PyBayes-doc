@@ -66,21 +66,44 @@
 
 
 <div class="viewcode-block" id="Filter"><a class="viewcode-back" href="../../filters.html#pybayes.filters.Filter">[docs]</a><span class="k">class</span> <span class="nc">Filter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Abstract prototype of a bayesian filter&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Abstract prototype of a bayesian filter.&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Filter.bayes"><a class="viewcode-back" href="../../filters.html#pybayes.filters.Filter.bayes">[docs]</a>    <span class="k">def</span> <span class="nf">bayes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yt</span><span class="p">,</span> <span class="n">ut</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Approximate or exact bayes rule (one iteration)</span>
+        <span class="sd">&quot;&quot;&quot;Perform approximate or exact bayes rule.</span>
 
 <span class="sd">        :param yt: observation at time t</span>
 <span class="sd">        :type yt: :class:`numpy.ndarray`</span>
 <span class="sd">        :param ut: intervence at time t (appliciable only to some filters)</span>
 <span class="sd">        :type ut: :class:`numpy.ndarray`</span>
-<span class="sd">        :return: aposteriori pdf. *Warning: filters are allowed to return a</span>
-<span class="sd">           reference to their working pdf =&gt; it is not safe to modify returned</span>
-<span class="sd">           pdf in any way.*</span>
-<span class="sd">        :rtype: :class:`~pybayes.pdfs.Pdf`</span>
+<span class="sd">        :return: always returns True (see :meth:`posterior` to get aposteriori density)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Derived classes must implement this method&quot;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Filter.posterior"><a class="viewcode-back" href="../../filters.html#pybayes.filters.Filter.posterior">[docs]</a>    <span class="k">def</span> <span class="nf">posterior</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return aposteriori probability density funcion (:class:`~pybayes.pdfs.Pdf`).</span>
+
+<span class="sd">        :return: aposteriori density</span>
+<span class="sd">        :rtype: :class:`~pybayes.pdfs.Pdf`</span>
+
+<span class="sd">        *Filter implementations may decide to return a reference to their work pdf - it is not safe</span>
+<span class="sd">        to modify it in any way, doing so may leave the filter in undefined state.*</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Derived classes must implement this method&quot;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Filter.evidence_log"><a class="viewcode-back" href="../../filters.html#pybayes.filters.Filter.evidence_log">[docs]</a>    <span class="k">def</span> <span class="nf">evidence_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yt</span><span class="p">):</span>  <span class="c"># TODO: sometimes also ut/cond?</span>
+        <span class="sd">&quot;&quot;&quot;Return the logarithm of *evidence* function (also known as *marginal likehood*) evaluated</span>
+<span class="sd">        in point yt.</span>
+
+<span class="sd">        :param yt: point which to evaluate the evidence in</span>
+<span class="sd">        :type yt: :class:`numpy.ndarray`</span>
+<span class="sd">        :rtype: double</span>
+
+<span class="sd">        This is typically computed after :meth:`bayes` with the same observation:</span>
+
+<span class="sd">        &gt;&gt;&gt; filter.bayes(yt)</span>
+<span class="sd">        &gt;&gt;&gt; log_likehood = filter.evidence_log(yt)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Derived classes should implement this method, if feasible&quot;</span><span class="p">)</span>
 
 </div></div>
 <div class="viewcode-block" id="KalmanFilter"><a class="viewcode-back" href="../../filters.html#pybayes.filters.KalmanFilter">[docs]</a><span class="k">class</span> <span class="nc">KalmanFilter</span><span class="p">(</span><span class="n">Filter</span><span class="p">):</span>
@@ -150,7 +173,7 @@
     <span class="k">def</span> <span class="nf">__deepcopy__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">memo</span><span class="p">):</span>
         <span class="c"># type(self) is used because this method may be called for a derived class</span>
         <span class="n">ret</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
-        <span class="n">ret</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">,</span> <span class="n">memo</span><span class="p">)</span>  <span class="c"># numpy arrays</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">,</span> <span class="n">memo</span><span class="p">)</span>  <span class="c"># numpy arrays:</span>
         <span class="n">ret</span><span class="o">.</span><span class="n">B</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">,</span> <span class="n">memo</span><span class="p">)</span>
         <span class="n">ret</span><span class="o">.</span><span class="n">C</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="p">,</span> <span class="n">memo</span><span class="p">)</span>
         <span class="n">ret</span><span class="o">.</span><span class="n">D</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="p">,</span> <span class="n">memo</span><span class="p">)</span>
@@ -159,7 +182,7 @@
         <span class="n">ret</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span>  <span class="c"># no need to copy integers</span>
         <span class="n">ret</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span>
         <span class="n">ret</span><span class="o">.</span><span class="n">j</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">j</span>
-        <span class="n">ret</span><span class="o">.</span><span class="n">P</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="p">,</span> <span class="n">memo</span><span class="p">)</span>  <span class="c"># GaussPdf</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">P</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="p">,</span> <span class="n">memo</span><span class="p">)</span>  <span class="c"># GaussPdfs:</span>
         <span class="n">ret</span><span class="o">.</span><span class="n">S</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="p">,</span> <span class="n">memo</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">ret</span>
 
@@ -187,7 +210,9 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">mu</span> <span class="o">+=</span> <span class="n">dot</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="p">(</span><span class="n">yt</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">mu</span><span class="p">))</span>  <span class="c"># a posteriori estimate</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">R</span> <span class="o">-=</span> <span class="n">dot</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">R</span><span class="p">)</span>  <span class="c"># a posteriori variance</span>
+        <span class="k">return</span> <span class="bp">True</span>
 
+    <span class="k">def</span> <span class="nf">posterior</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span>
 
 </div>
@@ -203,9 +228,9 @@
 <span class="sd">        :param int n: number of particles</span>
 <span class="sd">        :param init_pdf: probability density which initial particles are sampled from</span>
 <span class="sd">        :type init_pdf: :class:`~pybayes.pdfs.Pdf`</span>
-<span class="sd">        :param p_xt_xtp: :math:`p(x_t|x_{t-1})` pdf of state in *t* given state in *t-1*</span>
+<span class="sd">        :param p_xt_xtp: :math:`p(x_t|x_{t-1})` cpdf of state in *t* given state in *t-1*</span>
 <span class="sd">        :type p_xt_xtp: :class:`~pybayes.pdfs.CPdf`</span>
-<span class="sd">        :param p_yt_xt: :math:`p(y_t|x_t)` pdf of observation in *t* given state in *t*</span>
+<span class="sd">        :param p_yt_xt: :math:`p(y_t|x_t)` cpdf of observation in *t* given state in *t*</span>
 <span class="sd">        :type p_yt_xt: :class:`~pybayes.pdfs.CPdf`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dim</span> <span class="o">=</span> <span class="n">init_pdf</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span>  <span class="c"># dimension of state</span>
@@ -241,11 +266,40 @@
 
         <span class="c"># assure that weights are normalised</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">emp</span><span class="o">.</span><span class="n">normalise_weights</span><span class="p">()</span>
-
         <span class="c"># resample</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">emp</span><span class="o">.</span><span class="n">resample</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">True</span>
+</div>
+    <span class="k">def</span> <span class="nf">posterior</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">emp</span>
+</div>
+<div class="viewcode-block" id="MarginalizedParticleFilter"><a class="viewcode-back" href="../../filters.html#pybayes.filters.MarginalizedParticleFilter">[docs]</a><span class="k">class</span> <span class="nc">MarginalizedParticleFilter</span><span class="p">(</span><span class="n">Filter</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Standard marginalized particle filter implementation. Assume that state variable :math:`x`</span>
+<span class="sd">    can be divided into two (TODO: independent?) parts: :math:`x_t = [a_t, b_t]`, then aposteriori</span>
+<span class="sd">    pdf can be denoted as:</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">emp</span></div></div>
+<span class="sd">    .. math::</span>
+
+<span class="sd">       p &amp;= \sum_{i=1}^n \omega_i p^{(i)}(a_t | b_{1:t}, y_{1:t}) \delta(b_t - b_t^{(i)}) \\</span>
+<span class="sd">       p^{(i)}(a_t | b_{1:t}, y_{1:t}) &amp;= \mathcal{N} (\hat{a}_t^{(i)}, P_t^{(i)}) \\</span>
+<span class="sd">       \text{where } \quad \hat{a}_t^{(i)} &amp;\text{ and } P_t^{(i)} \text{ is mean and</span>
+<span class="sd">       covariance of i}^{th} \text{ gauss pdf} \\</span>
+<span class="sd">       b_t^{(i)} &amp;\text{ is value of the (b part of the) i}^{th} \text{ particle} \\</span>
+<span class="sd">       \omega_i \geq 0 &amp;\text{ is weight of the i}^{th} \text{ particle} \quad \sum \omega_i = 1</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MarginalizedParticleFilter.__init__"><a class="viewcode-back" href="../../filters.html#pybayes.filters.MarginalizedParticleFilter.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">init_b_pdf</span><span class="p">,</span> <span class="n">p_bt_btp</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Initialise marginalized particle filter.</span>
+
+<span class="sd">        :param int n: number of particles</span>
+<span class="sd">        :param init_b_pdf: probability density which initial **b** components of particles are</span>
+<span class="sd">           sampled from</span>
+<span class="sd">        :type init_b_pdf: :class:`~pybayes.pdfs.Pdf`</span>
+<span class="sd">        :param p_bt_btp: :math:`p(b_t|b_{t-1})` cpdf of the (b part of the) state in *t* given</span>
+<span class="sd">           state in *t-1*</span>
+<span class="sd">        :type p_bt_btp: :class:`~pybayes.pdfs.CPdf`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div></div>
 </pre></div>
 
           </div>

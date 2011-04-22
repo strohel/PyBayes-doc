@@ -14,3 +14,7 @@ Bayesian Filters
 .. autoclass:: ParticleFilter
 
    .. automethod:: __init__
+
+.. autoclass:: MarginalizedParticleFilter
+
+   .. automethod:: __init__
