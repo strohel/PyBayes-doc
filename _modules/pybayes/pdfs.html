@@ -101,8 +101,8 @@
 
 </div></div>
 <div class="viewcode-block" id="RV"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.RV">[docs]</a><span class="k">class</span> <span class="nc">RV</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Representation of a random variable made of one or more components. See</span>
-<span class="sd">    :class:`RVComp`.</span>
+    <span class="sd">&quot;&quot;&quot;Representation of a random variable made of one or more components. Each component is</span>
+<span class="sd">    represented by :class:`RVComp` class.</span>
 
 <span class="sd">    :var int dimension: cummulative dimension; do not change</span>
 <span class="sd">    :var str name: pretty name, can be changed but needs to be a string</span>
@@ -192,7 +192,7 @@
 
 <div class="viewcode-block" id="RV.contains"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.RV.contains">[docs]</a>    <span class="k">def</span> <span class="nf">contains</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">component</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return True if this random variable contains the exact same instance of</span>
-<span class="sd">        the component</span>
+<span class="sd">        the **component**.</span>
 
 <span class="sd">        :param component: component whose presence is tested</span>
 <span class="sd">        :type component: :class:`RVComp`</span>
@@ -224,11 +224,11 @@
         <span class="k">return</span> <span class="bp">False</span>
 </div>
 <div class="viewcode-block" id="RV.contained_in"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.RV.contained_in">[docs]</a>    <span class="k">def</span> <span class="nf">contained_in</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_components</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return True if sequence **components** contains all all components</span>
+        <span class="sd">&quot;&quot;&quot;Return True if sequence **test_components** contains all components</span>
 <span class="sd">        from this RV (and perhaps more).</span>
 
-<span class="sd">        :param components: set of components whose presence is checked</span>
-<span class="sd">        :type components: sequence of :class:`RVComp` items</span>
+<span class="sd">        :param test_components: set of components whose presence is checked</span>
+<span class="sd">        :type test_components: sequence of :class:`RVComp` items</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">component</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">test_components</span><span class="p">:</span>
@@ -237,7 +237,7 @@
 </div>
 <div class="viewcode-block" id="RV.indexed_in"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.RV.indexed_in">[docs]</a>    <span class="k">def</span> <span class="nf">indexed_in</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">super_rv</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return index array such that this rv is indexed in **super_rv**, which</span>
-<span class="sd">        must be superset of this rv. Resulting array can be used with :func:`numpy.take`</span>
+<span class="sd">        must be a superset of this rv. Resulting array can be used with :func:`numpy.take`</span>
 <span class="sd">        and :func:`numpy.put`.</span>
 
 <span class="sd">        :param super_rv: returned indices apply to this rv</span>
@@ -273,8 +273,8 @@
 
 <span class="sd">    Every CPdf takes (apart from others) 2 optional arguments to constructor:</span>
 <span class="sd">    **rv** (:class:`RV`) and **cond_rv** (:class:`RV`). When specified, they</span>
-<span class="sd">    denote that the CPdf is associated with particular random variable (respectively</span>
-<span class="sd">    its condition is associated with particular random variable); when unspecified,</span>
+<span class="sd">    denote that the CPdf is associated with a particular random variable (respectively</span>
+<span class="sd">    its condition is associated with a particular random variable); when unspecified,</span>
 <span class="sd">    *anonymous* random variable is assumed (exceptions exist, see :class:`ProdPdf`).</span>
 <span class="sd">    It is an error to pass RV whose dimension is not same as CPdf&#39;s dimension</span>
 <span class="sd">    (or cond dimension respectively).</span>
@@ -288,7 +288,7 @@
 <span class="sd">    cautious because sanity checks are only performed in constructor.*</span>
 
 <span class="sd">    While entire idea of random variable associations may not be needed in simple</span>
-<span class="sd">    cases, it allows you to express more complicated situations, assume the state</span>
+<span class="sd">    cases, it allows you to express more complicated situations. Assume the state</span>
 <span class="sd">    variable is composed of 2 components :math:`x_t = [a_t, b_t]` and following</span>
 <span class="sd">    probability density function has to be modelled:</span>
 
@@ -304,7 +304,8 @@
 <span class="sd">    &gt;&gt;&gt; a_tp, b_tp = RVComp(1, &#39;a_{t-1}&#39;), RVComp(1, &#39;b_{t-1}&#39;)  # t-1 case</span>
 
 <span class="sd">    &gt;&gt;&gt; p1 = LinGaussCPdf(1., 0., 1., 0., RV(a_t), RV(a_tp, b_t))</span>
-<span class="sd">    &gt;&gt;&gt; cov, A, b = np.array([[0.0001]]), np.array([[1.]]), np.array([0.])  # params for p2</span>
+<span class="sd">    &gt;&gt;&gt; # params for p2:</span>
+<span class="sd">    &gt;&gt;&gt; cov, A, b = np.array([[0.0001]]), np.array([[1.]]), np.array([0.])</span>
 <span class="sd">    &gt;&gt;&gt; p2 = MLinGaussCPdf(cov, A, b, RV(b_t), RV(b_tp))</span>
 
 <span class="sd">    &gt;&gt;&gt; p = ProdCPdf((p1, p2), RV(a_t, b_t), RV(a_tp, b_tp))</span>
@@ -314,7 +315,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="CPdf.shape"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.CPdf.shape">[docs]</a>    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return shape of the random variable (and mean).</span>
+        <span class="sd">&quot;&quot;&quot;Return shape of the random variable. :meth:`mean` and :meth:`variance` methods must</span>
+<span class="sd">        return arrays of this shape.</span>
 
 <span class="sd">        :rtype: int&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Derived classes must implement this function&quot;</span><span class="p">)</span>
@@ -543,7 +545,8 @@
 
 <span class="sd">        To create standard normal distribution:</span>
 
-<span class="sd">        &gt;&gt;&gt; norm = GaussPdf(np.array([0.]), np.array([[1.]]))  # note the shape of covariance</span>
+<span class="sd">        &gt;&gt;&gt; # note that cov is a matrix because of the double [[ and ]]</span>
+<span class="sd">        &gt;&gt;&gt; norm = GaussPdf(np.array([0.]), np.array([[1.]]))</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;mean must be numpy.ndarray&quot;</span><span class="p">)</span>
@@ -752,7 +755,7 @@
     <span class="k">def</span> <span class="nf">variance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
         <span class="n">ret</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-            <span class="n">ret</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span>
+            <span class="n">ret</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span>
         <span class="k">return</span> <span class="n">ret</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">**</span><span class="mi">2</span>
 
     <span class="k">def</span> <span class="nf">eval_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
@@ -850,23 +853,21 @@
         <span class="k">return</span> <span class="n">ret</span>
 
     <span class="k">def</span> <span class="nf">variance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
-        <span class="n">var</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">())</span>
-        <span class="c"># we calculate mean for particle part here, we don&#39;t want to uselessly call gausses[i].mean()</span>
-        <span class="n">mean</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_part_shape</span><span class="p">)</span>
+        <span class="c"># first, compute 2nd non-central moment</span>
+        <span class="n">mom2</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">())</span>
         <span class="n">temp</span> <span class="o">=</span> <span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">())</span>
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-            <span class="c"># compute mean of particle part:</span>
-            <span class="n">mean</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-            <span class="c"># gauss part of variance is computed easily:</span>
-            <span class="n">temp</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_gauss_shape</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gausses</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">variance</span><span class="p">()</span>
-            <span class="c"># for particle part we are calculating 2nd non-central moment here:</span>
+            <span class="c"># set gauss part of temp to \mu_i^2 + \sigma_i^2</span>
+            <span class="n">temp</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_gauss_shape</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gausses</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gausses</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">variance</span><span class="p">()</span><span class="o">**</span><span class="mi">2</span>
+            <span class="c"># set empirical part of temp to x_i^2</span>
             <span class="n">temp</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_gauss_shape</span><span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span>
-            <span class="n">var</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">temp</span>  <span class="c"># cython limitation: cannot compile: array_a[0:n] += array_b</span>
 
-        <span class="c"># make 2nd moment of particle part central:</span>
-        <span class="n">var</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_gauss_shape</span><span class="p">:]</span> <span class="o">=</span> <span class="n">var</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_gauss_shape</span><span class="p">:]</span> <span class="o">-</span> <span class="n">mean</span><span class="o">**</span><span class="mi">2</span>  <span class="c"># ditto cython limitation</span>
-        <span class="k">return</span> <span class="n">var</span>
+            <span class="c"># finaly scale by \omega_i and add to 2nd non-central moment we are computing</span>
+            <span class="n">mom2</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">temp</span>  <span class="c"># cython limitation: cannot compile: array_a[0:n] += array_b</span>
+
+        <span class="c"># return 2nd central moment by subtracting square of mean value</span>
+        <span class="k">return</span> <span class="n">mom2</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">**</span><span class="mi">2</span>
 
     <span class="k">def</span> <span class="nf">eval_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;eval_log doesn&#39;t make sense for (partially) discrete distribution&quot;</span><span class="p">)</span>
