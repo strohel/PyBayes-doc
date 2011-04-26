@@ -78,23 +78,26 @@ perhaps provides a simple benchmark) that would go into
 <p><strong>No internal module</strong> can <tt class="docutils literal"><span class="pre">import</span> <span class="pre">pybayes</span></tt>! That would result in an infinite
 recursion. External PyBayes clients can and should, however, only <tt class="docutils literal"><span class="pre">import</span> <span class="pre">pybayes</span></tt>
 (and in future also <tt class="docutils literal"><span class="pre">import</span> <span class="pre">pybayes.subpackage</span></tt>). From insibe PyBayes just
-import relevant pybayes modules, e.g. <tt class="docutils literal"><span class="pre">import</span> <span class="pre">pdfs</span></tt>.</p>
+import relevant pybayes modules, e.g. <tt class="docutils literal"><span class="pre">import</span> <span class="pre">pdfs</span></tt>. Notable exception from this rule is cimport,
+where (presumable due to a cython bug) <tt class="docutils literal"><span class="pre">from</span> <span class="pre">a.b</span> <span class="pre">cimport</span> <span class="pre">c</span></tt> sometimes doesn&#8217;t work and one has
+to type <tt class="docutils literal"><span class="pre">from</span> <span class="pre">pybayes.a.b</span> <span class="pre">cimport</span> <span class="pre">c</span></tt>.</p>
 <p>Imports in *.py files should adhere to following rules:</p>
 <ul class="simple">
 <li>import first system modules (sys, io..), then external modules (matplotlib..)
-and then pybayes modules</li>
-<li><strong>never import numpy directly</strong>, import numpywrap instead (and perhaps extend
-symbols that numpywrap.{py,pyx} imports) [TODO: numpywrap handling should be
-refactored a bit]</li>
-<li><tt class="docutils literal"><span class="pre">from</span> <span class="pre">module</span> <span class="pre">import</span> <span class="pre">symbol1,</span> <span class="pre">symbol2</span></tt> syntax is the preferred one</li>
-<li><tt class="docutils literal"><span class="pre">from</span> <span class="pre">module</span> <span class="pre">import</span> <span class="pre">*</span></tt> is prohibited</li>
+and then pybayes modules.</li>
+<li><strong>instead of</strong> importing <strong>numpy</strong> directly use <tt class="docutils literal"><span class="pre">import</span> <span class="pre">wrappers._numpy</span> <span class="pre">as</span> <span class="pre">np</span></tt>. This ensures
+that fast C alternatives are used in compiled mode.</li>
+<li><strong>instead of</strong> importing <strong>numpy.linalg</strong> directly use <tt class="docutils literal"><span class="pre">import</span> <span class="pre">wrappers._linalg</span> <span class="pre">as</span> <span class="pre">linalg</span></tt>.</li>
+<li>use <tt class="docutils literal"><span class="pre">import</span> <span class="pre">module</span> <span class="pre">[as</span> <span class="pre">abbrev]</span></tt> or, for commonly used symbols <tt class="docutils literal"><span class="pre">from</span> <span class="pre">module</span> <span class="pre">import</span> <span class="pre">symbol</span></tt>.</li>
+<li><tt class="docutils literal"><span class="pre">from</span> <span class="pre">module</span> <span class="pre">import</span> <span class="pre">*</span></tt> shouldn&#8217;t be used.</li>
 </ul>
 <p>Following rules apply to *.pxd (cython augmentation) files:</p>
 <ul class="simple">
 <li>no imports, just cimports.</li>
-<li>use <tt class="docutils literal"><span class="pre">from</span> <span class="pre">module</span> <span class="pre">cimport</span> <span class="pre">symbol1,</span> <span class="pre">symbol2</span></tt> syntax</li>
-<li><tt class="docutils literal"><span class="pre">from</span> <span class="pre">module</span> <span class="pre">cimport</span> <span class="pre">*</span></tt> is forbidden, only exception is <tt class="docutils literal"><span class="pre">from</span> <span class="pre">numpywrap</span>
-<span class="pre">cimport</span> <span class="pre">*</span></tt>, which is mandatory</li>
+<li>use same import styles as in associated .py file. (<tt class="docutils literal"><span class="pre">from</span> <span class="pre">module</span> <span class="pre">cimport</span></tt> vs.
+<tt class="docutils literal"><span class="pre">cimport</span> <span class="pre">module</span> <span class="pre">[as</span> <span class="pre">abbrev]</span></tt>)</li>
+<li>for numpy use <tt class="docutils literal"><span class="pre">cimport</span> <span class="pre">pybayes.wrappers._numpy</span> <span class="pre">as</span> <span class="pre">np</span></tt></li>
+<li>for numpy.linalg use <tt class="docutils literal"><span class="pre">cimport</span> <span class="pre">pybayes.wrappers._linalg</span> <span class="pre">as</span> <span class="pre">linalg</span></tt></li>
 </ul>
 <p><em>Above rules do not apply to</em> <tt class="docutils literal"><span class="pre">pybayes/tests</span></tt>. <em>These modules are considered
 external and should behave as a client script.</em></p>
