@@ -66,6 +66,8 @@
 <span class="kn">from</span> <span class="nn">pybayes.pdfs</span> <span class="kn">import</span> <span class="n">CPdf</span><span class="p">,</span> <span class="n">Pdf</span><span class="p">,</span> <span class="n">GaussPdf</span><span class="p">,</span> <span class="n">EmpPdf</span><span class="p">,</span> <span class="n">MarginalizedEmpPdf</span>
 
 
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">False</span>
+
 <div class="viewcode-block" id="Filter"><a class="viewcode-back" href="../../filters.html#pybayes.filters.Filter">[docs]</a><span class="k">class</span> <span class="nc">Filter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Abstract prototype of a bayesian filter.&quot;&quot;&quot;</span>
 
@@ -306,42 +308,57 @@
 <span class="sd">       \omega_i \geq 0 &amp;\text{ is weight of the i}^{th} \text{ particle} \quad \sum \omega_i = 1</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="MarginalizedParticleFilter.__init__"><a class="viewcode-back" href="../../filters.html#pybayes.filters.MarginalizedParticleFilter.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">init_b_pdf</span><span class="p">,</span> <span class="n">p_bt_btp</span><span class="p">):</span>
+<div class="viewcode-block" id="MarginalizedParticleFilter.__init__"><a class="viewcode-back" href="../../filters.html#pybayes.filters.MarginalizedParticleFilter.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">init_pdf</span><span class="p">,</span> <span class="n">p_bt_btp</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Initialise marginalized particle filter.</span>
 
 <span class="sd">        :param int n: number of particles</span>
-<span class="sd">        :param init_b_pdf: probability density which initial **b** components of particles are</span>
-<span class="sd">           sampled from</span>
-<span class="sd">        :type init_b_pdf: :class:`~pybayes.pdfs.Pdf`</span>
+<span class="sd">        :param init_pdf: probability density which initial particles are sampled from. (both</span>
+<span class="sd">           :math:`a_t` and :math:`b_t` parts)</span>
+<span class="sd">        :type init_pdf: :class:`~pybayes.pdfs.Pdf`</span>
 <span class="sd">        :param p_bt_btp: :math:`p(b_t|b_{t-1})` cpdf of the (b part of the) state in *t* given</span>
 <span class="sd">           state in *t-1*</span>
 <span class="sd">        :type p_bt_btp: :class:`~pybayes.pdfs.CPdf`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;n must be a positive integer&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">init_b_pdf</span><span class="p">,</span> <span class="n">Pdf</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">p_bt_btp</span><span class="p">,</span> <span class="n">CPdf</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;init_b_pdf must be a Pdf and p_bt_btp must be a CPdf&quot;</span><span class="p">)</span>
-        <span class="n">b_shape</span> <span class="o">=</span> <span class="n">init_b_pdf</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">p_bt_btp</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span> <span class="o">!=</span> <span class="n">b_shape</span> <span class="ow">or</span> <span class="n">p_bt_btp</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">()</span> <span class="o">!=</span> <span class="n">b_shape</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">init_pdf</span><span class="p">,</span> <span class="n">Pdf</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">p_bt_btp</span><span class="p">,</span> <span class="n">CPdf</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;init_pdf must be a Pdf and p_bt_btp must be a CPdf&quot;</span><span class="p">)</span>
+        <span class="n">b_shape</span> <span class="o">=</span> <span class="n">p_bt_btp</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">p_bt_btp</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">()</span> <span class="o">!=</span> <span class="n">b_shape</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;p_bt_btp&#39;s shape ({0}) and cond shape ({1}) must both be {2}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                              <span class="n">p_bt_btp</span><span class="o">.</span><span class="n">shape</span><span class="p">(),</span> <span class="n">p_bt_btp</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">(),</span> <span class="n">b_shape</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">p_bt_btp</span> <span class="o">=</span> <span class="n">p_bt_btp</span>
+        <span class="n">a_shape</span> <span class="o">=</span> <span class="n">init_pdf</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span> <span class="o">-</span> <span class="n">b_shape</span>
+
+        <span class="c"># current limitation:</span>
         <span class="k">if</span> <span class="n">b_shape</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;multivariate b_t not yet implemented (but planned)&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">a_shape</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;multivariate a_t not yet implemented (but planned)&quot;</span><span class="p">)</span>
+
+        <span class="c"># generate both initial parts of particles</span>
+        <span class="n">init_particles</span> <span class="o">=</span> <span class="n">init_pdf</span><span class="o">.</span><span class="n">samples</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
 
         <span class="c"># create all Kalman filters first</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">kalmans</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">KalmanFilter</span><span class="p">)</span> <span class="c"># array of references to Kalman filters</span>
         <span class="n">gausses</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">GaussPdf</span><span class="p">)</span> <span class="c"># array of Kalman filter state pdfs</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-            <span class="n">gausses</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">GaussPdf</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.</span><span class="p">]]))</span> <span class="c"># TODO: dimension and initial values!!!</span>
+            <span class="n">gausses</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">GaussPdf</span><span class="p">(</span><span class="n">init_particles</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="n">a_shape</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.</span><span class="p">]]))</span> <span class="c"># TODO: dimension and initial covariance</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">kalmans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">KalmanFilter</span><span class="p">(</span><span class="n">A</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.</span><span class="p">]]),</span> <span class="n">B</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)),</span>
                                            <span class="n">C</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.</span><span class="p">]]),</span> <span class="n">D</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)),</span>
                                            <span class="n">Q</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">123.</span><span class="p">]]),</span> <span class="n">R</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">123.</span><span class="p">]]),</span> <span class="c"># set to b_t in each step</span>
                                            <span class="n">state_pdf</span><span class="o">=</span><span class="n">gausses</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
         <span class="c"># construct apost pdf. Important: reference to ith GaussPdf is shared between ith Kalman</span>
         <span class="c"># filter&#39;s state_pdf and ith memp&#39;t gauss</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">memp</span> <span class="o">=</span> <span class="n">MarginalizedEmpPdf</span><span class="p">(</span><span class="n">gausses</span><span class="p">,</span> <span class="n">init_b_pdf</span><span class="o">.</span><span class="n">samples</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">memp</span> <span class="o">=</span> <span class="n">MarginalizedEmpPdf</span><span class="p">(</span><span class="n">gausses</span><span class="p">,</span> <span class="n">init_particles</span><span class="p">[:,</span><span class="n">a_shape</span><span class="p">:])</span>
 </div>
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kalmans</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="n">ret</span> <span class="o">+=</span> <span class="s">&quot;  {0}: {1:0&lt;5.3f} * {2} {3}    kf.S: {4}</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">memp</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                  <span class="bp">self</span><span class="o">.</span><span class="n">memp</span><span class="o">.</span><span class="n">gausses</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">memp</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">kalmans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">S</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ret</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c"># trim the last newline</span>
+
 <div class="viewcode-block" id="MarginalizedParticleFilter.bayes"><a class="viewcode-back" href="../../filters.html#pybayes.filters.MarginalizedParticleFilter.bayes">[docs]</a>    <span class="k">def</span> <span class="nf">bayes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yt</span><span class="p">,</span> <span class="n">ut</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Perform Bayes rule for new measurement :math:`y_t`. Uses following algorithm:</span>
 
@@ -356,6 +373,9 @@
 <span class="sd">        5. normalise weights</span>
 <span class="sd">        6. resample particles</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;MPF particles before bayes():&quot;</span>
+            <span class="k">print</span> <span class="bp">self</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kalmans</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
             <span class="c"># generate new b_t</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">memp</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">p_bt_btp</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">memp</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
@@ -377,13 +397,19 @@
 </div>
     <span class="k">def</span> <span class="nf">_resample</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">memp</span><span class="o">.</span><span class="n">get_resample_indices</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;MPF particles after bayes() before resampling:&quot;</span>
+            <span class="k">print</span> <span class="bp">self</span>
+            <span class="k">print</span> <span class="s">&quot;resample indices of new particles:&quot;</span><span class="p">,</span> <span class="n">indices</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">kalmans</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kalmans</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>  <span class="c"># resample kalman filters (makes references, not hard copies)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">memp</span><span class="o">.</span><span class="n">particles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">memp</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>  <span class="c"># resample particles</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kalmans</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-            <span class="k">if</span> <span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">i</span><span class="p">:</span>  <span class="c"># special case - no copying and reasigning needed</span>
+            <span class="k">if</span> <span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">i</span><span class="p">:</span>  <span class="c"># copy only when needed</span>
                 <span class="k">continue</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">kalmans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kalmans</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>  <span class="c"># we need to deep copy ith kalman</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">memp</span><span class="o">.</span><span class="n">gausses</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kalmans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">S</span>  <span class="c"># reassign reference to correct (new) state pdf</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">memp</span><span class="o">.</span><span class="n">gausses</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kalmans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">P</span>  <span class="c"># reassign reference to correct (new) state pdf</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">memp</span><span class="o">.</span><span class="n">weights</span><span class="p">[:]</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">kalmans</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c"># set weights to 1/n</span>
         <span class="k">return</span> <span class="bp">True</span>
