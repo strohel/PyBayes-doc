@@ -65,15 +65,15 @@ so instead of <tt class="docutils literal"><span class="pre">from</span> <span c
 <dd><p>Abstract prototype of a bayesian filter.</p>
 <dl class="method">
 <dt id="pybayes.filters.Filter.bayes">
-<tt class="descname">bayes</tt><big>(</big><em>yt</em>, <em>ut=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#Filter.bayes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.Filter.bayes" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">bayes</tt><big>(</big><em>yt</em>, <em>cond=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#Filter.bayes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.Filter.bayes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform approximate or exact bayes rule.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>yt</strong> (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-1611da9)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; observation at time t</li>
-<li><strong>ut</strong> (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-1611da9)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; intervence at time t (appliciable only to some filters)</li>
+<li><strong>yt</strong> (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-516d50c)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; observation at time t</li>
+<li><strong>cond</strong> (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-516d50c)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; condition at time t. Exact meaning is defined by each filter</li>
 </ul>
 </td>
 </tr>
@@ -111,7 +111,7 @@ in point yt.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>yt</strong> (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-1611da9)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; point which to evaluate the evidence in</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>yt</strong> (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-516d50c)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; point which to evaluate the evidence in</td>
 </tr>
 <tr class="field"><th class="field-name">Return type:</th><td class="field-body">double</td>
 </tr>
@@ -127,16 +127,56 @@ in point yt.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="kalman-filter">
-<h2>Kalman Filter<a class="headerlink" href="#kalman-filter" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="kalman-filter-family">
+<h2>Kalman Filter Family<a class="headerlink" href="#kalman-filter-family" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="pybayes.filters.KalmanFilter">
-<em class="property">class </em><tt class="descclassname">pybayes.filters.</tt><tt class="descname">KalmanFilter</tt><big>(</big><em>A</em>, <em>B</em>, <em>C</em>, <em>D</em>, <em>Q</em>, <em>R</em>, <em>state_pdf</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#KalmanFilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.KalmanFilter" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pybayes.filters.</tt><tt class="descname">KalmanFilter</tt><big>(</big><em>A</em>, <em>C</em>, <em>Q</em>, <em>R</em>, <em>state_pdf</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#KalmanFilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.KalmanFilter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Kalman filter</p>
 <dl class="method">
 <dt id="pybayes.filters.KalmanFilter.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>A</em>, <em>B</em>, <em>C</em>, <em>D</em>, <em>Q</em>, <em>R</em>, <em>state_pdf</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#KalmanFilter.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.KalmanFilter.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>A</em>, <em>C</em>, <em>Q</em>, <em>R</em>, <em>state_pdf</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#KalmanFilter.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.KalmanFilter.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>TODO: documentation</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pybayes.filters.ControlKalmanFilter">
+<em class="property">class </em><tt class="descclassname">pybayes.filters.</tt><tt class="descname">ControlKalmanFilter</tt><big>(</big><em>A</em>, <em>B</em>, <em>C</em>, <em>D</em>, <em>Q</em>, <em>R</em>, <em>state_pdf</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#ControlKalmanFilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.ControlKalmanFilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simple extension to <a class="reference internal" href="#pybayes.filters.KalmanFilter" title="pybayes.filters.KalmanFilter"><tt class="xref py py-class docutils literal"><span class="pre">KalmanFilter</span></tt></a> that takes control (intervention) vector as a
+condition in <tt class="xref py py-meth docutils literal"><span class="pre">bayes()</span></tt> and also takes additional B and D matrices in constructor.</p>
+<dl class="method">
+<dt id="pybayes.filters.ControlKalmanFilter.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>A</em>, <em>B</em>, <em>C</em>, <em>D</em>, <em>Q</em>, <em>R</em>, <em>state_pdf</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#ControlKalmanFilter.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.ControlKalmanFilter.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialise ControlKalmanFilter.</p>
+<p>For <strong>A</strong>, <strong>C</strong>, <strong>Q</strong>, <strong>R</strong> and <strong>state_pdf</strong> parameters see <a class="reference internal" href="#pybayes.filters.KalmanFilter" title="pybayes.filters.KalmanFilter"><tt class="xref py py-class docutils literal"><span class="pre">KalmanFilter</span></tt></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>B</strong> (2D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-516d50c)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; process control model matrix (TODO)</li>
+<li><strong>D</strong> (2D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-516d50c)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; process observation model matrix (TODO)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pybayes.filters.QRKalmanFilter">
+<em class="property">class </em><tt class="descclassname">pybayes.filters.</tt><tt class="descname">QRKalmanFilter</tt><big>(</big><em>A</em>, <em>C</em>, <em>state_pdf</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#QRKalmanFilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.QRKalmanFilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>An extension to <a class="reference internal" href="#pybayes.filters.KalmanFilter" title="pybayes.filters.KalmanFilter"><tt class="xref py py-class docutils literal"><span class="pre">KalmanFilter</span></tt></a> that takes (diagonal elements of) noise matrices Q and
+R in condition of <tt class="xref py py-meth docutils literal"><span class="pre">bayes()</span></tt> method.</p>
+<dl class="method">
+<dt id="pybayes.filters.QRKalmanFilter.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>A</em>, <em>C</em>, <em>state_pdf</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#QRKalmanFilter.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.QRKalmanFilter.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialise QRKalmanFilter.</p>
+<p>See <a class="reference internal" href="#pybayes.filters.KalmanFilter" title="pybayes.filters.KalmanFilter"><tt class="xref py py-class docutils literal"><span class="pre">KalmanFilter</span></tt></a> for the description of <strong>A</strong>, <strong>C</strong> and <strong>state_pdf</strong> parameters.</p>
 </dd></dl>
 
 </dd></dl>
@@ -172,7 +212,7 @@ in point yt.</p>
 
 <dl class="method">
 <dt id="pybayes.filters.ParticleFilter.bayes">
-<tt class="descname">bayes</tt><big>(</big><em>yt</em>, <em>ut=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#ParticleFilter.bayes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.ParticleFilter.bayes" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">bayes</tt><big>(</big><em>yt</em>, <em>cond=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#ParticleFilter.bayes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.ParticleFilter.bayes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform Bayes rule for new measurement <img class="math" src="_images/math/84b7f27da2c227a9434fb4e732197dc030e2a168.png" alt="y_t"/>. The algorithm is as follows:</p>
 <ol class="arabic simple">
 <li>generate new particles: <img class="math" src="_images/math/ab258ea9e1d7fed54b3460862193cc7508a1609b.png" alt="x_t^{(i)} = \text{sample from }
@@ -223,7 +263,7 @@ state in <em>t-1</em></li>
 
 <dl class="method">
 <dt id="pybayes.filters.MarginalizedParticleFilter.bayes">
-<tt class="descname">bayes</tt><big>(</big><em>yt</em>, <em>ut=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#MarginalizedParticleFilter.bayes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.MarginalizedParticleFilter.bayes" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">bayes</tt><big>(</big><em>yt</em>, <em>cond=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#MarginalizedParticleFilter.bayes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.MarginalizedParticleFilter.bayes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform Bayes rule for new measurement <img class="math" src="_images/math/84b7f27da2c227a9434fb4e732197dc030e2a168.png" alt="y_t"/>. Uses following algorithm:</p>
 <ol class="arabic simple">
 <li>generate new b parts of particles: <img class="math" src="_images/math/eba0996db274532c94553a44ea246a71a83cdb80.png" alt="b_t^{(i)} = \text{sample from }
@@ -254,7 +294,7 @@ filter.</li>
   <ul>
 <li><a class="reference internal" href="#">Bayesian Filters</a><ul>
 <li><a class="reference internal" href="#filter-prototype">Filter prototype</a></li>
-<li><a class="reference internal" href="#kalman-filter">Kalman Filter</a></li>
+<li><a class="reference internal" href="#kalman-filter-family">Kalman Filter Family</a></li>
 <li><a class="reference internal" href="#particle-filter-family">Particle Filter Family</a></li>
 </ul>
 </li>
