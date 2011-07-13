@@ -73,9 +73,9 @@
         <span class="sd">&quot;&quot;&quot;Perform approximate or exact bayes rule.</span>
 
 <span class="sd">        :param yt: observation at time t</span>
-<span class="sd">        :type yt: :class:`numpy.ndarray`</span>
+<span class="sd">        :type yt: 1D :class:`numpy.ndarray`</span>
 <span class="sd">        :param cond: condition at time t. Exact meaning is defined by each filter</span>
-<span class="sd">        :type cond: :class:`numpy.ndarray`</span>
+<span class="sd">        :type cond: 1D :class:`numpy.ndarray`</span>
 <span class="sd">        :return: always returns True (see :meth:`posterior` to get aposteriori density)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Derived classes must implement this method&quot;</span><span class="p">)</span>
@@ -108,10 +108,63 @@
 
 </div></div>
 <div class="viewcode-block" id="KalmanFilter"><a class="viewcode-back" href="../../filters.html#pybayes.filters.KalmanFilter">[docs]</a><span class="k">class</span> <span class="nc">KalmanFilter</span><span class="p">(</span><span class="n">Filter</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Kalman filter&quot;&quot;&quot;</span>
+    <span class="sd">r&quot;&quot;&quot;Implementation of standard Kalman filter. **cond** in :meth:`bayes` is interpreted as</span>
+<span class="sd">    control (intervention) input :math:`u_t` to the system.</span>
+
+<span class="sd">    Kalman filter forms *optimal Bayesian solution* for the following system:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        x_t &amp;= A_t x_{t-1} + B_t u_t + v_{t-1} \quad \quad</span>
+<span class="sd">            A_t \in \mathbb{R}^{n,n} \;\;</span>
+<span class="sd">            B_t \in \mathbb{R}^{n,k} \;\;</span>
+<span class="sd">            \;\; n \in \mathbb{N}</span>
+<span class="sd">            \;\; k \in \mathbb{N}_0 \text{ (may be zero)}</span>
+<span class="sd">            \\</span>
+<span class="sd">        y_t &amp;= C_t x_t + D_t u_t + w_t \quad \quad \quad \;\;</span>
+<span class="sd">            C_t \in \mathbb{R}^{j,n} \;\;</span>
+<span class="sd">            D_t \in \mathbb{R}^{j,k} \;\;</span>
+<span class="sd">            j \in \mathbb{N} \;\; j \leq n</span>
+
+<span class="sd">    where :math:`x_t \in \mathbb{R}^n` is hidden state vector, :math:`y_t \in \mathbb{R}^j` is</span>
+<span class="sd">    observation vector and :math:`u_t \in \mathbb{R}^k` is control vector. :math:`v_t` is normally</span>
+<span class="sd">    distributed zero-mean process noise with covariance matrix :math:`Q_t`, :math:`w_t` is normally</span>
+<span class="sd">    distributed zero-mean observation noise with covariance matrix :math:`R_t`. Additionally, every a</span>
+<span class="sd">    posteriori pdf (and intial pdf) have to be Gaussian.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="KalmanFilter.__init__"><a class="viewcode-back" href="../../filters.html#pybayes.filters.KalmanFilter.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">state_pdf</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;TODO: documentation&quot;&quot;&quot;</span>
+        <span class="sd">r&quot;&quot;&quot;Initialise Kalman filter.</span>
+
+<span class="sd">        :param A: process model matrix :math:`A_t` from :class:`class description &lt;KalmanFilter&gt;`.</span>
+<span class="sd">        :type A: 2D :class:`numpy.ndarray`</span>
+<span class="sd">        :param B: process control model matrix :math:`B_t` from :class:`class description &lt;KalmanFilter&gt;`.</span>
+<span class="sd">        :type B: 2D :class:`numpy.ndarray`</span>
+<span class="sd">        :param C: observation model matrix :math:`C_t` from :class:`class description &lt;KalmanFilter&gt;`.</span>
+<span class="sd">           Must be full-ranked.</span>
+<span class="sd">        :type C: 2D :class:`numpy.ndarray`</span>
+<span class="sd">        :param D: observation control model matrix :math:`D_t` from :class:`class description &lt;KalmanFilter&gt;`.</span>
+<span class="sd">        :type D: 2D :class:`numpy.ndarray`</span>
+<span class="sd">        :param Q: process noise covariance matrix :math:`Q_t` from :class:`class description &lt;KalmanFilter&gt;`.</span>
+<span class="sd">           Must be positive definite.</span>
+<span class="sd">        :type Q: 2D :class:`numpy.ndarray`</span>
+<span class="sd">        :param R: observation noise covariance matrix :math:`R_t` from :class:`class description &lt;KalmanFilter&gt;`.</span>
+<span class="sd">           Must be positive definite.</span>
+<span class="sd">        :type R: 2D :class:`numpy.ndarray`</span>
+<span class="sd">        :param state_pdf: initial state pdf. This object is referenced and used throughout whole</span>
+<span class="sd">           life of KalmanFilter, so it is not safe to reuse state pdf for other purposes.</span>
+<span class="sd">        :type state_pdf: :class:`~pybayes.pdfs.GaussPdf`</span>
+
+<span class="sd">        All matrices can be time-varying - you can modify or replace all above stated matrices</span>
+<span class="sd">        providing that you don&#39;t change their shape and all constraints still hold. On the other</span>
+<span class="sd">        hand, you **should not modify state_pdf** unless you really know what you are doing.</span>
+
+<span class="sd">        &gt;&gt;&gt; # initialise control-less Kalman filter:</span>
+<span class="sd">        &gt;&gt;&gt; kf = pb.KalmanFilter(A=np.array([[1.]]), B=np.zeros((1,0)),</span>
+<span class="sd">                                 C=np.array([[1.]]), D=np.zeros((1,0)),</span>
+<span class="sd">                                 Q=np.array([[0.7]]), R=np.array([[0.3]]),</span>
+<span class="sd">                                 state_pdf=pb.GaussPdf(...))</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c"># check type of pdf</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">state_pdf</span><span class="p">,</span> <span class="n">GaussPdf</span><span class="p">):</span>
@@ -187,7 +240,16 @@
         <span class="n">ret</span><span class="o">.</span><span class="n">S</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="p">,</span> <span class="n">memo</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">ret</span>
 
-    <span class="k">def</span> <span class="nf">bayes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yt</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">0</span><span class="p">)):</span>
+<div class="viewcode-block" id="KalmanFilter.bayes"><a class="viewcode-back" href="../../filters.html#pybayes.filters.KalmanFilter.bayes">[docs]</a>    <span class="k">def</span> <span class="nf">bayes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yt</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">0</span><span class="p">)):</span>
+        <span class="sd">&quot;&quot;&quot;Perform exact bayes rule.</span>
+
+<span class="sd">        :param yt: observation at time t</span>
+<span class="sd">        :type yt: 1D :class:`numpy.ndarray`</span>
+<span class="sd">        :param cond: control (intervention) vector at time t. May be :obj:`None` if filter is</span>
+<span class="sd">           control-less.</span>
+<span class="sd">        :type cond: 1D :class:`numpy.ndarray`</span>
+<span class="sd">        :return: always returns True (see :meth:`~Filter.posterior` to get aposteriori density)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">yt</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;yt must be and instance of numpy.ndarray ({0} given)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">yt</span><span class="p">)))</span>
         <span class="k">if</span> <span class="n">yt</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">yt</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">j</span><span class="p">:</span>
@@ -212,7 +274,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">mu</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="p">(</span><span class="n">yt</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">mu</span><span class="p">))</span>  <span class="c"># a posteriori state mean estimate</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">R</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">R</span><span class="p">)</span>  <span class="c"># a posteriori state covariance estimate</span>
         <span class="k">return</span> <span class="bp">True</span>
-
+</div>
     <span class="k">def</span> <span class="nf">posterior</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span>
 
@@ -286,11 +348,11 @@
 
 </div>
 <div class="viewcode-block" id="MarginalizedParticleFilter"><a class="viewcode-back" href="../../filters.html#pybayes.filters.MarginalizedParticleFilter">[docs]</a><span class="k">class</span> <span class="nc">MarginalizedParticleFilter</span><span class="p">(</span><span class="n">Filter</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Standard marginalized particle filter implementation. Assume that state variable :math:`x`</span>
-<span class="sd">    can be divided into two (TODO: independent?) parts: :math:`x_t = [a_t, b_t]`, then aposteriori</span>
+    <span class="sd">r&quot;&quot;&quot;Marginalized particle filter implementation. Assume that state variable :math:`x`</span>
+<span class="sd">    can be divided into two parts: :math:`x_t = [a_t, b_t]`, then aposteriori</span>
 <span class="sd">    pdf can be denoted as:</span>
 
-<span class="sd">    TODO: better description.</span>
+<span class="sd">    TODO: better description of Marginalized Particle Filter class</span>
 
 <span class="sd">    .. math::</span>
 
@@ -337,7 +399,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">kalmans</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">KalmanFilter</span><span class="p">)</span> <span class="c"># array of references to Kalman filters</span>
         <span class="n">gausses</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">GaussPdf</span><span class="p">)</span> <span class="c"># array of Kalman filter state pdfs</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-            <span class="n">gausses</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">GaussPdf</span><span class="p">(</span><span class="n">init_particles</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="n">a_shape</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.</span><span class="p">]]))</span> <span class="c"># TODO: dimension and initial covariance</span>
+            <span class="n">gausses</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">GaussPdf</span><span class="p">(</span><span class="n">init_particles</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="n">a_shape</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.</span><span class="p">]]))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">kalmans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">KalmanFilter</span><span class="p">(</span><span class="n">A</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.</span><span class="p">]]),</span> <span class="n">B</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)),</span>
                                            <span class="n">C</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.</span><span class="p">]]),</span> <span class="n">D</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)),</span>
                                            <span class="n">Q</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">123.</span><span class="p">]]),</span> <span class="n">R</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">123.</span><span class="p">]]),</span> <span class="c"># set to b_t in each step</span>

@@ -511,7 +511,7 @@
 <span class="sd">        that is doesn&#39;t add class variables)&quot;&quot;&quot;</span>
         <span class="c"># we cannont use AbstractGaussPdf statically - this method may be called</span>
         <span class="c"># by derived class</span>
-        <span class="n">ret</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>  <span class="c"># TODO: currently slower than PY_NEW()</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>  <span class="c"># optimisation TODO: currently slower than PY_NEW()</span>
         <span class="n">ret</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span>
         <span class="n">ret</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span>
         <span class="n">ret</span><span class="o">.</span><span class="n">rv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rv</span>
@@ -523,7 +523,7 @@
 <span class="sd">        that is doesn&#39;t add class variables)&quot;&quot;&quot;</span>
         <span class="c"># we cannont use AbstractGaussPdf statically - this method may be called</span>
         <span class="c"># by derived class</span>
-        <span class="n">ret</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>  <span class="c"># TODO: currently slower than PY_NEW()</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>  <span class="c"># optimisation TODO: currently slower than PY_NEW()</span>
         <span class="n">ret</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">,</span> <span class="n">memo</span><span class="p">)</span>
         <span class="n">ret</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="n">memo</span><span class="p">)</span>
         <span class="n">ret</span><span class="o">.</span><span class="n">rv</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rv</span><span class="p">,</span> <span class="n">memo</span><span class="p">)</span>
@@ -541,12 +541,14 @@
 <div class="viewcode-block" id="GaussPdf.__init__"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.GaussPdf.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="n">rv</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Initialise Gaussian pdf.</span>
 
-<span class="sd">        :param mean: mean value</span>
+<span class="sd">        :param mean: mean value; stored in **mu** attribute</span>
 <span class="sd">        :type mean: 1D :class:`numpy.ndarray`</span>
-<span class="sd">        :param cov: covariance matrix</span>
+<span class="sd">        :param cov: covariance matrix; stored in **R** arrtibute</span>
 <span class="sd">        :type cov: 2D :class:`numpy.ndarray`</span>
 
-<span class="sd">        To create standard normal distribution:</span>
+<span class="sd">        Covariance matrix **cov** must be *positive definite*. This is not checked during</span>
+<span class="sd">        initialisation; it fail or give incorrect results in :meth:`~CPdf.eval_log` or</span>
+<span class="sd">        :meth:`~CPdf.sample`. To create standard normal distribution:</span>
 
 <span class="sd">        &gt;&gt;&gt; # note that cov is a matrix because of the double [[ and ]]</span>
 <span class="sd">        &gt;&gt;&gt; norm = GaussPdf(np.array([0.]), np.array([[1.]]))</span>
@@ -565,7 +567,7 @@
                              <span class="nb">str</span><span class="p">(</span><span class="n">cov</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; given&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">cov</span> <span class="o">!=</span> <span class="n">cov</span><span class="o">.</span><span class="n">T</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;cov must be symmetric (complex covariance not supported)&quot;</span><span class="p">)</span>
-        <span class="c"># TODO: covariance must be positive definite</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <span class="n">mean</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="n">cov</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_set_rvs</span><span class="p">(</span><span class="n">rv</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
@@ -1143,15 +1145,15 @@
 <span class="sd">           cpdf. Must be a subclass of :class:`AbstractGaussPdf` and the default is</span>
 <span class="sd">           :class:`GaussPdf`. One alternative is :class:`LogNormPdf` for example.</span>
 
-<span class="sd">        TODO: better specification of callback functions</span>
+<span class="sd">        *Please note that the way of specifying callback function f and g is not yet fixed and may</span>
+<span class="sd">        be changed in future.*</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span> <span class="o">=</span> <span class="n">shape</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cond_shape</span> <span class="o">=</span> <span class="n">cond_shape</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="n">f</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">g</span> <span class="o">=</span> <span class="n">g</span>
         <span class="k">if</span> <span class="n">base_class</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="c"># TODO: to be correct, np.eye would be needed</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">gauss</span> <span class="o">=</span> <span class="n">GaussPdf</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">)))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gauss</span> <span class="o">=</span> <span class="n">GaussPdf</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">base_class</span><span class="p">,</span> <span class="n">AbstractGaussPdf</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;base_class must be a class (not an instance) and subclass of AbstractGaussPdf&quot;</span><span class="p">)</span>
@@ -1192,8 +1194,6 @@
     <span class="sd">r&quot;&quot;&quot;Pdf that is formed as a chain rule of multiple conditional pdfs.</span>
 <span class="sd">    Extends :class:`CPdf`.</span>
 
-<span class="sd">    TODO: make aggreate [cond\_]rv construction automatic and drop old constuctor.</span>
-
 <span class="sd">    In a</span>
 <span class="sd">    simple textbook case denoted below it isn&#39;t needed to specify random variables</span>
 <span class="sd">    at all. In this case when no random variable associations are passed,</span>
@@ -1220,10 +1220,14 @@
 <span class="sd">    &gt;&gt;&gt; p_2 = SomePdf(..., rv=RV(x_2), cond_rv=RV(y_2, y_1))</span>
 <span class="sd">    &gt;&gt;&gt; p = ProdCPdf((p_2, p_1), rv=RV(x_1, x_2), cond_rv=RV(y_1, y_2))  # order of</span>
 <span class="sd">    &gt;&gt;&gt; # pdfs is insignificant - order of rv components determines data flow</span>
+
+<span class="sd">    *Please note: this will change in near future in following way: it will be always required to</span>
+<span class="sd">    specify rvs and cond_rvs of factor pdfs (at least ones that are shared), but product rv and</span>
+<span class="sd">    cond_rv will be inferred automatically when not specified.*</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="ProdCPdf.__init__"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.ProdCPdf.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factors</span><span class="p">,</span> <span class="n">rv</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">cond_rv</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Construct chain rule of multiple cpdfs.</span>
+        <span class="sd">r&quot;&quot;&quot;Construct chain rule of multiple cpdfs.</span>
 
 <span class="sd">        :param factors: sequence of densities that will form the product</span>
 <span class="sd">        :type factors: sequence of :class:`CPdf`</span>
