@@ -77,7 +77,7 @@ so instead of <tt class="docutils literal"><span class="pre">from</span> <span c
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">always returns True (see <a class="reference internal" href="#pybayes.filters.Filter.posterior" title="pybayes.filters.Filter.posterior"><tt class="xref py py-meth docutils literal"><span class="pre">posterior()</span></tt></a> to get aposteriori density)</p>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">always returns True (see <a class="reference internal" href="#pybayes.filters.Filter.posterior" title="pybayes.filters.Filter.posterior"><tt class="xref py py-meth docutils literal"><span class="pre">posterior()</span></tt></a> to get posterior density)</p>
 </td>
 </tr>
 </tbody>
@@ -87,12 +87,12 @@ so instead of <tt class="docutils literal"><span class="pre">from</span> <span c
 <dl class="method">
 <dt id="pybayes.filters.Filter.posterior">
 <tt class="descname">posterior</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#Filter.posterior"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.Filter.posterior" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return aposteriori probability density funcion (<a class="reference internal" href="pdfs.html#pybayes.pdfs.Pdf" title="pybayes.pdfs.Pdf"><tt class="xref py py-class docutils literal"><span class="pre">Pdf</span></tt></a>).</p>
+<dd><p>Return posterior probability density funcion (<a class="reference internal" href="pdfs.html#pybayes.pdfs.Pdf" title="pybayes.pdfs.Pdf"><tt class="xref py py-class docutils literal"><span class="pre">Pdf</span></tt></a>).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">aposteriori density</td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">posterior density</td>
 </tr>
 <tr class="field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="pdfs.html#pybayes.pdfs.Pdf" title="pybayes.pdfs.Pdf"><tt class="xref py py-class docutils literal"><span class="pre">Pdf</span></tt></a></td>
 </tr>
@@ -149,8 +149,8 @@ y_t &amp;= C_t x_t + D_t u_t + w_t \quad \quad \quad \;\;
 </div><p>where <img class="math" src="_images/math/dcf1c6f36966b6ffcbc7d8001a0d21620708039b.png" alt="x_t \in \mathbb{R}^n"/> is hidden state vector, <img class="math" src="_images/math/81bfc84b0453810390a93139ce565b04e2ef874e.png" alt="y_t \in \mathbb{R}^j"/> is
 observation vector and <img class="math" src="_images/math/a9c3f8b026fbec8799a3256cce3ccd11cb7b1316.png" alt="u_t \in \mathbb{R}^k"/> is control vector. <img class="math" src="_images/math/54c637cab61f43e08325bd8c5a41e60bca94fa9a.png" alt="v_t"/> is normally
 distributed zero-mean process noise with covariance matrix <img class="math" src="_images/math/3a493392033e7998dcd3df4c422cc4a14644b1f1.png" alt="Q_t"/>, <img class="math" src="_images/math/9407218b469d82075dd7da2a8c7b1e5bf17bec89.png" alt="w_t"/> is normally
-distributed zero-mean observation noise with covariance matrix <img class="math" src="_images/math/9fbf70257cf041a08a07676aab5556e163115536.png" alt="R_t"/>. Additionally, every a
-posteriori pdf (and intial pdf) have to be Gaussian.</p>
+distributed zero-mean observation noise with covariance matrix <img class="math" src="_images/math/9fbf70257cf041a08a07676aab5556e163115536.png" alt="R_t"/>. Additionally, intial
+pdf (<strong>state_pdf</strong>) has to be Gaussian.</p>
 <dl class="method">
 <dt id="pybayes.filters.KalmanFilter.__init__">
 <tt class="descname">__init__</tt><big>(</big><em>A</em>, <em>B</em>, <em>C</em>, <em>D</em>, <em>Q</em>, <em>R</em>, <em>state_pdf</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#KalmanFilter.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.KalmanFilter.__init__" title="Permalink to this definition">¶</a></dt>
@@ -203,7 +203,7 @@ control-less.</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">always returns True (see <a class="reference internal" href="#pybayes.filters.Filter.posterior" title="pybayes.filters.Filter.posterior"><tt class="xref py py-meth docutils literal"><span class="pre">posterior()</span></tt></a> to get aposteriori density)</p>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">always returns True (see <a class="reference internal" href="#pybayes.filters.Filter.posterior" title="pybayes.filters.Filter.posterior"><tt class="xref py py-meth docutils literal"><span class="pre">posterior()</span></tt></a> to get posterior density)</p>
 </td>
 </tr>
 </tbody>
@@ -218,7 +218,7 @@ control-less.</li>
 <dl class="class">
 <dt id="pybayes.filters.ParticleFilter">
 <em class="property">class </em><tt class="descclassname">pybayes.filters.</tt><tt class="descname">ParticleFilter</tt><big>(</big><em>n</em>, <em>init_pdf</em>, <em>p_xt_xtp</em>, <em>p_yt_xt</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#ParticleFilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.ParticleFilter" title="Permalink to this definition">¶</a></dt>
-<dd><p>A filter whose aposteriori density takes the form</p>
+<dd><p>A filter whose posterior density takes the form</p>
 <div class="math">
 <p><img src="_images/math/c0235906c6a9aee3db07ef413c36c3fbb2d273a4.png" alt="p(x_t|y_{1:t}) = \sum_{i=1}^n \omega_i \delta ( x_t - x_t^{(i)} )" /></p>
 </div><dl class="method">
@@ -261,8 +261,7 @@ p(x_t^{(i)}|x_{t-1}^{(i)}) \quad \forall i"/></li>
 <dt id="pybayes.filters.MarginalizedParticleFilter">
 <em class="property">class </em><tt class="descclassname">pybayes.filters.</tt><tt class="descname">MarginalizedParticleFilter</tt><big>(</big><em>n</em>, <em>init_pdf</em>, <em>p_bt_btp</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#MarginalizedParticleFilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.MarginalizedParticleFilter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Marginalized particle filter implementation. Assume that state variable <img class="math" src="_images/math/26eeb5258ca5099acf8fe96b2a1049c48c89a5e6.png" alt="x"/>
-can be divided into two parts: <img class="math" src="_images/math/79c18f8eed1cf8786ef8c7fc1f3b49492427ba00.png" alt="x_t = [a_t, b_t]"/>, then aposteriori
-pdf can be denoted as:</p>
+can be divided into two parts: <img class="math" src="_images/math/79c18f8eed1cf8786ef8c7fc1f3b49492427ba00.png" alt="x_t = [a_t, b_t]"/>, then posterior pdf can be denoted as:</p>
 <p>TODO: better description of Marginalized Particle Filter class</p>
 <div class="math">
 <p><img src="_images/math/7da247017672d147c21aaaf8611adab0b944324c.png" alt="p &amp;= \sum_{i=1}^n \omega_i p^{(i)}(a_t | b_{1:t}, y_{1:t}) \delta(b_t - b_t^{(i)}) \\
