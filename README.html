@@ -55,16 +55,13 @@
 <h1>PyBayes<a class="headerlink" href="#pybayes" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="about">
 <h2>About<a class="headerlink" href="#about" title="Permalink to this headline">¶</a></h2>
-<p>A long-term goal of PyBayes is to be the preferred python library for
-implementing Bayesian filtering (recursive estimation) and decision-making
-systems.</p>
-<p>Already done are classes for both basic static and conditional probability
-densities ([c]pdfs) and a special cpdf representing a chain rule. Particle
-filter that uses cpdfs extensively is implemented, Kalman filter is also present.</p>
+<p>PyBayes is an object-oriented Python library for recursive Bayesian
+estimation (Bayesian filtering) that is convenient to use. Already implemented are
+Kalman filter, particle filter and marginalized particle filter, all built atop of
+a light framework of probability density functions. PyBayes can optionally use Cython
+for lage speed gains (Cython build is several times faster).</p>
 <p>Future plans include more specialised variants of Kalman/particle filters and
-speed optimisations. The project is also interesting technically as it is
-dual-mode: can be be used without cython at all or compiled to gain more speed
-- with nearly no code duplication.</p>
+speed optimisations.</p>
 <p>Automatically generated <strong>documentation</strong> can be found at
 <a class="reference external" href="http://strohel.github.com/PyBayes-doc/">http://strohel.github.com/PyBayes-doc/</a></p>
 <div class="section" id="licensing">

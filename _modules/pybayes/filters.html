@@ -133,26 +133,28 @@
 <span class="sd">    pdf (**state_pdf**) has to be Gaussian.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="KalmanFilter.__init__"><a class="viewcode-back" href="../../filters.html#pybayes.filters.KalmanFilter.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">state_pdf</span><span class="p">):</span>
+<div class="viewcode-block" id="KalmanFilter.__init__"><a class="viewcode-back" href="../../filters.html#pybayes.filters.KalmanFilter.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">C</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">D</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">Q</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">R</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">state_pdf</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Initialise Kalman filter.</span>
 
-<span class="sd">        :param A: process model matrix :math:`A_t` from :class:`class description &lt;KalmanFilter&gt;`.</span>
+<span class="sd">        :param A: process model matrix :math:`A_t` from :class:`class description &lt;KalmanFilter&gt;`</span>
 <span class="sd">        :type A: 2D :class:`numpy.ndarray`</span>
-<span class="sd">        :param B: process control model matrix :math:`B_t` from :class:`class description &lt;KalmanFilter&gt;`.</span>
+<span class="sd">        :param B: process control model matrix :math:`B_t` from :class:`class description</span>
+<span class="sd">           &lt;KalmanFilter&gt;`; may be None or unspecified for control-less systems</span>
 <span class="sd">        :type B: 2D :class:`numpy.ndarray`</span>
-<span class="sd">        :param C: observation model matrix :math:`C_t` from :class:`class description &lt;KalmanFilter&gt;`.</span>
-<span class="sd">           Must be full-ranked.</span>
+<span class="sd">        :param C: observation model matrix :math:`C_t` from :class:`class description</span>
+<span class="sd">           &lt;KalmanFilter&gt;`; must be full-ranked</span>
 <span class="sd">        :type C: 2D :class:`numpy.ndarray`</span>
-<span class="sd">        :param D: observation control model matrix :math:`D_t` from :class:`class description &lt;KalmanFilter&gt;`.</span>
+<span class="sd">        :param D: observation control model matrix :math:`D_t` from :class:`class description</span>
+<span class="sd">           &lt;KalmanFilter&gt;`; may be None or unspecified for control-less systems</span>
 <span class="sd">        :type D: 2D :class:`numpy.ndarray`</span>
-<span class="sd">        :param Q: process noise covariance matrix :math:`Q_t` from :class:`class description &lt;KalmanFilter&gt;`.</span>
-<span class="sd">           Must be positive definite.</span>
+<span class="sd">        :param Q: process noise covariance matrix :math:`Q_t` from :class:`class description</span>
+<span class="sd">           &lt;KalmanFilter&gt;`; must be positive definite</span>
 <span class="sd">        :type Q: 2D :class:`numpy.ndarray`</span>
-<span class="sd">        :param R: observation noise covariance matrix :math:`R_t` from :class:`class description &lt;KalmanFilter&gt;`.</span>
-<span class="sd">           Must be positive definite.</span>
+<span class="sd">        :param R: observation noise covariance matrix :math:`R_t` from :class:`class description</span>
+<span class="sd">           &lt;KalmanFilter&gt;`; must be positive definite</span>
 <span class="sd">        :type R: 2D :class:`numpy.ndarray`</span>
-<span class="sd">        :param state_pdf: initial state pdf. This object is referenced and used throughout whole</span>
-<span class="sd">           life of KalmanFilter, so it is not safe to reuse state pdf for other purposes.</span>
+<span class="sd">        :param state_pdf: initial state pdf; this object is referenced and used throughout whole</span>
+<span class="sd">           life of KalmanFilter, so it is not safe to reuse state pdf for other purposes</span>
 <span class="sd">        :type state_pdf: :class:`~pybayes.pdfs.GaussPdf`</span>
 
 <span class="sd">        All matrices can be time-varying - you can modify or replace all above stated matrices</span>
@@ -160,8 +162,8 @@
 <span class="sd">        hand, you **should not modify state_pdf** unless you really know what you are doing.</span>
 
 <span class="sd">        &gt;&gt;&gt; # initialise control-less Kalman filter:</span>
-<span class="sd">        &gt;&gt;&gt; kf = pb.KalmanFilter(A=np.array([[1.]]), B=np.zeros((1,0)),</span>
-<span class="sd">                                 C=np.array([[1.]]), D=np.zeros((1,0)),</span>
+<span class="sd">        &gt;&gt;&gt; kf = pb.KalmanFilter(A=np.array([[1.]]),</span>
+<span class="sd">                                 C=np.array([[1.]]),</span>
 <span class="sd">                                 Q=np.array([[0.7]]), R=np.array([[0.3]]),</span>
 <span class="sd">                                 state_pdf=pb.GaussPdf(...))</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -174,12 +176,16 @@
         <span class="n">matrices</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;A&quot;</span><span class="p">:</span><span class="n">A</span><span class="p">,</span> <span class="s">&quot;B&quot;</span><span class="p">:</span><span class="n">B</span><span class="p">,</span> <span class="s">&quot;C&quot;</span><span class="p">:</span><span class="n">C</span><span class="p">,</span> <span class="s">&quot;D&quot;</span><span class="p">:</span><span class="n">D</span><span class="p">,</span> <span class="s">&quot;Q&quot;</span><span class="p">:</span><span class="n">Q</span><span class="p">,</span> <span class="s">&quot;R&quot;</span><span class="p">:</span><span class="n">R</span><span class="p">}</span>
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">matrices</span><span class="p">:</span>
             <span class="n">matrix</span> <span class="o">=</span> <span class="n">matrices</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s">&#39;B&#39;</span> <span class="ow">and</span> <span class="n">matrix</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>  <span class="c"># we allow B to be unspecified</span>
+                <span class="n">matrices</span><span class="p">[</span><span class="s">&#39;B&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">matrix</span> <span class="o">=</span> <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s">&#39;D&#39;</span> <span class="ow">and</span> <span class="n">matrix</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>  <span class="c"># we allow D to be unspecified</span>
+                <span class="n">matrices</span><span class="p">[</span><span class="s">&#39;D&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">matrix</span> <span class="o">=</span> <span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">C</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">))</span>
+
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">name</span> <span class="o">+</span> <span class="s">&quot; must be (exactly) numpy.ndarray, &quot;</span> <span class="o">+</span>
-                                <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">matrix</span><span class="p">))</span> <span class="o">+</span> <span class="s">&quot; given&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;{0} must be numpy.ndarray, {1} given&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">matrix</span><span class="p">)))</span>
             <span class="k">if</span> <span class="n">matrix</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">name</span> <span class="o">+</span> <span class="s">&quot; must have 2 dimensions (thus forming a matrix), &quot;</span> <span class="o">+</span>
-                                 <span class="nb">str</span><span class="p">(</span><span class="n">matrix</span><span class="o">.</span><span class="n">ndim</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; given&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;{0} must have 2 dimensions (forming a matrix) {1} given&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                                 <span class="n">name</span><span class="p">,</span> <span class="n">matrix</span><span class="o">.</span><span class="n">ndim</span><span class="p">))</span>
 
         <span class="c"># remember vector shapes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="n">state_pdf</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span>  <span class="c"># dimension of state vector</span>
@@ -241,11 +247,11 @@
         <span class="k">return</span> <span class="n">ret</span>
 
 <div class="viewcode-block" id="KalmanFilter.bayes"><a class="viewcode-back" href="../../filters.html#pybayes.filters.KalmanFilter.bayes">[docs]</a>    <span class="k">def</span> <span class="nf">bayes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yt</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">0</span><span class="p">)):</span>
-        <span class="sd">&quot;&quot;&quot;Perform exact bayes rule.</span>
+        <span class="sd">r&quot;&quot;&quot;Perform exact bayes rule.</span>
 
 <span class="sd">        :param yt: observation at time t</span>
 <span class="sd">        :type yt: 1D :class:`numpy.ndarray`</span>
-<span class="sd">        :param cond: control (intervention) vector at time t. May be :obj:`None` if filter is</span>
+<span class="sd">        :param cond: control (intervention) vector at time t. May be unspecified if the filter is</span>
 <span class="sd">           control-less.</span>
 <span class="sd">        :type cond: 1D :class:`numpy.ndarray`</span>
 <span class="sd">        :return: always returns True (see :meth:`~Filter.posterior` to get posterior density)</span>
@@ -283,7 +289,9 @@
 
 </div>
 <div class="viewcode-block" id="ParticleFilter"><a class="viewcode-back" href="../../filters.html#pybayes.filters.ParticleFilter">[docs]</a><span class="k">class</span> <span class="nc">ParticleFilter</span><span class="p">(</span><span class="n">Filter</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;A filter whose posterior density takes the form</span>
+    <span class="sd">r&quot;&quot;&quot;Standard particle filter implementation with resampling.</span>
+
+<span class="sd">    Posterior pdf is represented using :class:`~pybayes.pdfs.EmpPdf` and takes following form:</span>
 
 <span class="sd">    .. math:: p(x_t|y_{1:t}) = \sum_{i=1}^n \omega_i \delta ( x_t - x_t^{(i)} )</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -348,22 +356,30 @@
 
 </div>
 <div class="viewcode-block" id="MarginalizedParticleFilter"><a class="viewcode-back" href="../../filters.html#pybayes.filters.MarginalizedParticleFilter">[docs]</a><span class="k">class</span> <span class="nc">MarginalizedParticleFilter</span><span class="p">(</span><span class="n">Filter</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Marginalized particle filter implementation. Assume that state variable :math:`x`</span>
-<span class="sd">    can be divided into two parts: :math:`x_t = [a_t, b_t]`, then posterior pdf can be denoted as:</span>
+    <span class="sd">r&quot;&quot;&quot;Simple marginalized particle filter implementation. Assume that tha state vector :math:`x`</span>
+<span class="sd">    can be divided into two parts :math:`x_t = (a_t, b_t)` and that the pdf representing the process</span>
+<span class="sd">    model can be factorised as follows:</span>
 
-<span class="sd">    TODO: better description of Marginalized Particle Filter class</span>
+<span class="sd">    .. math:: p(x_t|x_{t-1}) = p(a_t|a_{t-1}, b_t) p(b_t | b_{t-1})</span>
+
+<span class="sd">    and that the :math:`a_t` part (given :math:`b_t`) can be estimated with (a subbclass of) the</span>
+<span class="sd">    :class:`KalmanFilter`. Such system may be suitable for the marginalized particle filter, whose</span>
+<span class="sd">    posterior pdf takes the form</span>
 
 <span class="sd">    .. math::</span>
 
-<span class="sd">       p &amp;= \sum_{i=1}^n \omega_i p^{(i)}(a_t | b_{1:t}, y_{1:t}) \delta(b_t - b_t^{(i)}) \\</span>
-<span class="sd">       p^{(i)}(a_t | b_{1:t}, y_{1:t}) &amp;= \mathcal{N} (\hat{a}_t^{(i)}, P_t^{(i)}) \\</span>
-<span class="sd">       \text{where } \quad \hat{a}_t^{(i)} &amp;\text{ and } P_t^{(i)} \text{ is mean and</span>
-<span class="sd">       covariance of i}^{th} \text{ gauss pdf} \\</span>
+<span class="sd">       p &amp;= \sum_{i=1}^n \omega_i p(a_t | y_{1:t}, b_{1:t}^{(i)}) \delta(b_t - b_t^{(i)}) \\</span>
+<span class="sd">       p(a_t | y_{1:t}, b_{1:t}^{(i)}) &amp;\text{ is posterior pdf of i}^{th} \text{ Kalman filter} \\</span>
+<span class="sd">       \text{where } \quad \quad \quad \quad \quad</span>
 <span class="sd">       b_t^{(i)} &amp;\text{ is value of the (b part of the) i}^{th} \text{ particle} \\</span>
 <span class="sd">       \omega_i \geq 0 &amp;\text{ is weight of the i}^{th} \text{ particle} \quad \sum \omega_i = 1</span>
+
+<span class="sd">    *Note: currently :math:`b_t` is hard-coded to be process and observation noise covariance of the</span>
+<span class="sd">    :math:`a_t` part. This will be changed soon and :math:`b_t` will be passed as condition to</span>
+<span class="sd">    :meth:`KalmanFilter.bayes`.*</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="MarginalizedParticleFilter.__init__"><a class="viewcode-back" href="../../filters.html#pybayes.filters.MarginalizedParticleFilter.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">init_pdf</span><span class="p">,</span> <span class="n">p_bt_btp</span><span class="p">):</span>
+<div class="viewcode-block" id="MarginalizedParticleFilter.__init__"><a class="viewcode-back" href="../../filters.html#pybayes.filters.MarginalizedParticleFilter.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">init_pdf</span><span class="p">,</span> <span class="n">p_bt_btp</span><span class="p">,</span> <span class="n">kalman_args</span><span class="p">,</span> <span class="n">kalman_class</span> <span class="o">=</span> <span class="n">KalmanFilter</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Initialise marginalized particle filter.</span>
 
 <span class="sd">        :param int n: number of particles</span>
@@ -373,11 +389,17 @@
 <span class="sd">        :param p_bt_btp: :math:`p(b_t|b_{t-1})` cpdf of the (b part of the) state in *t* given</span>
 <span class="sd">           state in *t-1*</span>
 <span class="sd">        :type p_bt_btp: :class:`~pybayes.pdfs.CPdf`</span>
+<span class="sd">        :param dict kalman_args: arguments for the Kalman filter, passed as dictionary; *state_pdf*</span>
+<span class="sd">           key should not be speficied as it is supplied by the marginalized particle filter</span>
+<span class="sd">        :param class kalman_class: class of the filter used for the :math:`a_t` part of the system;</span>
+<span class="sd">            defaults to :class:`KalmanFilter`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;n must be a positive integer&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">init_pdf</span><span class="p">,</span> <span class="n">Pdf</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">p_bt_btp</span><span class="p">,</span> <span class="n">CPdf</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;init_pdf must be a Pdf and p_bt_btp must be a CPdf&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">kalman_class</span><span class="p">,</span> <span class="n">KalmanFilter</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;kalman_class must be a subclass (not an instance) of KalmanFilter&quot;</span><span class="p">)</span>
         <span class="n">b_shape</span> <span class="o">=</span> <span class="n">p_bt_btp</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">p_bt_btp</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">()</span> <span class="o">!=</span> <span class="n">b_shape</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;p_bt_btp&#39;s shape ({0}) and cond shape ({1}) must both be {2}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
@@ -385,11 +407,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">p_bt_btp</span> <span class="o">=</span> <span class="n">p_bt_btp</span>
         <span class="n">a_shape</span> <span class="o">=</span> <span class="n">init_pdf</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span> <span class="o">-</span> <span class="n">b_shape</span>
 
-        <span class="c"># current limitation:</span>
-        <span class="k">if</span> <span class="n">b_shape</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;multivariate b_t not yet implemented (but planned)&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">a_shape</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;multivariate a_t not yet implemented (but planned)&quot;</span><span class="p">)</span>
+        <span class="c"># this will be removed when hardcoding Q,R into kalman filter will be removed</span>
+        <span class="n">kalman_args</span><span class="p">[</span><span class="s">&#39;Q&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">123.</span><span class="p">]])</span>
+        <span class="n">kalman_args</span><span class="p">[</span><span class="s">&#39;R&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">494658.</span><span class="p">]])</span>
 
         <span class="c"># generate both initial parts of particles</span>
         <span class="n">init_particles</span> <span class="o">=</span> <span class="n">init_pdf</span><span class="o">.</span><span class="n">samples</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
@@ -399,10 +419,8 @@
         <span class="n">gausses</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">GaussPdf</span><span class="p">)</span> <span class="c"># array of Kalman filter state pdfs</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
             <span class="n">gausses</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">GaussPdf</span><span class="p">(</span><span class="n">init_particles</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="n">a_shape</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.</span><span class="p">]]))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">kalmans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">KalmanFilter</span><span class="p">(</span><span class="n">A</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.</span><span class="p">]]),</span> <span class="n">B</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)),</span>
-                                           <span class="n">C</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.</span><span class="p">]]),</span> <span class="n">D</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)),</span>
-                                           <span class="n">Q</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">123.</span><span class="p">]]),</span> <span class="n">R</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">123.</span><span class="p">]]),</span> <span class="c"># set to b_t in each step</span>
-                                           <span class="n">state_pdf</span><span class="o">=</span><span class="n">gausses</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">kalman_args</span><span class="p">[</span><span class="s">&#39;state_pdf&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gausses</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kalmans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">kalman_class</span><span class="p">(</span><span class="o">**</span><span class="n">kalman_args</span><span class="p">)</span>
         <span class="c"># construct apost pdf. Important: reference to ith GaussPdf is shared between ith Kalman</span>
         <span class="c"># filter&#39;s state_pdf and ith memp&#39;t gauss</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">memp</span> <span class="o">=</span> <span class="n">MarginalizedEmpPdf</span><span class="p">(</span><span class="n">gausses</span><span class="p">,</span> <span class="n">init_particles</span><span class="p">[:,</span><span class="n">a_shape</span><span class="p">:])</span>

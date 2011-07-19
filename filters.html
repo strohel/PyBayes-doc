@@ -72,8 +72,8 @@ so instead of <tt class="docutils literal"><span class="pre">from</span> <span c
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>yt</strong> (1D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-861e227)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; observation at time t</li>
-<li><strong>cond</strong> (1D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-861e227)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; condition at time t. Exact meaning is defined by each filter</li>
+<li><strong>yt</strong> (1D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-64fce7c)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; observation at time t</li>
+<li><strong>cond</strong> (1D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-64fce7c)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; condition at time t. Exact meaning is defined by each filter</li>
 </ul>
 </td>
 </tr>
@@ -111,7 +111,7 @@ in point yt.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>yt</strong> (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-861e227)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; point which to evaluate the evidence in</td>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>yt</strong> (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-64fce7c)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; point which to evaluate the evidence in</td>
 </tr>
 <tr class="field"><th class="field-name">Return type:</th><td class="field-body">double</td>
 </tr>
@@ -131,7 +131,7 @@ in point yt.</p>
 <h2>Kalman Filter<a class="headerlink" href="#kalman-filter" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="pybayes.filters.KalmanFilter">
-<em class="property">class </em><tt class="descclassname">pybayes.filters.</tt><tt class="descname">KalmanFilter</tt><big>(</big><em>A</em>, <em>B</em>, <em>C</em>, <em>D</em>, <em>Q</em>, <em>R</em>, <em>state_pdf</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#KalmanFilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.KalmanFilter" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pybayes.filters.</tt><tt class="descname">KalmanFilter</tt><big>(</big><em>A</em>, <em>B=None</em>, <em>C=None</em>, <em>D=None</em>, <em>Q=None</em>, <em>R=None</em>, <em>state_pdf=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#KalmanFilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.KalmanFilter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implementation of standard Kalman filter. <strong>cond</strong> in <a class="reference internal" href="#pybayes.filters.KalmanFilter.bayes" title="pybayes.filters.KalmanFilter.bayes"><tt class="xref py py-meth docutils literal"><span class="pre">bayes()</span></tt></a> is interpreted as
 control (intervention) input <img class="math" src="_images/math/65934e62c7adf123e9849a7b9a163958162c1a74.png" alt="u_t"/> to the system.</p>
 <p>Kalman filter forms <em>optimal Bayesian solution</em> for the following system:</p>
@@ -153,24 +153,21 @@ distributed zero-mean observation noise with covariance matrix <img class="math"
 pdf (<strong>state_pdf</strong>) has to be Gaussian.</p>
 <dl class="method">
 <dt id="pybayes.filters.KalmanFilter.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>A</em>, <em>B</em>, <em>C</em>, <em>D</em>, <em>Q</em>, <em>R</em>, <em>state_pdf</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#KalmanFilter.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.KalmanFilter.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>A</em>, <em>B=None</em>, <em>C=None</em>, <em>D=None</em>, <em>Q=None</em>, <em>R=None</em>, <em>state_pdf=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#KalmanFilter.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.KalmanFilter.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialise Kalman filter.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>A</strong> (2D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-861e227)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; process model matrix <img class="math" src="_images/math/2ad14c81978b68932f8ec828750c02438f581967.png" alt="A_t"/> from <a class="reference internal" href="#pybayes.filters.KalmanFilter" title="pybayes.filters.KalmanFilter"><tt class="xref py py-class docutils literal"><span class="pre">class</span> <span class="pre">description</span></tt></a>.</li>
-<li><strong>B</strong> (2D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-861e227)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; process control model matrix <img class="math" src="_images/math/d713f67e9556171e4f028bfeac00f2efdcfd6e0e.png" alt="B_t"/> from <a class="reference internal" href="#pybayes.filters.KalmanFilter" title="pybayes.filters.KalmanFilter"><tt class="xref py py-class docutils literal"><span class="pre">class</span> <span class="pre">description</span></tt></a>.</li>
-<li><strong>C</strong> (2D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-861e227)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; observation model matrix <img class="math" src="_images/math/3cb852f35979fc2f394947379aa5940440798f8a.png" alt="C_t"/> from <a class="reference internal" href="#pybayes.filters.KalmanFilter" title="pybayes.filters.KalmanFilter"><tt class="xref py py-class docutils literal"><span class="pre">class</span> <span class="pre">description</span></tt></a>.
-Must be full-ranked.</li>
-<li><strong>D</strong> (2D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-861e227)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; observation control model matrix <img class="math" src="_images/math/56ff51eb4870ec165ac7daed4a82c7323caf4e78.png" alt="D_t"/> from <a class="reference internal" href="#pybayes.filters.KalmanFilter" title="pybayes.filters.KalmanFilter"><tt class="xref py py-class docutils literal"><span class="pre">class</span> <span class="pre">description</span></tt></a>.</li>
-<li><strong>Q</strong> (2D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-861e227)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; process noise covariance matrix <img class="math" src="_images/math/3a493392033e7998dcd3df4c422cc4a14644b1f1.png" alt="Q_t"/> from <a class="reference internal" href="#pybayes.filters.KalmanFilter" title="pybayes.filters.KalmanFilter"><tt class="xref py py-class docutils literal"><span class="pre">class</span> <span class="pre">description</span></tt></a>.
-Must be positive definite.</li>
-<li><strong>R</strong> (2D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-861e227)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; observation noise covariance matrix <img class="math" src="_images/math/9fbf70257cf041a08a07676aab5556e163115536.png" alt="R_t"/> from <a class="reference internal" href="#pybayes.filters.KalmanFilter" title="pybayes.filters.KalmanFilter"><tt class="xref py py-class docutils literal"><span class="pre">class</span> <span class="pre">description</span></tt></a>.
-Must be positive definite.</li>
-<li><strong>state_pdf</strong> (<a class="reference internal" href="pdfs.html#pybayes.pdfs.GaussPdf" title="pybayes.pdfs.GaussPdf"><tt class="xref py py-class docutils literal"><span class="pre">GaussPdf</span></tt></a>) &#8211; initial state pdf. This object is referenced and used throughout whole
-life of KalmanFilter, so it is not safe to reuse state pdf for other purposes.</li>
+<li><strong>A</strong> (2D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-64fce7c)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; process model matrix <img class="math" src="_images/math/2ad14c81978b68932f8ec828750c02438f581967.png" alt="A_t"/> from <a class="reference internal" href="#pybayes.filters.KalmanFilter" title="pybayes.filters.KalmanFilter"><tt class="xref py py-class docutils literal"><span class="pre">class</span> <span class="pre">description</span></tt></a></li>
+<li><strong>B</strong> (2D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-64fce7c)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; process control model matrix <img class="math" src="_images/math/d713f67e9556171e4f028bfeac00f2efdcfd6e0e.png" alt="B_t"/> from <a class="reference internal" href="#pybayes.filters.KalmanFilter" title="pybayes.filters.KalmanFilter"><tt class="xref py py-class docutils literal"><span class="pre">class</span> <span class="pre">description</span></tt></a>; may be None or unspecified for control-less systems</li>
+<li><strong>C</strong> (2D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-64fce7c)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; observation model matrix <img class="math" src="_images/math/3cb852f35979fc2f394947379aa5940440798f8a.png" alt="C_t"/> from <a class="reference internal" href="#pybayes.filters.KalmanFilter" title="pybayes.filters.KalmanFilter"><tt class="xref py py-class docutils literal"><span class="pre">class</span> <span class="pre">description</span></tt></a>; must be full-ranked</li>
+<li><strong>D</strong> (2D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-64fce7c)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; observation control model matrix <img class="math" src="_images/math/56ff51eb4870ec165ac7daed4a82c7323caf4e78.png" alt="D_t"/> from <a class="reference internal" href="#pybayes.filters.KalmanFilter" title="pybayes.filters.KalmanFilter"><tt class="xref py py-class docutils literal"><span class="pre">class</span> <span class="pre">description</span></tt></a>; may be None or unspecified for control-less systems</li>
+<li><strong>Q</strong> (2D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-64fce7c)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; process noise covariance matrix <img class="math" src="_images/math/3a493392033e7998dcd3df4c422cc4a14644b1f1.png" alt="Q_t"/> from <a class="reference internal" href="#pybayes.filters.KalmanFilter" title="pybayes.filters.KalmanFilter"><tt class="xref py py-class docutils literal"><span class="pre">class</span> <span class="pre">description</span></tt></a>; must be positive definite</li>
+<li><strong>R</strong> (2D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-64fce7c)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; observation noise covariance matrix <img class="math" src="_images/math/9fbf70257cf041a08a07676aab5556e163115536.png" alt="R_t"/> from <a class="reference internal" href="#pybayes.filters.KalmanFilter" title="pybayes.filters.KalmanFilter"><tt class="xref py py-class docutils literal"><span class="pre">class</span> <span class="pre">description</span></tt></a>; must be positive definite</li>
+<li><strong>state_pdf</strong> (<a class="reference internal" href="pdfs.html#pybayes.pdfs.GaussPdf" title="pybayes.pdfs.GaussPdf"><tt class="xref py py-class docutils literal"><span class="pre">GaussPdf</span></tt></a>) &#8211; initial state pdf; this object is referenced and used throughout whole
+life of KalmanFilter, so it is not safe to reuse state pdf for other purposes</li>
 </ul>
 </td>
 </tr>
@@ -180,8 +177,8 @@ life of KalmanFilter, so it is not safe to reuse state pdf for other purposes.</
 providing that you don&#8217;t change their shape and all constraints still hold. On the other
 hand, you <strong>should not modify state_pdf</strong> unless you really know what you are doing.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># initialise control-less Kalman filter:</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">kf</span> <span class="o">=</span> <span class="n">pb</span><span class="o">.</span><span class="n">KalmanFilter</span><span class="p">(</span><span class="n">A</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.</span><span class="p">]]),</span> <span class="n">B</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)),</span>
-<span class="go">                         C=np.array([[1.]]), D=np.zeros((1,0)),</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kf</span> <span class="o">=</span> <span class="n">pb</span><span class="o">.</span><span class="n">KalmanFilter</span><span class="p">(</span><span class="n">A</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.</span><span class="p">]]),</span>
+<span class="go">                         C=np.array([[1.]]),</span>
 <span class="go">                         Q=np.array([[0.7]]), R=np.array([[0.3]]),</span>
 <span class="go">                         state_pdf=pb.GaussPdf(...))</span>
 </pre></div>
@@ -197,8 +194,8 @@ hand, you <strong>should not modify state_pdf</strong> unless you really know wh
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>yt</strong> (1D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-861e227)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; observation at time t</li>
-<li><strong>cond</strong> (1D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-861e227)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; control (intervention) vector at time t. May be <a class="reference external" href="http://docs.python.org/library/constants.html#None" title="(in Python v2.7)"><tt class="xref py py-obj xref docutils literal"><span class="pre">None</span></tt></a> if filter is
+<li><strong>yt</strong> (1D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-64fce7c)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; observation at time t</li>
+<li><strong>cond</strong> (1D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-64fce7c)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) &#8211; control (intervention) vector at time t. May be unspecified if the filter is
 control-less.</li>
 </ul>
 </td>
@@ -218,7 +215,8 @@ control-less.</li>
 <dl class="class">
 <dt id="pybayes.filters.ParticleFilter">
 <em class="property">class </em><tt class="descclassname">pybayes.filters.</tt><tt class="descname">ParticleFilter</tt><big>(</big><em>n</em>, <em>init_pdf</em>, <em>p_xt_xtp</em>, <em>p_yt_xt</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#ParticleFilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.ParticleFilter" title="Permalink to this definition">¶</a></dt>
-<dd><p>A filter whose posterior density takes the form</p>
+<dd><p>Standard particle filter implementation with resampling.</p>
+<p>Posterior pdf is represented using <a class="reference internal" href="pdfs.html#pybayes.pdfs.EmpPdf" title="pybayes.pdfs.EmpPdf"><tt class="xref py py-class docutils literal"><span class="pre">EmpPdf</span></tt></a> and takes following form:</p>
 <div class="math">
 <p><img src="_images/math/c0235906c6a9aee3db07ef413c36c3fbb2d273a4.png" alt="p(x_t|y_{1:t}) = \sum_{i=1}^n \omega_i \delta ( x_t - x_t^{(i)} )" /></p>
 </div><dl class="method">
@@ -259,20 +257,27 @@ p(x_t^{(i)}|x_{t-1}^{(i)}) \quad \forall i"/></li>
 
 <dl class="class">
 <dt id="pybayes.filters.MarginalizedParticleFilter">
-<em class="property">class </em><tt class="descclassname">pybayes.filters.</tt><tt class="descname">MarginalizedParticleFilter</tt><big>(</big><em>n</em>, <em>init_pdf</em>, <em>p_bt_btp</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#MarginalizedParticleFilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.MarginalizedParticleFilter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Marginalized particle filter implementation. Assume that state variable <img class="math" src="_images/math/26eeb5258ca5099acf8fe96b2a1049c48c89a5e6.png" alt="x"/>
-can be divided into two parts: <img class="math" src="_images/math/79c18f8eed1cf8786ef8c7fc1f3b49492427ba00.png" alt="x_t = [a_t, b_t]"/>, then posterior pdf can be denoted as:</p>
-<p>TODO: better description of Marginalized Particle Filter class</p>
+<em class="property">class </em><tt class="descclassname">pybayes.filters.</tt><tt class="descname">MarginalizedParticleFilter</tt><big>(</big><em>n</em>, <em>init_pdf</em>, <em>p_bt_btp</em>, <em>kalman_args</em>, <em>kalman_class=&lt;class 'pybayes.filters.KalmanFilter'&gt;</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#MarginalizedParticleFilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.MarginalizedParticleFilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simple marginalized particle filter implementation. Assume that tha state vector <img class="math" src="_images/math/26eeb5258ca5099acf8fe96b2a1049c48c89a5e6.png" alt="x"/>
+can be divided into two parts <img class="math" src="_images/math/b32275f4b8d7c21a322b82fe083ec75b972f8a6c.png" alt="x_t = (a_t, b_t)"/> and that the pdf representing the process
+model can be factorised as follows:</p>
 <div class="math">
-<p><img src="_images/math/7da247017672d147c21aaaf8611adab0b944324c.png" alt="p &amp;= \sum_{i=1}^n \omega_i p^{(i)}(a_t | b_{1:t}, y_{1:t}) \delta(b_t - b_t^{(i)}) \\
-p^{(i)}(a_t | b_{1:t}, y_{1:t}) &amp;= \mathcal{N} (\hat{a}_t^{(i)}, P_t^{(i)}) \\
-\text{where } \quad \hat{a}_t^{(i)} &amp;\text{ and } P_t^{(i)} \text{ is mean and
-covariance of i}^{th} \text{ gauss pdf} \\
+<p><img src="_images/math/f7dfc6b69fe76d59d03f1940f771a26df44f20d1.png" alt="p(x_t|x_{t-1}) = p(a_t|a_{t-1}, b_t) p(b_t | b_{t-1})" /></p>
+</div><p>and that the <img class="math" src="_images/math/bd7b27485881f9584eb55ef1fef58c055de03b7c.png" alt="a_t"/> part (given <img class="math" src="_images/math/a27ae64b71af735251a4ed459811816285ddf575.png" alt="b_t"/>) can be estimated with (a subbclass of) the
+<a class="reference internal" href="#pybayes.filters.KalmanFilter" title="pybayes.filters.KalmanFilter"><tt class="xref py py-class docutils literal"><span class="pre">KalmanFilter</span></tt></a>. Such system may be suitable for the marginalized particle filter, whose
+posterior pdf takes the form</p>
+<div class="math">
+<p><img src="_images/math/2273d1523ae3b9149e34fa9cd683e698224a7327.png" alt="p &amp;= \sum_{i=1}^n \omega_i p(a_t | y_{1:t}, b_{1:t}^{(i)}) \delta(b_t - b_t^{(i)}) \\
+p(a_t | y_{1:t}, b_{1:t}^{(i)}) &amp;\text{ is posterior pdf of i}^{th} \text{ Kalman filter} \\
+\text{where } \quad \quad \quad \quad \quad
 b_t^{(i)} &amp;\text{ is value of the (b part of the) i}^{th} \text{ particle} \\
 \omega_i \geq 0 &amp;\text{ is weight of the i}^{th} \text{ particle} \quad \sum \omega_i = 1" /></p>
-</div><dl class="method">
+</div><p><em>Note: currently :math:`b_t` is hard-coded to be process and observation noise covariance of the
+:math:`a_t` part. This will be changed soon and :math:`b_t` will be passed as condition to
+:meth:`KalmanFilter.bayes`.</em></p>
+<dl class="method">
 <dt id="pybayes.filters.MarginalizedParticleFilter.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>n</em>, <em>init_pdf</em>, <em>p_bt_btp</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#MarginalizedParticleFilter.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.MarginalizedParticleFilter.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>n</em>, <em>init_pdf</em>, <em>p_bt_btp</em>, <em>kalman_args</em>, <em>kalman_class=&lt;class 'pybayes.filters.KalmanFilter'&gt;</em><big>)</big><a class="reference internal" href="_modules/pybayes/filters.html#MarginalizedParticleFilter.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.filters.MarginalizedParticleFilter.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialise marginalized particle filter.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -284,6 +289,10 @@ b_t^{(i)} &amp;\text{ is value of the (b part of the) i}^{th} \text{ particle} \
 <img class="math" src="_images/math/bd7b27485881f9584eb55ef1fef58c055de03b7c.png" alt="a_t"/> and <img class="math" src="_images/math/a27ae64b71af735251a4ed459811816285ddf575.png" alt="b_t"/> parts)</li>
 <li><strong>p_bt_btp</strong> (<a class="reference internal" href="pdfs.html#pybayes.pdfs.CPdf" title="pybayes.pdfs.CPdf"><tt class="xref py py-class docutils literal"><span class="pre">CPdf</span></tt></a>) &#8211; <img class="math" src="_images/math/57b1517ab3d3d59d53154f84a8a97cb06111a008.png" alt="p(b_t|b_{t-1})"/> cpdf of the (b part of the) state in <em>t</em> given
 state in <em>t-1</em></li>
+<li><strong>kalman_args</strong> (<a class="reference external" href="http://docs.python.org/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; arguments for the Kalman filter, passed as dictionary; <em>state_pdf</em>
+key should not be speficied as it is supplied by the marginalized particle filter</li>
+<li><strong>kalman_class</strong> (<em>class</em>) &#8211; class of the filter used for the <img class="math" src="_images/math/bd7b27485881f9584eb55ef1fef58c055de03b7c.png" alt="a_t"/> part of the system;
+defaults to <a class="reference internal" href="#pybayes.filters.KalmanFilter" title="pybayes.filters.KalmanFilter"><tt class="xref py py-class docutils literal"><span class="pre">KalmanFilter</span></tt></a></li>
 </ul>
 </td>
 </tr>
