@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pybayes.pdfs &mdash; PyBayes v0.2 documentation</title>
+    <title>pybayes.pdfs &mdash; PyBayes v0.2-175-gf9c0550-dirty documentation</title>
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.2',
+        VERSION:     '0.2-175-gf9c0550-dirty',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyBayes v0.2 documentation" href="../../index.html" />
+    <link rel="top" title="PyBayes v0.2-175-gf9c0550-dirty documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
   <body>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">PyBayes v0.2 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">PyBayes v0.2-175-gf9c0550-dirty documentation</a> &raquo;</li>
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -297,9 +297,9 @@
 
 <span class="sd">    .. math::</span>
 
-<span class="sd">       p(x_t|x_{t-1}) &amp;:= p_1(a_t|a_{t-1}, b_t) p_2(b_t|b_{t-1}) \\</span>
-<span class="sd">       p_1(a_t|a_{t-1}, b_t) &amp;:= \mathcal{N}(a_{t-1}, b_t) \\</span>
-<span class="sd">       p_2(b_t|b_{t-1}) &amp;:= \mathcal{N}(b_{t-1}, 0.0001)</span>
+<span class="sd">       p(x_t|x_{t-1}) &amp;= p_1(a_t|a_{t-1}, b_t) p_2(b_t|b_{t-1}) \\</span>
+<span class="sd">       p_1(a_t|a_{t-1}, b_t) &amp;= \mathcal{N}(a_{t-1}, b_t) \\</span>
+<span class="sd">       p_2(b_t|b_{t-1}) &amp;= \mathcal{N}(b_{t-1}, 0.0001)</span>
 
 <span class="sd">    This is done in PyBayes with associated RVs:</span>
 
@@ -792,7 +792,7 @@
 
 <span class="sd">    .. math::</span>
 
-<span class="sd">       p &amp;= \sum_{i=1}^n \omega_i \Big[ \mathcal{N}\left(\hat{a}^{(i)}, P^{(i)}\right) \Big]_a</span>
+<span class="sd">       p(a, b) &amp;= \sum_{i=1}^n \omega_i \Big[ \mathcal{N}\left(\hat{a}^{(i)}, P^{(i)}\right) \Big]_a</span>
 <span class="sd">       \delta(b - b^{(i)}) \\</span>
 <span class="sd">       \text{where } \quad \hat{a}^{(i)} &amp;\text{ and } P^{(i)} \text{ is mean and</span>
 <span class="sd">       covariance of i}^{th} \text{ gauss pdf} \\</span>
@@ -803,7 +803,6 @@
 <span class="sd">       for each particle; shape: (n) where n is the number of particles</span>
 <span class="sd">    :var numpy.ndarray particles: 2D array of particles; shape: (n, m) where n</span>
 <span class="sd">       is the number of particles, m dimension of the &quot;empirical&quot; part of random variable</span>
-<span class="sd">    :var numpy.ndarray weights: 1D array of particle weights</span>
 
 <span class="sd">    You may alter particles and weights, but you must ensure that their shapes</span>
 <span class="sd">    match and that weight constraints still hold. You can use</span>
@@ -982,7 +981,7 @@
 <span class="sd">    .. math::</span>
 
 <span class="sd">       f(x|c) \propto \exp \left( - \left( x-\mu \right)&#39; R^{-1} \left( x-\mu \right) \right)</span>
-<span class="sd">       \quad \quad \text{where} ~ \mu := A c + b</span>
+<span class="sd">       \quad \quad \text{where} ~ \mu = A c + b</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="MLinGaussCPdf.__init__"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.MLinGaussCPdf.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">rv</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">cond_rv</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">base_class</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
@@ -1057,8 +1056,8 @@
 <span class="sd">    .. math::</span>
 
 <span class="sd">       f(x|c_1 c_2) \propto \exp \left( - \frac{\left( x-\mu \right)^2}{2\sigma^2} \right)</span>
-<span class="sd">       \quad \quad \text{where} \quad \mu := a c_1 + b \quad \text{and}</span>
-<span class="sd">       \quad \sigma^2 := c c_2 + d</span>
+<span class="sd">       \quad \quad \text{where} \quad \mu = a c_1 + b \quad \text{and}</span>
+<span class="sd">       \quad \sigma^2 = c c_2 + d</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="LinGaussCPdf.__init__"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.LinGaussCPdf.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">rv</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">cond_rv</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">base_class</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
@@ -1130,8 +1129,8 @@
 <span class="sd">    .. math::</span>
 
 <span class="sd">       f(x|c) &amp;\propto \exp \left( - \left( x-\mu \right)&#39; R^{-1} \left( x-\mu \right) \right) \\</span>
-<span class="sd">       \text{where} \quad \mu &amp;:= f(c) \text{ (interpreted n-dimensional vector)} \\</span>
-<span class="sd">       R &amp;:= g(c) \text{ (interpreted as n*n matrix)}</span>
+<span class="sd">       \text{where} \quad \mu &amp;= f(c) \text{ (interpreted as n-dimensional vector)} \\</span>
+<span class="sd">       R &amp;= g(c) \text{ (interpreted as n*n matrix)}</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="GaussCPdf.__init__"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.GaussCPdf.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">cond_shape</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">rv</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">cond_rv</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">base_class</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
@@ -1139,8 +1138,8 @@
 
 <span class="sd">        :param int shape: dimension of random vector</span>
 <span class="sd">        :param int cond_shape: dimension of condition</span>
-<span class="sd">        :param callable f: :math:`\mu := f(c)` where c = condition</span>
-<span class="sd">        :param callable g: :math:`R := g(c)` where c = condition</span>
+<span class="sd">        :param callable f: :math:`\mu = f(c)` where c = condition</span>
+<span class="sd">        :param callable g: :math:`R = g(c)` where c = condition</span>
 <span class="sd">        :param class base_class: class whose instance is created as a base pdf for this</span>
 <span class="sd">           cpdf. Must be a subclass of :class:`AbstractGaussPdf` and the default is</span>
 <span class="sd">           :class:`GaussPdf`. One alternative is :class:`LogNormPdf` for example.</span>
@@ -1202,15 +1201,15 @@
 
 <span class="sd">    .. math::</span>
 
-<span class="sd">        f(x_1 x_2 x_3 | c) &amp;= f_1(x_1 | x_2 x_3 c) f_2(x_2 | x_3 c) f_3(x_3 | c) \\</span>
-<span class="sd">        \text{or} \quad f(x_1 x_2 x_3) &amp;= f_1(x_1 | x_2 x_3) f_2(x_2 | x_3) f_3(x_3)</span>
+<span class="sd">        p(x_1 x_2 x_3 | c) &amp;= p(x_1 | x_2 x_3 c) p(x_2 | x_3 c) p(x_3 | c) \\</span>
+<span class="sd">        \text{or} \quad p(x_1 x_2 x_3) &amp;= p(x_1 | x_2 x_3) p(x_2 | x_3) p(x_3)</span>
 
 <span class="sd">    &gt;&gt;&gt; f = ProdCPdf((f1, f2, f3))</span>
 
 <span class="sd">    For less simple situations, specifiying random value associations is needed</span>
-<span class="sd">    to estabilish data chain:</span>
+<span class="sd">    to estabilish data-flow:</span>
 
-<span class="sd">    .. math:: p(x_1 x_2 | y_1 y_2) = p_1(x_1 | x_2) p_2(x_2 | y_2 y_1)</span>
+<span class="sd">    .. math:: p(x_1 x_2 | y_1 y_2) = p_1(x_1 | y_1) p_2(x_2 | y_2 y_1)</span>
 
 <span class="sd">    &gt;&gt;&gt; # prepare random variable components:</span>
 <span class="sd">    &gt;&gt;&gt; x_1, x_2 = RVComp(1), RVComp(1, &quot;name is optional&quot;)</span>
@@ -1409,7 +1408,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">PyBayes v0.2 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">PyBayes v0.2-175-gf9c0550-dirty documentation</a> &raquo;</li>
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
