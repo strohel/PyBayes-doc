@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pybayes.filters &mdash; PyBayes v0.2-175-gf9c0550-dirty documentation</title>
+    <title>pybayes.filters &mdash; PyBayes v0.3 documentation</title>
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.2-175-gf9c0550-dirty',
+        VERSION:     '0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyBayes v0.2-175-gf9c0550-dirty documentation" href="../../index.html" />
+    <link rel="top" title="PyBayes v0.3 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
   <body>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">PyBayes v0.2-175-gf9c0550-dirty documentation</a> &raquo;</li>
+        <li><a href="../../index.html">PyBayes v0.3 documentation</a> &raquo;</li>
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -375,9 +375,9 @@
 <span class="sd">       b_t^{(i)} &amp;\text{ is value of the (b part of the) i}^{th} \text{ particle} \\</span>
 <span class="sd">       \omega_i \geq 0 &amp;\text{ is weight of the i}^{th} \text{ particle} \quad \sum \omega_i = 1</span>
 
-<span class="sd">    *Note: currently :math:`b_t` is hard-coded to be process and observation noise covariance of the</span>
+<span class="sd">    **Note:** currently :math:`b_t` is hard-coded to be process and observation noise covariance of the</span>
 <span class="sd">    :math:`a_t` part. This will be changed soon and :math:`b_t` will be passed as condition to</span>
-<span class="sd">    :meth:`KalmanFilter.bayes`.*</span>
+<span class="sd">    :meth:`KalmanFilter.bayes`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="MarginalizedParticleFilter.__init__"><a class="viewcode-back" href="../../filters.html#pybayes.filters.MarginalizedParticleFilter.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">init_pdf</span><span class="p">,</span> <span class="n">p_bt_btp</span><span class="p">,</span> <span class="n">kalman_args</span><span class="p">,</span> <span class="n">kalman_class</span> <span class="o">=</span> <span class="n">KalmanFilter</span><span class="p">):</span>
@@ -516,7 +516,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">PyBayes v0.2-175-gf9c0550-dirty documentation</a> &raquo;</li>
+        <li><a href="../../index.html">PyBayes v0.3 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
