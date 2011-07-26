@@ -8,7 +8,6 @@ popd
 
 make -C "${PYBAYES_DIR}/doc/" clean
 make -C "${PYBAYES_DIR}/doc/" html
-make -C "${PYBAYES_DIR}/doc/" latexpdf
 rsync -am -v --delete "${PYBAYES_DIR}/doc/_build/html/" \
 	--exclude /.git --exclude /synchronise.sh --exclude README \
 	--exclude /.nojekyll --exclude /.buildinfo \
