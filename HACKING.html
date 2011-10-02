@@ -109,16 +109,16 @@ external and should behave as a client script.</em></p>
 <div class="section" id="before-tagging">
 <h3>Before Tagging<a class="headerlink" href="#before-tagging" title="Permalink to this headline">¶</a></h3>
 <ol class="arabic simple">
-<li>Set fallback version to X.Y in setup.py (around line 15)</li>
-<li>Set version to X.Y in support/python-pybayes.spec</li>
-<li>Ensure ChangeLog.rst mentions all important changes</li>
-<li>(Optional) update short/long description in setup.py AND support/python-pybayes.spec</li>
+<li>Set fallback version to X.Y in <cite>setup.py</cite> (around line 15)</li>
+<li>Set version to X.Y in <cite>support/python-pybayes.spec</cite></li>
+<li>Ensure <cite>ChangeLog.rst</cite> mentions all important changes</li>
+<li>(Optional) update short/long description in <cite>setup.py</cite> <strong>AND</strong> <cite>support/python-pybayes.spec</cite></li>
 </ol>
 </div>
 <div class="section" id="tagging">
 <h3>Tagging<a class="headerlink" href="#tagging" title="Permalink to this headline">¶</a></h3>
 <ol class="arabic">
-<li><p class="first">Check everything, run test, stresses for Python 2.6, 2.7, 3.1, 3.2 in both pure/Cython mode</p>
+<li><p class="first">Check everything, run tests and stresses for Python 2.6, 2.7, 3.1, 3.2 in both pure/Cython mode</p>
 </li>
 <li><p class="first"><tt class="docutils literal"><span class="pre">git</span> <span class="pre">tag</span> <span class="pre">-s</span> <span class="pre">vX.Y</span></tt></p>
 </li>
@@ -127,19 +127,30 @@ external and should behave as a client script.</em></p>
 <li><p class="first"><tt class="docutils literal"><span class="pre">gzip</span> <span class="pre">dist/PyBayes-X.Y.tar</span></tt></p>
 </li>
 <li><p class="first"><tt class="docutils literal"><span class="pre">./setup.py</span> <span class="pre">register</span></tt></p>
-<p><tt class="docutils literal"><span class="pre">./setup.py</span> <span class="pre">upload</span></tt> does not work as some files are not in MANIFEST etc.</p>
+<p>(do not use <tt class="docutils literal"><span class="pre">./setup.py</span> <span class="pre">upload</span></tt>, it does not work as some files are not in MANIFEST etc.)</p>
 </li>
 </ol>
 </div>
 <div class="section" id="publishing">
 <h3>Publishing<a class="headerlink" href="#publishing" title="Permalink to this headline">¶</a></h3>
 <ol class="arabic simple">
-<li>Upload PyBayes-X.Y.tar to <a class="reference external" href="https://github.com/strohel/PyBayes/downloads">https://github.com/strohel/PyBayes/downloads</a> and
+<li>Upload PyBayes-X.Y.tar.gz to <a class="reference external" href="https://github.com/strohel/PyBayes/downloads">https://github.com/strohel/PyBayes/downloads</a> and
 <a class="reference external" href="http://pypi.python.org/pypi/PyBayes">http://pypi.python.org/pypi/PyBayes</a></li>
-<li>Upload updated python-pybayes.spec file to
+<li>Build and upload docs: <tt class="docutils literal"><span class="pre">cd</span> <span class="pre">../pybayes-doc</span> <span class="pre">&amp;&amp;</span> <span class="pre">./synchronize.sh</span></tt></li>
+<li>Upload updated <cite>python-pybayes.spec</cite> file to
 <a class="reference external" href="https://build.opensuse.org/package/files?package=python-pybayes&amp;project=home%3Astrohel">https://build.opensuse.org/package/files?package=python-pybayes&amp;project=home%3Astrohel</a></li>
-<li>If short description of PyBayes changed, update manually at following places
-*</li>
+<li>If <strong>short description</strong> of PyBayes changed in <cite>setup.py</cite> and <cite>python-pybayes.spec</cite>, update it
+manually at following places:<ul>
+<li><a class="reference external" href="https://github.com/strohel/PyBayes">https://github.com/strohel/PyBayes</a></li>
+</ul>
+</li>
+<li>If <strong>long description</strong> of PyBayes changed in <cite>setup.py</cite> and <cite>python-pybayes.spec</cite>, update it
+manually at following places:<ul>
+<li><a class="reference external" href="https://build.opensuse.org/package/show?package=python-pybayes&amp;project=home%3Astrohel">https://build.opensuse.org/package/show?package=python-pybayes&amp;project=home%3Astrohel</a></li>
+<li><a class="reference external" href="http://scipy.org/Topical_Software">http://scipy.org/Topical_Software</a></li>
+<li><a class="reference external" href="http://www.ohloh.net/p/pybayes">http://www.ohloh.net/p/pybayes</a></li>
+</ul>
+</li>
 </ol>
 </div>
 </div>
