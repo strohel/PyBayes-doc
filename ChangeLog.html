@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Python Module Index &mdash; PyBayes v0.3-28-g4814f7b-dirty documentation</title>
+    <title>PyBayes Change Log &mdash; PyBayes v0.3-28-g4814f7b-dirty documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -23,9 +23,8 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="PyBayes v0.3-28-g4814f7b-dirty documentation" href="index.html" />
- 
-
-
+    <link rel="next" title="Probability Density Functions" href="pdfs.html" />
+    <link rel="prev" title="PyBayes" href="README.html" /> 
   </head>
   <body>
     <div class="related">
@@ -35,8 +34,14 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="#" title="Python Module Index"
+          <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pdfs.html" title="Probability Density Functions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="README.html" title="PyBayes"
+             accesskey="P">previous</a> |</li>
         <li><a href="index.html">PyBayes v0.3-28-g4814f7b-dirty documentation</a> &raquo;</li> 
       </ul>
     </div>  
@@ -46,34 +51,23 @@
         <div class="bodywrapper">
           <div class="body">
             
-
-   <h1>Python Module Index</h1>
-
-   <div class="modindex-jumpbox">
-   <a href="#cap-p"><strong>p</strong></a>
-   </div>
-
-   <table class="indextable modindextable" cellspacing="0" cellpadding="2">
-     <tr class="pcap"><td></td><td>&nbsp;</td><td></td></tr>
-     <tr class="cap" id="cap-p"><td></td><td>
-       <strong>p</strong></td><td></td></tr>
-     <tr>
-       <td><img src="_static/minus.png" class="toggler"
-              id="toggle-1" style="display: none" alt="-" /></td>
-       <td>
-       <a href="index.html#module-pybayes"><tt class="xref">pybayes</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
-       <a href="filters.html#module-pybayes.filters"><tt class="xref">pybayes.filters</tt></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&nbsp;&nbsp;&nbsp;
-       <a href="pdfs.html#module-pybayes.pdfs"><tt class="xref">pybayes.pdfs</tt></a></td><td>
-       <em></em></td></tr>
-   </table>
+  <div class="section" id="pybayes-change-log">
+<h1>PyBayes Change Log<a class="headerlink" href="#pybayes-change-log" title="Permalink to this headline">¶</a></h1>
+<p>This file mentions important changes between PyBayes version that are important for its users. Most
+recent versions are mentioned on top.</p>
+<div class="section" id="changes-between-0-3-and-0-4">
+<h2>Changes between 0.3 and 0.4<a class="headerlink" href="#changes-between-0-3-and-0-4" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Test-suite no longer needs PyBayes to be installed, yay! (no privilege problems etc.)</li>
+<li>Build-system was rewritten so that it is no longer an ugly hack. .pxd and .py files are now
+installed along .so (.dll) files for interoperability and additional openness. Better parsing of
+setup.py arguments and custom parameters visible in the &#8211;help command.</li>
+<li>(C)Pdf shape() and cond_shape() functions are no longer abstract and just return
+<cite>self.rv.dimension</cite> and <cite>self.cond_rv.dimension</cite> respectively. CPdf subclasses therefore should
+not implement these methods. This is a backwards compatible change API-wise.</li>
+</ul>
+</div>
+</div>
 
 
           </div>
@@ -81,6 +75,25 @@
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">PyBayes Change Log</a><ul>
+<li><a class="reference internal" href="#changes-between-0-3-and-0-4">Changes between 0.3 and 0.4</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="README.html"
+                        title="previous chapter">PyBayes</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pdfs.html"
+                        title="next chapter">Probability Density Functions</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/ChangeLog.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
@@ -105,8 +118,14 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="#" title="Python Module Index"
+          <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pdfs.html" title="Probability Density Functions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="README.html" title="PyBayes"
+             >previous</a> |</li>
         <li><a href="index.html">PyBayes v0.3-28-g4814f7b-dirty documentation</a> &raquo;</li> 
       </ul>
     </div>

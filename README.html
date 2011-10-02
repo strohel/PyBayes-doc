@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>PyBayes &mdash; PyBayes v0.3-12-g311b6fd documentation</title>
+    <title>PyBayes &mdash; PyBayes v0.3-28-g4814f7b-dirty documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3-12-g311b6fd',
+        VERSION:     '0.3-28-g4814f7b-dirty',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,8 +22,8 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="PyBayes v0.3-12-g311b6fd documentation" href="index.html" />
-    <link rel="next" title="Probability Density Functions" href="pdfs.html" />
+    <link rel="top" title="PyBayes v0.3-28-g4814f7b-dirty documentation" href="index.html" />
+    <link rel="next" title="PyBayes Change Log" href="ChangeLog.html" />
     <link rel="prev" title="PyBayes API Documentation" href="index.html" /> 
   </head>
   <body>
@@ -37,12 +37,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pdfs.html" title="Probability Density Functions"
+          <a href="ChangeLog.html" title="PyBayes Change Log"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="index.html" title="PyBayes API Documentation"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">PyBayes v0.3-12-g311b6fd documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyBayes v0.3-28-g4814f7b-dirty documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -59,10 +59,11 @@
 estimation (Bayesian filtering) that is convenient to use. Already implemented are
 Kalman filter, particle filter and marginalized particle filter, all built atop of
 a light framework of probability density functions. PyBayes can optionally use Cython
-for lage speed gains (Cython build is several times faster).</p>
-<p>Future plans include more specialised variants of Kalman/particle filters and
-speed optimisations.</p>
-<p>PyBayes is being developed by Matěj Laitl, feel free to send me a mail to matej at laitl dot cz.</p>
+for lage speed gains (Cython build can be several times faster in some situations).</p>
+<p>PyBayes is tested with Python 2.6, 2.7 and 3.1 (using 2to3). Future plans include more specialised
+variants of Kalman/particle filters and speed optimisations.</p>
+<p>PyBayes is being developed by Matěj Laitl, feel free to send me a mail to matej at laitl dot cz.
+See ChangeLog.rst file to review a list of most important changes in recent versions.</p>
 <p>Automatically generated <strong>documentation</strong> can be found at
 <a class="reference external" href="http://strohel.github.com/PyBayes-doc/">http://strohel.github.com/PyBayes-doc/</a></p>
 <div class="section" id="licensing">
@@ -74,6 +75,8 @@ PyBayes in e.g. BSD-licensed project? Ask!)</p>
 </div>
 <div class="section" id="obtaining-pybayes">
 <h2>Obtaining PyBayes<a class="headerlink" href="#obtaining-pybayes" title="Permalink to this headline">¶</a></h2>
+<p>PyBayes releases can be found in .tar.gz format at <a class="reference external" href="https://github.com/strohel/PyBayes/downloads">github</a> or <a class="reference external" href="http://pypi.python.org/pypi/PyBayes">PyPI</a>. These releases bundle the Tokyo
+project for convenience.</p>
 <p>Development of PyBayes happens on <a class="reference external" href="http://github.com/strohel/PyBayes">http://github.com/strohel/PyBayes</a> using git VCS
 and the most fresh development sources can be obtained using git. It should be noted that
 PyBayes uses git submodule to bundle Tokyo library, so the proper way to clone
@@ -128,7 +131,7 @@ Interpreter overhead is avoided and many other optimisation options arise this
 way.</p>
 <p>In order to build optimised PyBayes, you&#8217;ll additionally need:</p>
 <ul class="simple">
-<li><a class="reference external" href="http://www.cython.org">Cython</a> Python to C compiler</li>
+<li><a class="reference external" href="http://www.cython.org/">Cython</a> Python to C compiler, version <strong>0.14.1</strong> or newer</li>
 <li>working C compiler (GCC on Unix-like systems, MinGW or Microsoft Visual C on
 Windows <a class="footnote-reference" href="#install-cython" id="id2">[2]</a>)</li>
 <li><a class="reference external" href="http://numpy.scipy.org/">NumPy</a> numerical library for Python, version 1.5 or greater (NumPy is needed
@@ -155,16 +158,21 @@ messages during build:</p>
 </div></blockquote>
 <ul class="simple">
 <li>in order to be 100% sure that optimised build is used, you can add
-<tt class="docutils literal"><span class="pre">--use=cython=yes</span></tt> option to the <tt class="docutils literal"><span class="pre">./setup.py</span></tt> call. You can force pure
-Python mode even when Cython is installed, pass <tt class="docutils literal"><span class="pre">--use=cython=no</span></tt>. By
+<tt class="docutils literal"><span class="pre">--use-cython=yes</span></tt> option to the <tt class="docutils literal"><span class="pre">./setup.py</span></tt> call. You can force pure
+Python mode even when Cython is installed, pass <tt class="docutils literal"><span class="pre">--use-cython=no</span></tt>. By
 default, PyBayes auto-detects Cython and NumPy presence on system.</li>
 <li>if you plan to profile code that uses optimised PyBayes, you may want to
 embed profiling information into PyBayes. This can be accomplished by
 passing <tt class="docutils literal"><span class="pre">--profile=yes</span></tt> to <tt class="docutils literal"><span class="pre">./setup.py</span></tt>. The default is to omit
 profiling information in order to avoid performance penalties.</li>
+<li>all standard and custom build parameters can be listed using <tt class="docutils literal"><span class="pre">./setup.py</span> <span class="pre">--help</span></tt></li>
 </ul>
 </li>
 </ol>
+<p>The best results performance-wise are achieved when also your code that uses or extends PyBayes is
+compiled by Cython and uses static typing where appropriate. Remember to
+<tt class="docutils literal"><span class="pre">cimport</span> <span class="pre">pybayes[.something]</span></tt> everytime you <tt class="docutils literal"><span class="pre">import</span> <span class="pre">pybayes[.something]</span></tt> so that fast Cython
+calling convention is used.</p>
 </div>
 <div class="section" id="building-documentation">
 <h3>Building Documentation<a class="headerlink" href="#building-documentation" title="Permalink to this headline">¶</a></h3>
@@ -183,20 +191,16 @@ embed them as images into resulting HTML pages. Be sure to have LaTeX-enabled
 Sphinx if you want to see such nice things.</div></blockquote>
 </div>
 </div>
-<div class="section" id="testing-pybayes">
-<h2>Testing PyBayes<a class="headerlink" href="#testing-pybayes" title="Permalink to this headline">¶</a></h2>
-<p>Once PyBayes is installed, you may want to run its tests in order to ensure
-proper functionality. The <tt class="docutils literal"><span class="pre">examples</span></tt> directory contains <tt class="docutils literal"><span class="pre">run_tests.py</span></tt> and
-<tt class="docutils literal"><span class="pre">run_stresses.py</span></tt> scripts that execute all PyBayes tests and stress tests
-respectively. Run these scripts with <tt class="docutils literal"><span class="pre">-h</span></tt> option to see usage.</p>
-<blockquote>
-<div><em>Note: running tests from within source directory is discouraged and
-unsupported.</em></div></blockquote>
-<p>For even greater convenience, <tt class="docutils literal"><span class="pre">examples/install_test_stress.py</span></tt> python
-script can clear, build, install, test, stress both Python and Cython build in
-one go. It is especially suitable for PyBayes hackers. Run
-<tt class="docutils literal"><span class="pre">install_test_stress.py</span> <span class="pre">-h</span></tt> to get usage information. Please be sure to add
-<tt class="docutils literal"><span class="pre">--clean</span></tt> or <tt class="docutils literal"><span class="pre">-c</span></tt> flag when you mix Python and Cython builds.</p>
+<div class="section" id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
+<p>PyBayes comes with a comprehensive test and stress-suite that can and should be used to verify that
+your PyBayes build works as expected.</p>
+<p>Since version 0.4, testing is integrated into the <cite>setup.py</cite> script and can be run without
+installing PyBayes. On order to run PyBayes test-suite, simply issue <tt class="docutils literal"><span class="pre">./setup.py</span> <span class="pre">test</span></tt>. To run
+tests in normal PyBayes installation procedure, simply install like this:
+<tt class="docutils literal"><span class="pre">./setup.py</span> <span class="pre">build</span> <span class="pre">test</span> <span class="pre">install</span></tt>. Failing tests cause installation to fail, but this can be
+overriden using <cite>&#8211;non-fatal</cite> option to the <cite>test</cite> command.</p>
+<p>Stress testing is not yet ported to the <cite>setup.py</cite>, see the <cite>support/run_stresses.py</cite> script.</p>
 </div>
 </div>
 
@@ -219,7 +223,7 @@ one go. It is especially suitable for PyBayes hackers. Run
 <li><a class="reference internal" href="#building-documentation">Building Documentation</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#testing-pybayes">Testing PyBayes</a></li>
+<li><a class="reference internal" href="#testing">Testing</a></li>
 </ul>
 </li>
 </ul>
@@ -228,8 +232,8 @@ one go. It is especially suitable for PyBayes hackers. Run
   <p class="topless"><a href="index.html"
                         title="previous chapter">PyBayes API Documentation</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="pdfs.html"
-                        title="next chapter">Probability Density Functions</a></p>
+  <p class="topless"><a href="ChangeLog.html"
+                        title="next chapter">PyBayes Change Log</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/README.txt"
@@ -262,12 +266,12 @@ one go. It is especially suitable for PyBayes hackers. Run
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pdfs.html" title="Probability Density Functions"
+          <a href="ChangeLog.html" title="PyBayes Change Log"
              >next</a> |</li>
         <li class="right" >
           <a href="index.html" title="PyBayes API Documentation"
              >previous</a> |</li>
-        <li><a href="index.html">PyBayes v0.3-12-g311b6fd documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyBayes v0.3-28-g4814f7b-dirty documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

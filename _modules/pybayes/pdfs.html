@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pybayes.pdfs &mdash; PyBayes v0.3-12-g311b6fd documentation</title>
+    <title>pybayes.pdfs &mdash; PyBayes v0.3-28-g4814f7b-dirty documentation</title>
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.3-12-g311b6fd',
+        VERSION:     '0.3-28-g4814f7b-dirty',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyBayes v0.3-12-g311b6fd documentation" href="../../index.html" />
+    <link rel="top" title="PyBayes v0.3-28-g4814f7b-dirty documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
   <body>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">PyBayes v0.3-12-g311b6fd documentation</a> &raquo;</li>
+        <li><a href="../../index.html">PyBayes v0.3-28-g4814f7b-dirty documentation</a> &raquo;</li>
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -318,28 +318,38 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="CPdf.shape"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.CPdf.shape">[docs]</a>    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return shape of the random variable. :meth:`mean` and :meth:`variance` methods must</span>
-<span class="sd">        return arrays of this shape.</span>
+        <span class="sd">&quot;&quot;&quot;Return pdf shape = number of dimensions of the random variable.</span>
 
-<span class="sd">        :rtype: int&quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Derived classes must implement this function&quot;</span><span class="p">)</span>
+<span class="sd">        :meth:`mean` and :meth:`variance` methods must return arrays of this shape.</span>
+<span class="sd">        Default implementation (which you should not override) just returns</span>
+<span class="sd">        self.rv.dimension.</span>
+
+<span class="sd">        :rtype: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rv</span><span class="o">.</span><span class="n">dimension</span>
 </div>
 <div class="viewcode-block" id="CPdf.cond_shape"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.CPdf.cond_shape">[docs]</a>    <span class="k">def</span> <span class="nf">cond_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return shape of the condition.</span>
+        <span class="sd">&quot;&quot;&quot;Return condition shape = number of dimensions of the conditioning variable.</span>
 
-<span class="sd">        :rtype: int&quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Derived classes must implement this function&quot;</span><span class="p">)</span>
+<span class="sd">        Default implementation (which you should not override) just returns</span>
+<span class="sd">        self.cond_rv.dimension.</span>
+
+<span class="sd">        :rtype: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cond_rv</span><span class="o">.</span><span class="n">dimension</span>
 </div>
 <div class="viewcode-block" id="CPdf.mean"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.CPdf.mean">[docs]</a>    <span class="k">def</span> <span class="nf">mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return (conditional) mean value of the pdf.</span>
 
-<span class="sd">        :rtype: :class:`numpy.ndarray`&quot;&quot;&quot;</span>
+<span class="sd">        :rtype: :class:`numpy.ndarray`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Derived classes must implement this function&quot;</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="CPdf.variance"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.CPdf.variance">[docs]</a>    <span class="k">def</span> <span class="nf">variance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return (conditional) variance (diagonal elements of covariance).</span>
 
-<span class="sd">        :rtype: :class:`numpy.ndarray`&quot;&quot;&quot;</span>
+<span class="sd">        :rtype: :class:`numpy.ndarray`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Derived classes must implement this function&quot;</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="CPdf.eval_log"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.CPdf.eval_log">[docs]</a>    <span class="k">def</span> <span class="nf">eval_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
@@ -347,7 +357,8 @@
 
 <span class="sd">        :param x: point which to evaluate the function in</span>
 <span class="sd">        :type x: :class:`numpy.ndarray`</span>
-<span class="sd">        :rtype: double&quot;&quot;&quot;</span>
+<span class="sd">        :rtype: double</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Derived classes must implement this function&quot;</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="CPdf.sample"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.CPdf.sample">[docs]</a>    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
@@ -373,7 +384,8 @@
 
 <span class="sd">        :raises TypeError: cond is not of correct type</span>
 <span class="sd">        :raises ValueError: cond doesn&#39;t have appropriate shape</span>
-<span class="sd">        :rtype: bool&quot;&quot;&quot;</span>
+<span class="sd">        :rtype: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">cond</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>  <span class="c"># cython-specific</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;cond must be numpy.ndarray&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">cond</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
@@ -388,7 +400,8 @@
 
 <span class="sd">        :raises TypeError: cond is not of correct type</span>
 <span class="sd">        :raises ValueError: cond doesn&#39;t have appropriate shape</span>
-<span class="sd">        :rtype: bool&quot;&quot;&quot;</span>
+<span class="sd">        :rtype: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>  <span class="c"># cython-specific</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;x must be numpy.ndarray&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
@@ -397,30 +410,36 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;x must be of shape ({0},) array of shape ({1},) given&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">(),</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
         <span class="k">return</span> <span class="bp">True</span>
 
-    <span class="k">def</span> <span class="nf">_set_rvs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rv</span><span class="p">,</span> <span class="n">cond_rv</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_set_rvs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exp_shape</span><span class="p">,</span> <span class="n">rv</span><span class="p">,</span> <span class="n">exp_cond_shape</span><span class="p">,</span> <span class="n">cond_rv</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Internal heper to check and set rv and cond_rv.</span>
 
+<span class="sd">        :param int exp_shape: expected random variable shape</span>
+<span class="sd">        :param RV rv: associated random variable or None to have it auto-created</span>
+<span class="sd">        :param int exp_cond_shape: expected conditioning variable shape</span>
+<span class="sd">        :param RV cond_rv: associated conditioning variable or None to have it auto-created</span>
+
 <span class="sd">        :raises TypeError: rv or cond_rv doesnt have right type</span>
-<span class="sd">        :raises ValueError: dimensions do not match&quot;&quot;&quot;</span>
+<span class="sd">        :raises ValueError: dimensions do not match</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">rv</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">rv</span> <span class="o">=</span> <span class="n">RV</span><span class="p">(</span><span class="n">RVComp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">()))</span>  <span class="c"># create RV with one anonymous component</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rv</span> <span class="o">=</span> <span class="n">RV</span><span class="p">(</span><span class="n">RVComp</span><span class="p">(</span><span class="n">exp_shape</span><span class="p">))</span>  <span class="c"># create RV with one anonymous component</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rv</span><span class="p">,</span> <span class="n">RV</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;rv (if specified) must be (a subclass of) RV&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">rv</span><span class="o">.</span><span class="n">dimension</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">():</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;rv has wrong dimension &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">rv</span><span class="o">.</span><span class="n">dimension</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;, &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">())</span> <span class="o">+</span> <span class="s">&quot; expected&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">rv</span><span class="o">.</span><span class="n">dimension</span> <span class="o">!=</span> <span class="n">exp_shape</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;rv has wrong dimension {0}, {1} expected&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">rv</span><span class="o">.</span><span class="n">dimension</span><span class="p">,</span> <span class="n">exp_shape</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">rv</span> <span class="o">=</span> <span class="n">rv</span>
 
         <span class="k">if</span> <span class="n">cond_rv</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">()</span> <span class="ow">is</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">exp_cond_shape</span> <span class="ow">is</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">cond_rv</span> <span class="o">=</span> <span class="n">RV</span><span class="p">()</span>  <span class="c"># create empty RV to denote empty condition</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">cond_rv</span> <span class="o">=</span> <span class="n">RV</span><span class="p">(</span><span class="n">RVComp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">()))</span>  <span class="c"># create RV with one anonymous component</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cond_rv</span> <span class="o">=</span> <span class="n">RV</span><span class="p">(</span><span class="n">RVComp</span><span class="p">(</span><span class="n">exp_cond_shape</span><span class="p">))</span>  <span class="c"># create RV with one anonymous component</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cond_rv</span><span class="p">,</span> <span class="n">RV</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;cond_rv (is specified) must be (a subclass of) RV&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">cond_rv</span><span class="o">.</span><span class="n">dimension</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">():</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;cond_rv has wrong dimension &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">cond_rv</span><span class="o">.</span><span class="n">dimension</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;, &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">())</span> <span class="o">+</span> <span class="s">&quot; expected&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;cond_rv (if specified) must be (a subclass of) RV&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">cond_rv</span><span class="o">.</span><span class="n">dimension</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">exp_cond_shape</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;cond_rv has wrong dimension {0}, {1} expected&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cond_rv</span><span class="o">.</span><span class="n">dimension</span><span class="p">,</span> <span class="n">exp_cond_shape</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">cond_rv</span> <span class="o">=</span> <span class="n">cond_rv</span>
         <span class="k">return</span> <span class="bp">True</span>
 
@@ -437,8 +456,12 @@
 <div class="viewcode-block" id="Pdf.cond_shape"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.Pdf.cond_shape">[docs]</a>    <span class="k">def</span> <span class="nf">cond_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return zero as Pdfs have no condition.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="mi">0</span>
+</div>
+    <span class="k">def</span> <span class="nf">_set_rv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exp_shape</span><span class="p">,</span> <span class="n">rv</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Internal helper - shortcut to :meth:`~CPdf._set_rvs`&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_rvs</span><span class="p">(</span><span class="n">exp_shape</span><span class="p">,</span> <span class="n">rv</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
 
-</div></div>
+</div>
 <div class="viewcode-block" id="UniPdf"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.UniPdf">[docs]</a><span class="k">class</span> <span class="nc">UniPdf</span><span class="p">(</span><span class="n">Pdf</span><span class="p">):</span>
     <span class="sd">r&quot;&quot;&quot;Simple uniform multivariate probability density function. Extends</span>
 <span class="sd">    :class:`Pdf`.</span>
@@ -472,11 +495,8 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;a must have same shape as b&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;b must be greater than a in each dimension&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_set_rvs</span><span class="p">(</span><span class="n">rv</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_rv</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">rv</span><span class="p">)</span>
 </div>
-    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
     <span class="k">def</span> <span class="nf">mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span>  <span class="c"># element-wise division</span>
 
@@ -570,13 +590,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <span class="n">mean</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="n">cov</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_set_rvs</span><span class="p">(</span><span class="n">rv</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_rv</span><span class="p">(</span><span class="n">mean</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">rv</span><span class="p">)</span>
 </div>
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s">&quot;&lt;pybayes.pdfs.GaussPdf mu={0} R={1}&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span>
@@ -645,11 +662,8 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;cov must be positive&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <span class="n">mean</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="n">cov</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_set_rvs</span><span class="p">(</span><span class="n">rv</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_rv</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">rv</span><span class="p">)</span>
 </div>
-    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="mi">1</span>
-
     <span class="k">def</span> <span class="nf">mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span>
 
@@ -752,11 +766,8 @@
         <span class="c"># set n weights to 1/n</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_set_rvs</span><span class="p">(</span><span class="n">rv</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_rv</span><span class="p">(</span><span class="n">init_particles</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">rv</span><span class="p">)</span>
 </div>
-    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-
     <span class="k">def</span> <span class="nf">mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
         <span class="n">ret</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
@@ -846,13 +857,10 @@
         <span class="c"># set n weights to 1/n</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_gauss_shape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gausses</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span>  <span class="c"># shape of the gaussian component</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_part_shape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c"># shape of the empirical component</span>
+        <span class="n">part_shape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c"># shape of the empirical component</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_set_rvs</span><span class="p">(</span><span class="n">rv</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_rv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_gauss_shape</span> <span class="o">+</span> <span class="n">part_shape</span><span class="p">,</span> <span class="n">rv</span><span class="p">)</span>
 </div>
-    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gauss_shape</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_part_shape</span>
-
     <span class="k">def</span> <span class="nf">mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
         <span class="n">ret</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">())</span>
         <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">())</span>
@@ -929,16 +937,13 @@
                 <span class="n">rv_comps</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">rv</span><span class="o">.</span><span class="n">components</span><span class="p">)</span>  <span class="c"># add components of child rvs</span>
 
         <span class="c"># pre-calclate shape</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shapes</span><span class="p">)</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shapes</span><span class="p">)</span>
         <span class="c"># associate with a rv (needs to be after _shape calculation)</span>
         <span class="k">if</span> <span class="n">rv_comps</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_set_rvs</span><span class="p">(</span><span class="n">rv</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_rv</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">rv</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_set_rvs</span><span class="p">(</span><span class="n">RV</span><span class="p">(</span><span class="o">*</span><span class="n">rv_comps</span><span class="p">),</span> <span class="bp">None</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_rv</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">RV</span><span class="p">(</span><span class="o">*</span><span class="n">rv_comps</span><span class="p">))</span>
 </div>
-    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span>
-
     <span class="k">def</span> <span class="nf">mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
         <span class="n">curr</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">ret</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">())</span>
@@ -1014,14 +1019,8 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;b must have same number of cols as covariance&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;A must have same number of rows as covariance&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_set_rvs</span><span class="p">(</span><span class="n">rv</span><span class="p">,</span> <span class="n">cond_rv</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_rvs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">rv</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">cond_rv</span><span class="p">)</span>
 </div>
-    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-    <span class="k">def</span> <span class="nf">cond_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-
     <span class="k">def</span> <span class="nf">mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
         <span class="c"># note: it may not be true that gauss.mu == gauss.mean() for all AbstractGaussPdf</span>
         <span class="c"># classes. One such example is LogNormPdf</span>
@@ -1087,14 +1086,8 @@
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">base_class</span><span class="p">,</span> <span class="n">AbstractGaussPdf</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;base_class must be a class (not an instance) and subclass of AbstractGaussPdf&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">gauss</span> <span class="o">=</span> <span class="n">base_class</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.</span><span class="p">]]))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_set_rvs</span><span class="p">(</span><span class="n">rv</span><span class="p">,</span> <span class="n">cond_rv</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_rvs</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">rv</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">cond_rv</span><span class="p">)</span>
 </div>
-    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="mi">1</span>
-
-    <span class="k">def</span> <span class="nf">cond_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="mi">2</span>
-
     <span class="k">def</span> <span class="nf">mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_set_gauss_params</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gauss</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
@@ -1147,24 +1140,16 @@
 <span class="sd">        *Please note that the way of specifying callback function f and g is not yet fixed and may</span>
 <span class="sd">        be changed in future.*</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span> <span class="o">=</span> <span class="n">shape</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_cond_shape</span> <span class="o">=</span> <span class="n">cond_shape</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="n">f</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">g</span> <span class="o">=</span> <span class="n">g</span>
         <span class="k">if</span> <span class="n">base_class</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">gauss</span> <span class="o">=</span> <span class="n">GaussPdf</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gauss</span> <span class="o">=</span> <span class="n">GaussPdf</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">shape</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">base_class</span><span class="p">,</span> <span class="n">AbstractGaussPdf</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;base_class must be a class (not an instance) and subclass of AbstractGaussPdf&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">gauss</span> <span class="o">=</span> <span class="n">base_class</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">)))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_set_rvs</span><span class="p">(</span><span class="n">rv</span><span class="p">,</span> <span class="n">cond_rv</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gauss</span> <span class="o">=</span> <span class="n">base_class</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">shape</span><span class="p">,</span> <span class="n">shape</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_rvs</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">rv</span><span class="p">,</span> <span class="n">cond_shape</span><span class="p">,</span> <span class="n">cond_rv</span><span class="p">)</span>
 </div>
-    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span>
-
-    <span class="k">def</span> <span class="nf">cond_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cond_shape</span>
-
     <span class="k">def</span> <span class="nf">mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_set_gauss_params</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gauss</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
@@ -1184,8 +1169,8 @@
 
     <span class="k">def</span> <span class="nf">_set_gauss_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_cond</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gauss</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gauss</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gauss</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gauss</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">()))</span>
         <span class="k">return</span> <span class="bp">True</span>
 
 </div>
@@ -1242,43 +1227,40 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">out_indeces</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">if</span> <span class="n">rv</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">cond_rv</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_init_anonymous</span><span class="p">(</span><span class="n">factors</span><span class="p">)</span>
+            <span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">cond_shape</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init_anonymous</span><span class="p">(</span><span class="n">factors</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">rv</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">cond_rv</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_init_with_rvs</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">factors</span><span class="p">),</span> <span class="n">rv</span><span class="p">,</span> <span class="n">cond_rv</span><span class="p">)</span>  <span class="c"># needs factors as list</span>
+            <span class="c"># needs factors as list</span>
+            <span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">cond_shape</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init_with_rvs</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">factors</span><span class="p">),</span> <span class="n">rv</span><span class="p">,</span> <span class="n">cond_rv</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&quot;Please pass both rv and cond_rv or none of them, other combinations not (yet) supported&quot;</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_set_rvs</span><span class="p">(</span><span class="n">rv</span><span class="p">,</span> <span class="n">cond_rv</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_rvs</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">rv</span><span class="p">,</span> <span class="n">cond_shape</span><span class="p">,</span> <span class="n">cond_rv</span><span class="p">)</span>
 </div>
     <span class="k">def</span> <span class="nf">_init_anonymous</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factors</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">factors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">factors</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">CPdf</span><span class="p">)</span>
 
         <span class="c"># overall cond shape equals last factor cond shape:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_cond_shape</span> <span class="o">=</span> <span class="n">factors</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span> <span class="o">=</span> <span class="n">factors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span> <span class="o">+</span> <span class="n">factors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cond_shape</span>
+        <span class="n">cum_cond_shape</span> <span class="o">=</span> <span class="n">factors</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">()</span>
+        <span class="n">cum_shape</span> <span class="o">=</span> <span class="n">factors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span> <span class="o">+</span> <span class="n">factors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">()</span> <span class="o">-</span> <span class="n">cum_cond_shape</span>
 
         <span class="n">start_ind</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c"># current start index in cummulate rv and cond_rv data array</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
             <span class="n">factor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">factor</span><span class="p">,</span> <span class="n">CPdf</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;all records in factors must be (subclasses of) CPdf&quot;</span><span class="p">)</span>
-
             <span class="n">shape</span> <span class="o">=</span> <span class="n">factor</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span>
             <span class="n">cond_shape</span> <span class="o">=</span> <span class="n">factor</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">()</span>
             <span class="c"># expected (normal + cond) shape:</span>
-            <span class="n">exp_shape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cond_shape</span> <span class="o">-</span> <span class="n">start_ind</span>
+            <span class="n">exp_shape</span> <span class="o">=</span> <span class="n">cum_shape</span> <span class="o">+</span> <span class="n">cum_cond_shape</span> <span class="o">-</span> <span class="n">start_ind</span>
             <span class="k">if</span> <span class="n">shape</span> <span class="o">+</span> <span class="n">cond_shape</span> <span class="o">!=</span> <span class="n">exp_shape</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Expected that pdf {0} will have shape (={1}) + &quot;</span><span class="o">.</span>
                     <span class="n">format</span><span class="p">(</span><span class="n">factor</span><span class="p">,</span> <span class="n">shape</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;cond_shape (={0}) == {1}&quot;</span><span class="o">.</span>
                     <span class="n">format</span><span class="p">(</span><span class="n">cond_shape</span><span class="p">,</span> <span class="n">exp_shape</span><span class="p">))</span>
-
             <span class="bp">self</span><span class="o">.</span><span class="n">in_indeces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start_ind</span> <span class="o">+</span> <span class="n">shape</span><span class="p">,</span> <span class="n">start_ind</span> <span class="o">+</span> <span class="n">shape</span> <span class="o">+</span> <span class="n">cond_shape</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">out_indeces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start_ind</span><span class="p">,</span> <span class="n">start_ind</span> <span class="o">+</span> <span class="n">shape</span><span class="p">))</span>
-
             <span class="n">start_ind</span> <span class="o">+=</span> <span class="n">shape</span>
-
-        <span class="k">if</span> <span class="n">start_ind</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">start_ind</span> <span class="o">!=</span> <span class="n">cum_shape</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Shapes do not match&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">cum_shape</span><span class="p">,</span> <span class="n">cum_cond_shape</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_init_with_rvs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factors</span><span class="p">,</span> <span class="n">rv</span><span class="p">,</span> <span class="n">cond_rv</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialise ProdCPdf using rv components for data chain construction.</span>
@@ -1332,15 +1314,7 @@
             <span class="n">factor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">in_indeces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">factor</span><span class="o">.</span><span class="n">cond_rv</span><span class="o">.</span><span class="n">indexed_in</span><span class="p">(</span><span class="n">cummulate_rv</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">out_indeces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">factor</span><span class="o">.</span><span class="n">rv</span><span class="o">.</span><span class="n">indexed_in</span><span class="p">(</span><span class="n">cummulate_rv</span><span class="p">))</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span> <span class="o">=</span> <span class="n">rv</span><span class="o">.</span><span class="n">dimension</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_cond_shape</span> <span class="o">=</span> <span class="n">cond_rv</span><span class="o">.</span><span class="n">dimension</span>
-
-    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span>
-
-    <span class="k">def</span> <span class="nf">cond_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cond_shape</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">rv</span><span class="o">.</span><span class="n">dimension</span><span class="p">,</span> <span class="n">cond_rv</span><span class="o">.</span><span class="n">dimension</span><span class="p">)</span> <span class="c"># in fact no-op, but we already check RV dimensions</span>
 
     <span class="k">def</span> <span class="nf">mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Not yet implemented&quot;</span><span class="p">)</span>
@@ -1353,9 +1327,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_cond</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span>
 
         <span class="c"># combination of evaluation point and condition:</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cond_shape</span><span class="p">)</span>
-        <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
-        <span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">:]</span> <span class="o">=</span> <span class="n">cond</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rv</span><span class="o">.</span><span class="n">dimension</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cond_rv</span><span class="o">.</span><span class="n">dimension</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">rv</span><span class="o">.</span><span class="n">dimension</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">rv</span><span class="o">.</span><span class="n">dimension</span><span class="p">:]</span> <span class="o">=</span> <span class="n">cond</span>
         <span class="n">ret</span> <span class="o">=</span> <span class="mf">0.</span>
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
@@ -1366,15 +1340,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_cond</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span>
 
         <span class="c"># combination of sampled variables and condition:</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cond_shape</span><span class="p">)</span>
-        <span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">:]</span> <span class="o">=</span> <span class="n">cond</span>  <span class="c"># rest is undefined</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rv</span><span class="o">.</span><span class="n">dimension</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cond_rv</span><span class="o">.</span><span class="n">dimension</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">rv</span><span class="o">.</span><span class="n">dimension</span><span class="p">:]</span> <span class="o">=</span> <span class="n">cond</span>  <span class="c"># rest is undefined</span>
 
         <span class="c"># process pdfs from right to left (they are arranged so that data flow</span>
         <span class="c"># is well defined in this case):</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
             <span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">out_indeces</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">factors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">in_indeces</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
 
-        <span class="k">return</span> <span class="n">data</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">]</span>  <span class="c"># return right portion of data</span></div>
+        <span class="k">return</span> <span class="n">data</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">rv</span><span class="o">.</span><span class="n">dimension</span><span class="p">]</span>  <span class="c"># return right portion of data</span></div>
 </pre></div>
 
           </div>
@@ -1408,7 +1382,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">PyBayes v0.3-12-g311b6fd documentation</a> &raquo;</li>
+        <li><a href="../../index.html">PyBayes v0.3-28-g4814f7b-dirty documentation</a> &raquo;</li>
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>

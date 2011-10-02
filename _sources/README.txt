@@ -9,12 +9,13 @@ PyBayes is an object-oriented Python library for recursive Bayesian
 estimation (Bayesian filtering) that is convenient to use. Already implemented are
 Kalman filter, particle filter and marginalized particle filter, all built atop of
 a light framework of probability density functions. PyBayes can optionally use Cython
-for lage speed gains (Cython build is several times faster).
+for lage speed gains (Cython build can be several times faster in some situations).
 
-Future plans include more specialised variants of Kalman/particle filters and
-speed optimisations.
+PyBayes is tested with Python 2.6, 2.7 and 3.1 (using 2to3). Future plans include more specialised
+variants of Kalman/particle filters and speed optimisations.
 
 PyBayes is being developed by Matěj Laitl, feel free to send me a mail to matej at laitl dot cz.
+See ChangeLog.rst file to review a list of most important changes in recent versions.
 
 Automatically generated **documentation** can be found at
 http://strohel.github.com/PyBayes-doc/
@@ -28,6 +29,12 @@ PyBayes in e.g. BSD-licensed project? Ask!)
 
 Obtaining PyBayes
 =================
+
+PyBayes releases can be found in .tar.gz format at github_ or PyPI_. These releases bundle the Tokyo
+project for convenience.
+
+.. _github: https://github.com/strohel/PyBayes/downloads
+.. _PyPI: http://pypi.python.org/pypi/PyBayes
 
 Development of PyBayes happens on http://github.com/strohel/PyBayes using git VCS
 and the most fresh development sources can be obtained using git. It should be noted that
@@ -84,7 +91,7 @@ way.
 
 In order to build optimised PyBayes, you'll additionally need:
 
-* Cython_ Python to C compiler
+* Cython_ Python to C compiler, version **0.14.1** or newer
 * working C compiler (GCC on Unix-like systems, MinGW or Microsoft Visual C on
   Windows [#install_cython]_)
 * NumPy_ numerical library for Python, version 1.5 or greater (NumPy is needed
@@ -92,7 +99,7 @@ In order to build optimised PyBayes, you'll additionally need:
 * On some Debian-based Linux distributions (Ubuntu) you'll need python-dev
   package that contains ``Python.h`` file that is needed by PyBayes
 
-.. _Cython: http://www.cython.org
+.. _Cython: http://www.cython.org/
 .. [#install_cython] http://docs.cython.org/src/quickstart/install.html
 .. _NumPy: http://numpy.scipy.org/
 
@@ -109,13 +116,19 @@ Proceed with following steps:
       ``Notice: NumPy found.``
 
    * in order to be 100% sure that optimised build is used, you can add
-     ``--use=cython=yes`` option to the ``./setup.py`` call. You can force pure
-     Python mode even when Cython is installed, pass ``--use=cython=no``. By
+     ``--use-cython=yes`` option to the ``./setup.py`` call. You can force pure
+     Python mode even when Cython is installed, pass ``--use-cython=no``. By
      default, PyBayes auto-detects Cython and NumPy presence on system.
    * if you plan to profile code that uses optimised PyBayes, you may want to
      embed profiling information into PyBayes. This can be accomplished by
      passing ``--profile=yes`` to ``./setup.py``. The default is to omit
      profiling information in order to avoid performance penalties.
+   * all standard and custom build parameters can be listed using ``./setup.py --help``
+
+The best results performance-wise are achieved when also your code that uses or extends PyBayes is
+compiled by Cython and uses static typing where appropriate. Remember to
+``cimport pybayes[.something]`` everytime you ``import pybayes[.something]`` so that fast Cython
+calling convention is used.
 
 Building Documentation
 ----------------------
@@ -138,19 +151,16 @@ for example, run ``make html`` and then point your browser to
 .. _Sphinx: http://sphinx.pocoo.org/
 .. _LaTeX: http://www.latex-project.org/
 
-Testing PyBayes
-===============
+Testing
+=======
 
-Once PyBayes is installed, you may want to run its tests in order to ensure
-proper functionality. The ``examples`` directory contains ``run_tests.py`` and
-``run_stresses.py`` scripts that execute all PyBayes tests and stress tests
-respectively. Run these scripts with ``-h`` option to see usage.
+PyBayes comes with a comprehensive test and stress-suite that can and should be used to verify that
+your PyBayes build works as expected.
 
-   *Note: running tests from within source directory is discouraged and
-   unsupported.*
+Since version 0.4, testing is integrated into the `setup.py` script and can be run without
+installing PyBayes. On order to run PyBayes test-suite, simply issue ``./setup.py test``. To run
+tests in normal PyBayes installation procedure, simply install like this:
+``./setup.py build test install``. Failing tests cause installation to fail, but this can be
+overriden using `--non-fatal` option to the `test` command.
 
-For even greater convenience, ``examples/install_test_stress.py`` python
-script can clear, build, install, test, stress both Python and Cython build in
-one go. It is especially suitable for PyBayes hackers. Run
-``install_test_stress.py -h`` to get usage information. Please be sure to add
-``--clean`` or ``-c`` flag when you mix Python and Cython builds.
+Stress testing is not yet ported to the `setup.py`, see the `support/run_stresses.py` script.
