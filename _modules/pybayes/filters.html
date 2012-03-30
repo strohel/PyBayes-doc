@@ -3,17 +3,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pybayes.filters &mdash; PyBayes v0.3-28-g4814f7b-dirty documentation</title>
+    <title>pybayes.filters &mdash; PyBayes 0.3-48-g8fd82e4 documentation</title>
+    
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.3-28-g4814f7b-dirty',
+        VERSION:     '0.3-48-g8fd82e4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +25,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyBayes v0.3-28-g4814f7b-dirty documentation" href="../../index.html" />
+    <link rel="top" title="PyBayes 0.3-48-g8fd82e4 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
   <body>
@@ -35,7 +38,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">PyBayes v0.3-28-g4814f7b-dirty documentation</a> &raquo;</li>
+        <li><a href="../../index.html">PyBayes 0.3-48-g8fd82e4 documentation</a> &raquo;</li>
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -316,10 +319,10 @@
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;both p_xt_xtp and p_yt_xt must be instances of the CPdf class&quot;</span><span class="p">)</span>
 
         <span class="n">dim</span> <span class="o">=</span> <span class="n">init_pdf</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span>  <span class="c"># dimension of state</span>
-        <span class="k">if</span> <span class="n">p_xt_xtp</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span> <span class="o">!=</span> <span class="n">dim</span> <span class="ow">or</span> <span class="n">p_xt_xtp</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">()</span> <span class="o">!=</span> <span class="n">dim</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">p_xt_xtp</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span> <span class="o">!=</span> <span class="n">dim</span> <span class="ow">or</span> <span class="n">p_xt_xtp</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">dim</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Expected shape() and cond_shape() of p_xt_xtp will &quot;</span>
-                <span class="o">+</span> <span class="s">&quot;be {0}; ({1}, {2}) given.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">p_xt_xtp</span><span class="o">.</span><span class="n">shape</span><span class="p">(),</span>
-                <span class="n">p_xt_xtp</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">()))</span>
+                <span class="o">+</span> <span class="s">&quot;be (respectively greater than) {0}; ({1}, {2}) given.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span>
+                <span class="n">p_xt_xtp</span><span class="o">.</span><span class="n">shape</span><span class="p">(),</span> <span class="n">p_xt_xtp</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">()))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">p_xt_xtp</span> <span class="o">=</span> <span class="n">p_xt_xtp</span>
         <span class="k">if</span> <span class="n">p_yt_xt</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">()</span> <span class="o">!=</span> <span class="n">dim</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Expected cond_shape() of p_yt_xt will be {0}; {1} given.&quot;</span>
@@ -330,7 +333,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">emp</span> <span class="o">=</span> <span class="n">EmpPdf</span><span class="p">(</span><span class="n">init_pdf</span><span class="o">.</span><span class="n">samples</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
 </div>
 <div class="viewcode-block" id="ParticleFilter.bayes"><a class="viewcode-back" href="../../filters.html#pybayes.filters.ParticleFilter.bayes">[docs]</a>    <span class="k">def</span> <span class="nf">bayes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yt</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
-        <span class="sd">r&quot;&quot;&quot;Perform Bayes rule for new measurement :math:`y_t`. The algorithm is as follows:</span>
+        <span class="sd">r&quot;&quot;&quot;Perform Bayes rule for new measurement :math:`y_t`.</span>
+
+<span class="sd">        :param numpy.ndarray cond: optional condition that is passed to :math:`p(x_t|x_{t-1})`</span>
+<span class="sd">          after :math:`x_{t-1}` so that is can be rewritten as: :math:`p(x_t|x_{t-1}, c)`.</span>
+
+<span class="sd">        The algorithm is as follows:</span>
 
 <span class="sd">        1. generate new particles: :math:`x_t^{(i)} = \text{sample from }</span>
 <span class="sd">           p(x_t^{(i)}|x_{t-1}^{(i)}) \quad \forall i`</span>
@@ -341,7 +349,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">emp</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
             <span class="c"># generate new ith particle:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">emp</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">p_xt_xtp</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">emp</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">cond</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">aggregate_cond</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emp</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">aggregate_cond</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">emp</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">cond</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">emp</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">p_xt_xtp</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">aggregate_cond</span><span class="p">)</span>
 
             <span class="c"># recompute ith weight:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">emp</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*=</span> <span class="n">exp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p_yt_xt</span><span class="o">.</span><span class="n">eval_log</span><span class="p">(</span><span class="n">yt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">emp</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
@@ -493,7 +505,7 @@
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -516,13 +528,13 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">PyBayes v0.3-28-g4814f7b-dirty documentation</a> &raquo;</li>
+        <li><a href="../../index.html">PyBayes 0.3-48-g8fd82e4 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2010, Matěj Laitl.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

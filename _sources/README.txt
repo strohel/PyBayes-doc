@@ -9,10 +9,10 @@ PyBayes is an object-oriented Python library for recursive Bayesian
 estimation (Bayesian filtering) that is convenient to use. Already implemented are
 Kalman filter, particle filter and marginalized particle filter, all built atop of
 a light framework of probability density functions. PyBayes can optionally use Cython
-for lage speed gains (Cython build can be several times faster in some situations).
+for large speed gains (Cython build can be several times faster in some situations).
 
-PyBayes is tested with Python 2.6, 2.7 and 3.1 (using 2to3). Future plans include more specialised
-variants of Kalman/particle filters and speed optimisations.
+PyBayes is tested with Python 2.6, 2.7 and 3.1 (using 2to3). Future plans include 
+more specialised variants of Kalman/particle filters and speed optimisations.
 
 PyBayes is being developed by Matěj Laitl, feel free to send me a mail to matej at laitl dot cz.
 See ChangeLog.rst file to review a list of most important changes in recent versions.
@@ -31,10 +31,13 @@ Obtaining PyBayes
 =================
 
 PyBayes releases can be found in .tar.gz format at github_ or PyPI_. These releases bundle the Tokyo
-project for convenience.
+project for convenience. Binary packages for CentOS, Debian, Fedora, RHEL, OpenSUSE and Ubuntu can
+be downloaded from the `OpenSUSE Build Service`_; these packages are fast Cython builds. (with no
+requirement to install Cython for building)
 
 .. _github: https://github.com/strohel/PyBayes/downloads
 .. _PyPI: http://pypi.python.org/pypi/PyBayes
+.. _`OpenSUSE Build Service`: https://build.opensuse.org/package/show?package=python-pybayes&project=home%3Astrohel
 
 Development of PyBayes happens on http://github.com/strohel/PyBayes using git VCS
 and the most fresh development sources can be obtained using git. It should be noted that
@@ -109,11 +112,9 @@ Proceed with following steps:
    package manager if you use a modern Linux Distribution.
 
 #. Unpack and install PyBayes as described above, you should see following
-   messages during build:
+   message during build:
 
-      ``Notice: Cython found.``
-
-      ``Notice: NumPy found.``
+      ``Cython and NumPy found, enabling optimised Cython build.``
 
    * in order to be 100% sure that optimised build is used, you can add
      ``--use-cython=yes`` option to the ``./setup.py`` call. You can force pure
@@ -144,9 +145,9 @@ with a list of available documentation formats. To generate html documentation,
 for example, run ``make html`` and then point your browser to
 `[path_to_pybayes]/doc/_build/html/index.html`.
 
-   PyBayes docs contain many mathematical expressions; Sphinx_ can use LaTeX_ to
-   embed them as images into resulting HTML pages. Be sure to have LaTeX-enabled
-   Sphinx if you want to see such nice things.
+PyBayes docs contain many mathematical expressions; Sphinx_ can use LaTeX_ to
+embed them as images into resulting HTML pages. Be sure to have LaTeX-enabled
+Sphinx if you want to see such nice things.
 
 .. _Sphinx: http://sphinx.pocoo.org/
 .. _LaTeX: http://www.latex-project.org/
@@ -158,9 +159,15 @@ PyBayes comes with a comprehensive test and stress-suite that can and should be 
 your PyBayes build works as expected.
 
 Since version 0.4, testing is integrated into the `setup.py` script and can be run without
-installing PyBayes. On order to run PyBayes test-suite, simply issue ``./setup.py test``. To run
-tests in normal PyBayes installation procedure, simply install like this:
+installing PyBayes. In order to run PyBayes test-suite, simply issue ``./setup.py test`` from within
+the source directory. To run tests during installation procedure, simply install like this:
 ``./setup.py build test install``. Failing tests cause installation to fail, but this can be
-overriden using `--non-fatal` option to the `test` command.
+overriden using `--non-fatal` option of the `test` command.
+
+If you want to test your already installed PyBayes instance, simply issue
+``python -m pybayes.tests`` anytime, anywhere. :-)
+
+Stress-testing
+--------------
 
 Stress testing is not yet ported to the `setup.py`, see the `support/run_stresses.py` script.

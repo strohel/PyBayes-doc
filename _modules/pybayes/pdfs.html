@@ -3,17 +3,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pybayes.pdfs &mdash; PyBayes v0.3-28-g4814f7b-dirty documentation</title>
+    <title>pybayes.pdfs &mdash; PyBayes 0.3-48-g8fd82e4 documentation</title>
+    
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.3-28-g4814f7b-dirty',
+        VERSION:     '0.3-48-g8fd82e4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +25,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyBayes v0.3-28-g4814f7b-dirty documentation" href="../../index.html" />
+    <link rel="top" title="PyBayes 0.3-48-g8fd82e4 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
   <body>
@@ -35,7 +38,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">PyBayes v0.3-28-g4814f7b-dirty documentation</a> &raquo;</li>
+        <li><a href="../../index.html">PyBayes 0.3-48-g8fd82e4 documentation</a> &raquo;</li>
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -275,9 +278,9 @@
 <span class="sd">    not the case, the result is unconditional.</span>
 
 <span class="sd">    Every CPdf takes (apart from others) 2 optional arguments to constructor:</span>
-<span class="sd">    **rv** (:class:`RV`) and **cond_rv** (:class:`RV`). When specified, they</span>
-<span class="sd">    denote that the CPdf is associated with a particular random variable (respectively</span>
-<span class="sd">    its condition is associated with a particular random variable); when unspecified,</span>
+<span class="sd">    **rv** and **cond_rv**. (both :class:`RV` or a sequence of :class:`RVComp` objects) When</span>
+<span class="sd">    specified, they denote that the CPdf is associated with a particular random variable</span>
+<span class="sd">    (respectively its condition is associated with a particular random variable); when unspecified,</span>
 <span class="sd">    *anonymous* random variable is assumed (exceptions exist, see :class:`ProdPdf`).</span>
 <span class="sd">    It is an error to pass RV whose dimension is not same as CPdf&#39;s dimension</span>
 <span class="sd">    (or cond dimension respectively).</span>
@@ -306,12 +309,12 @@
 <span class="sd">    &gt;&gt;&gt; a_t, b_t = RVComp(1, &#39;a_t&#39;), RVComp(1, &#39;b_t&#39;)  # create RV components</span>
 <span class="sd">    &gt;&gt;&gt; a_tp, b_tp = RVComp(1, &#39;a_{t-1}&#39;), RVComp(1, &#39;b_{t-1}&#39;)  # t-1 case</span>
 
-<span class="sd">    &gt;&gt;&gt; p1 = LinGaussCPdf(1., 0., 1., 0., RV(a_t), RV(a_tp, b_t))</span>
+<span class="sd">    &gt;&gt;&gt; p1 = LinGaussCPdf(1., 0., 1., 0., [a_t], [a_tp, b_t])</span>
 <span class="sd">    &gt;&gt;&gt; # params for p2:</span>
 <span class="sd">    &gt;&gt;&gt; cov, A, b = np.array([[0.0001]]), np.array([[1.]]), np.array([0.])</span>
-<span class="sd">    &gt;&gt;&gt; p2 = MLinGaussCPdf(cov, A, b, RV(b_t), RV(b_tp))</span>
+<span class="sd">    &gt;&gt;&gt; p2 = MLinGaussCPdf(cov, A, b, [b_t], [b_tp])</span>
 
-<span class="sd">    &gt;&gt;&gt; p = ProdCPdf((p1, p2), RV(a_t, b_t), RV(a_tp, b_tp))</span>
+<span class="sd">    &gt;&gt;&gt; p = ProdCPdf((p1, p2), [a_t, b_t], [a_tp, b_tp])</span>
 
 <span class="sd">    &gt;&gt;&gt; p.sample(np.array([1., 2.]))</span>
 <span class="sd">    &gt;&gt;&gt; p.eval_log()</span>
@@ -414,9 +417,11 @@
         <span class="sd">&quot;&quot;&quot;Internal heper to check and set rv and cond_rv.</span>
 
 <span class="sd">        :param int exp_shape: expected random variable shape</span>
-<span class="sd">        :param RV rv: associated random variable or None to have it auto-created</span>
+<span class="sd">        :param rv: associated random variable or None to have it auto-created</span>
+<span class="sd">        :type rv: :class:`RV` or a sequence of :class:`RVComp` objects</span>
 <span class="sd">        :param int exp_cond_shape: expected conditioning variable shape</span>
-<span class="sd">        :param RV cond_rv: associated conditioning variable or None to have it auto-created</span>
+<span class="sd">        :param cond_rv: associated conditioning variable or None to have it auto-created</span>
+<span class="sd">        :type cond_rv: :class:`RV` or a sequence of :class:`RVComp` objects</span>
 
 <span class="sd">        :raises TypeError: rv or cond_rv doesnt have right type</span>
 <span class="sd">        :raises ValueError: dimensions do not match</span>
@@ -424,11 +429,12 @@
         <span class="k">if</span> <span class="n">rv</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">rv</span> <span class="o">=</span> <span class="n">RV</span><span class="p">(</span><span class="n">RVComp</span><span class="p">(</span><span class="n">exp_shape</span><span class="p">))</span>  <span class="c"># create RV with one anonymous component</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rv</span><span class="p">,</span> <span class="n">RV</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;rv (if specified) must be (a subclass of) RV&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">rv</span><span class="o">.</span><span class="n">dimension</span> <span class="o">!=</span> <span class="n">exp_shape</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rv</span><span class="p">,</span> <span class="n">RV</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rv</span> <span class="o">=</span> <span class="n">rv</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rv</span> <span class="o">=</span> <span class="n">RV</span><span class="p">(</span><span class="n">rv</span><span class="p">)</span>  <span class="c">#  assume that rv is a sequence of components</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rv</span><span class="o">.</span><span class="n">dimension</span> <span class="o">!=</span> <span class="n">exp_shape</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;rv has wrong dimension {0}, {1} expected&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">rv</span><span class="o">.</span><span class="n">dimension</span><span class="p">,</span> <span class="n">exp_shape</span><span class="p">))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">rv</span> <span class="o">=</span> <span class="n">rv</span>
 
         <span class="k">if</span> <span class="n">cond_rv</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">exp_cond_shape</span> <span class="ow">is</span> <span class="mi">0</span><span class="p">:</span>
@@ -436,11 +442,12 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">cond_rv</span> <span class="o">=</span> <span class="n">RV</span><span class="p">(</span><span class="n">RVComp</span><span class="p">(</span><span class="n">exp_cond_shape</span><span class="p">))</span>  <span class="c"># create RV with one anonymous component</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cond_rv</span><span class="p">,</span> <span class="n">RV</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;cond_rv (if specified) must be (a subclass of) RV&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">cond_rv</span><span class="o">.</span><span class="n">dimension</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">exp_cond_shape</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cond_rv</span><span class="p">,</span> <span class="n">RV</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cond_rv</span> <span class="o">=</span> <span class="n">cond_rv</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cond_rv</span> <span class="o">=</span> <span class="n">RV</span><span class="p">(</span><span class="n">cond_rv</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cond_rv</span><span class="o">.</span><span class="n">dimension</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">exp_cond_shape</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;cond_rv has wrong dimension {0}, {1} expected&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cond_rv</span><span class="o">.</span><span class="n">dimension</span><span class="p">,</span> <span class="n">exp_cond_shape</span><span class="p">))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">cond_rv</span> <span class="o">=</span> <span class="n">cond_rv</span>
         <span class="k">return</span> <span class="bp">True</span>
 
 </div>
@@ -469,9 +476,9 @@
 <span class="sd">    .. math:: f(x) = \Theta(x - a) \Theta(b - x) \prod_{i=1}^n \frac{1}{b_i-a_i}</span>
 
 <span class="sd">    :var a: left border</span>
-<span class="sd">    :type a: :class:`numpy.ndarray`</span>
+<span class="sd">    :type a: 1D :class:`numpy.ndarray`</span>
 <span class="sd">    :var b: right border</span>
-<span class="sd">    :type b: :class:`numpy.ndarray`</span>
+<span class="sd">    :type b: 1D :class:`numpy.ndarray`</span>
 
 <span class="sd">    You may modify these attributes as long as you don&#39;t change their shape and</span>
 <span class="sd">    assumption **a** &lt; **b** still holds.</span>
@@ -481,11 +488,14 @@
         <span class="sd">&quot;&quot;&quot;Initialise uniform distribution.</span>
 
 <span class="sd">        :param a: left border</span>
-<span class="sd">        :type a: :class:`numpy.ndarray`</span>
+<span class="sd">        :type a: 1D :class:`numpy.ndarray`</span>
 <span class="sd">        :param b: right border</span>
-<span class="sd">        :type b: :class:`numpy.ndarray`</span>
+<span class="sd">        :type b: 1D :class:`numpy.ndarray`</span>
 
-<span class="sd">        **b** must be greater (in each dimension) than **a**</span>
+<span class="sd">        **b** must be greater (in each dimension) than **a**.</span>
+<span class="sd">        To construct uniform distribution on interval [0,1]:</span>
+
+<span class="sd">        &gt;&gt;&gt; uni = UniPdf(np.array([0.]), np.array([1.]), rv)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
@@ -1200,9 +1210,9 @@
 <span class="sd">    &gt;&gt;&gt; x_1, x_2 = RVComp(1), RVComp(1, &quot;name is optional&quot;)</span>
 <span class="sd">    &gt;&gt;&gt; y_1, y_2 = RVComp(1), RVComp(1, &quot;but recommended&quot;)</span>
 
-<span class="sd">    &gt;&gt;&gt; p_1 = SomePdf(..., rv=RV(x_1), cond_rv=RV(x_2))</span>
-<span class="sd">    &gt;&gt;&gt; p_2 = SomePdf(..., rv=RV(x_2), cond_rv=RV(y_2, y_1))</span>
-<span class="sd">    &gt;&gt;&gt; p = ProdCPdf((p_2, p_1), rv=RV(x_1, x_2), cond_rv=RV(y_1, y_2))  # order of</span>
+<span class="sd">    &gt;&gt;&gt; p_1 = SomePdf(..., rv=[x_1], cond_rv=[x_2])</span>
+<span class="sd">    &gt;&gt;&gt; p_2 = SomePdf(..., rv=[x_2], cond_rv=[y_2, y_1])</span>
+<span class="sd">    &gt;&gt;&gt; p = ProdCPdf((p_2, p_1), rv=[x_1, x_2], cond_rv=[y_1, y_2])  # order of</span>
 <span class="sd">    &gt;&gt;&gt; # pdfs is insignificant - order of rv components determines data flow</span>
 
 <span class="sd">    *Please note: this will change in near future in following way: it will be always required to</span>
@@ -1218,7 +1228,7 @@
 
 <span class="sd">        Usual way of creating ProdCPdf could be:</span>
 
-<span class="sd">        &gt;&gt;&gt; prod = ProdCPdf((MLinGaussCPdf(..), UniPdf(..)), RV(..), RV(..))</span>
+<span class="sd">        &gt;&gt;&gt; prod = ProdCPdf([MLinGaussCPdf(..), UniPdf(..)], rv=[..], cond_rv=[..])</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">factors</span><span class="p">)</span> <span class="ow">is</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;at least one factor must be passed&quot;</span><span class="p">)</span>
@@ -1268,6 +1278,9 @@
 <span class="sd">        :param factors: factor pdfs that will form the product</span>
 <span class="sd">        :type factors: :class:`list` of :class:`CPdf` items</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># rv, cond_rv could be lists, so convert them if needed</span>
+        <span class="n">rv</span> <span class="o">=</span> <span class="n">RV</span><span class="p">(</span><span class="n">rv</span><span class="p">)</span>
+        <span class="n">cond_rv</span> <span class="o">=</span> <span class="n">RV</span><span class="p">(</span><span class="n">cond_rv</span><span class="p">)</span>
         <span class="c"># gradually filled set of components that would be available in e.g.</span>
         <span class="c"># sample() computation:</span>
         <span class="n">avail_rvcomps</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">cond_rv</span><span class="o">.</span><span class="n">components</span><span class="p">)</span>
@@ -1359,7 +1372,7 @@
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -1382,13 +1395,13 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">PyBayes v0.3-28-g4814f7b-dirty documentation</a> &raquo;</li>
+        <li><a href="../../index.html">PyBayes 0.3-48-g8fd82e4 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2010, Matěj Laitl.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

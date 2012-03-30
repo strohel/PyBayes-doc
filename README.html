@@ -3,17 +3,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>PyBayes &mdash; PyBayes v0.3-28-g4814f7b-dirty documentation</title>
+    <title>PyBayes &mdash; PyBayes 0.3-48-g8fd82e4 documentation</title>
+    
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3-28-g4814f7b-dirty',
+        VERSION:     '0.3-48-g8fd82e4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +25,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="PyBayes v0.3-28-g4814f7b-dirty documentation" href="index.html" />
+    <link rel="top" title="PyBayes 0.3-48-g8fd82e4 documentation" href="index.html" />
     <link rel="next" title="PyBayes Change Log" href="ChangeLog.html" />
     <link rel="prev" title="PyBayes API Documentation" href="index.html" /> 
   </head>
@@ -42,7 +45,7 @@
         <li class="right" >
           <a href="index.html" title="PyBayes API Documentation"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">PyBayes v0.3-28-g4814f7b-dirty documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyBayes 0.3-48-g8fd82e4 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -59,9 +62,9 @@
 estimation (Bayesian filtering) that is convenient to use. Already implemented are
 Kalman filter, particle filter and marginalized particle filter, all built atop of
 a light framework of probability density functions. PyBayes can optionally use Cython
-for lage speed gains (Cython build can be several times faster in some situations).</p>
-<p>PyBayes is tested with Python 2.6, 2.7 and 3.1 (using 2to3). Future plans include more specialised
-variants of Kalman/particle filters and speed optimisations.</p>
+for large speed gains (Cython build can be several times faster in some situations).</p>
+<p>PyBayes is tested with Python 2.6, 2.7 and 3.1 (using 2to3). Future plans include
+more specialised variants of Kalman/particle filters and speed optimisations.</p>
 <p>PyBayes is being developed by Matěj Laitl, feel free to send me a mail to matej at laitl dot cz.
 See ChangeLog.rst file to review a list of most important changes in recent versions.</p>
 <p>Automatically generated <strong>documentation</strong> can be found at
@@ -76,7 +79,9 @@ PyBayes in e.g. BSD-licensed project? Ask!)</p>
 <div class="section" id="obtaining-pybayes">
 <h2>Obtaining PyBayes<a class="headerlink" href="#obtaining-pybayes" title="Permalink to this headline">¶</a></h2>
 <p>PyBayes releases can be found in .tar.gz format at <a class="reference external" href="https://github.com/strohel/PyBayes/downloads">github</a> or <a class="reference external" href="http://pypi.python.org/pypi/PyBayes">PyPI</a>. These releases bundle the Tokyo
-project for convenience.</p>
+project for convenience. Binary packages for CentOS, Debian, Fedora, RHEL, OpenSUSE and Ubuntu can
+be downloaded from the <a class="reference external" href="https://build.opensuse.org/package/show?package=python-pybayes&amp;project=home%3Astrohel">OpenSUSE Build Service</a>; these packages are fast Cython builds. (with no
+requirement to install Cython for building)</p>
 <p>Development of PyBayes happens on <a class="reference external" href="http://github.com/strohel/PyBayes">http://github.com/strohel/PyBayes</a> using git VCS
 and the most fresh development sources can be obtained using git. It should be noted that
 PyBayes uses git submodule to bundle Tokyo library, so the proper way to clone
@@ -151,10 +156,9 @@ package that contains <tt class="docutils literal"><span class="pre">Python.h</s
 package manager if you use a modern Linux Distribution.</p>
 </li>
 <li><p class="first">Unpack and install PyBayes as described above, you should see following
-messages during build:</p>
+message during build:</p>
 <blockquote>
-<div><p><tt class="docutils literal"><span class="pre">Notice:</span> <span class="pre">Cython</span> <span class="pre">found.</span></tt></p>
-<p><tt class="docutils literal"><span class="pre">Notice:</span> <span class="pre">NumPy</span> <span class="pre">found.</span></tt></p>
+<div><p><tt class="docutils literal"><span class="pre">Cython</span> <span class="pre">and</span> <span class="pre">NumPy</span> <span class="pre">found,</span> <span class="pre">enabling</span> <span class="pre">optimised</span> <span class="pre">Cython</span> <span class="pre">build.</span></tt></p>
 </div></blockquote>
 <ul class="simple">
 <li>in order to be 100% sure that optimised build is used, you can add
@@ -185,10 +189,9 @@ In order to build it, change directory to <cite>doc/</cite> under PyBayes source
 with a list of available documentation formats. To generate html documentation,
 for example, run <tt class="docutils literal"><span class="pre">make</span> <span class="pre">html</span></tt> and then point your browser to
 <cite>[path_to_pybayes]/doc/_build/html/index.html</cite>.</p>
-<blockquote>
-<div>PyBayes docs contain many mathematical expressions; <a class="reference external" href="http://sphinx.pocoo.org/">Sphinx</a> can use <a class="reference external" href="http://www.latex-project.org/">LaTeX</a> to
+<p>PyBayes docs contain many mathematical expressions; <a class="reference external" href="http://sphinx.pocoo.org/">Sphinx</a> can use <a class="reference external" href="http://www.latex-project.org/">LaTeX</a> to
 embed them as images into resulting HTML pages. Be sure to have LaTeX-enabled
-Sphinx if you want to see such nice things.</div></blockquote>
+Sphinx if you want to see such nice things.</p>
 </div>
 </div>
 <div class="section" id="testing">
@@ -196,11 +199,16 @@ Sphinx if you want to see such nice things.</div></blockquote>
 <p>PyBayes comes with a comprehensive test and stress-suite that can and should be used to verify that
 your PyBayes build works as expected.</p>
 <p>Since version 0.4, testing is integrated into the <cite>setup.py</cite> script and can be run without
-installing PyBayes. On order to run PyBayes test-suite, simply issue <tt class="docutils literal"><span class="pre">./setup.py</span> <span class="pre">test</span></tt>. To run
-tests in normal PyBayes installation procedure, simply install like this:
+installing PyBayes. In order to run PyBayes test-suite, simply issue <tt class="docutils literal"><span class="pre">./setup.py</span> <span class="pre">test</span></tt> from within
+the source directory. To run tests during installation procedure, simply install like this:
 <tt class="docutils literal"><span class="pre">./setup.py</span> <span class="pre">build</span> <span class="pre">test</span> <span class="pre">install</span></tt>. Failing tests cause installation to fail, but this can be
-overriden using <cite>&#8211;non-fatal</cite> option to the <cite>test</cite> command.</p>
+overriden using <cite>&#8211;non-fatal</cite> option of the <cite>test</cite> command.</p>
+<p>If you want to test your already installed PyBayes instance, simply issue
+<tt class="docutils literal"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pybayes.tests</span></tt> anytime, anywhere. :-)</p>
+<div class="section" id="stress-testing">
+<h3>Stress-testing<a class="headerlink" href="#stress-testing" title="Permalink to this headline">¶</a></h3>
 <p>Stress testing is not yet ported to the <cite>setup.py</cite>, see the <cite>support/run_stresses.py</cite> script.</p>
+</div>
 </div>
 </div>
 
@@ -223,7 +231,10 @@ overriden using <cite>&#8211;non-fatal</cite> option to the <cite>test</cite> co
 <li><a class="reference internal" href="#building-documentation">Building Documentation</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#testing">Testing</a></li>
+<li><a class="reference internal" href="#testing">Testing</a><ul>
+<li><a class="reference internal" href="#stress-testing">Stress-testing</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -242,7 +253,7 @@ overriden using <cite>&#8211;non-fatal</cite> option to the <cite>test</cite> co
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -271,12 +282,12 @@ overriden using <cite>&#8211;non-fatal</cite> option to the <cite>test</cite> co
         <li class="right" >
           <a href="index.html" title="PyBayes API Documentation"
              >previous</a> |</li>
-        <li><a href="index.html">PyBayes v0.3-28-g4814f7b-dirty documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyBayes 0.3-48-g8fd82e4 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2010, Matěj Laitl.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>
