@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Probability Density Functions &mdash; PyBayes 0.3-57-g96e3913 documentation</title>
+    <title>Probability Density Functions &mdash; PyBayes 0.3-59-g6493e4c documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3-57-g96e3913',
+        VERSION:     '0.3-59-g6493e4c',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="PyBayes 0.3-57-g96e3913 documentation" href="index.html" />
+    <link rel="top" title="PyBayes 0.3-59-g6493e4c documentation" href="index.html" />
     <link rel="next" title="Bayesian Filters" href="filters.html" />
     <link rel="prev" title="PyBayes Change Log" href="ChangeLog.html" /> 
   </head>
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="ChangeLog.html" title="PyBayes Change Log"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">PyBayes 0.3-57-g96e3913 documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyBayes 0.3-59-g6493e4c documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -925,6 +925,56 @@ be changed in future.</em></p>
 </dd></dl>
 
 <dl class="class">
+<dt id="pybayes.pdfs.GammaCPdf">
+<em class="property">class </em><tt class="descclassname">pybayes.pdfs.</tt><tt class="descname">GammaCPdf</tt><big>(</big><em>gamma</em>, <em>rv=None</em>, <em>cond_rv=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#GammaCPdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.GammaCPdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conditional pdf based on <a class="reference internal" href="#pybayes.pdfs.GammaPdf" title="pybayes.pdfs.GammaPdf"><tt class="xref py py-class docutils literal"><span class="pre">GammaPdf</span></tt></a> tuned in a way to have mean
+<img class="math" src="_images/math/2d8c833ed800824727cd7bd2fb9de1a12ad7e674.png" alt="\mu"/> and standard deviation <img class="math" src="_images/math/23ed7aaff57916aeb17a4c830a5aa17b911d6a7d.png" alt="\gamma \mu"/>. In other words,
+<img class="math" src="_images/math/8affbaa8edeef768e2f7a488e56eb8c799812570.png" alt="\text{GammaCpdf}(\mu, \gamma) = \text{GammaPdf}\left(
+k = \gamma^{-2}, \theta = \gamma^2 \mu \right)"/></p>
+<p>The <img class="math" src="_images/math/66981fa3920210c6ad8dbe5e968783d5dd7520c3.png" alt="\gamma"/> parameter is specified in constructor and the <img class="math" src="_images/math/2d8c833ed800824727cd7bd2fb9de1a12ad7e674.png" alt="\mu"/>
+parameter is the conditioning variable.</p>
+<dl class="method">
+<dt id="pybayes.pdfs.GammaCPdf.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>gamma</em>, <em>rv=None</em>, <em>cond_rv=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#GammaCPdf.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.GammaCPdf.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialise conditional gamma pdf.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gamma</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; <img class="math" src="_images/math/66981fa3920210c6ad8dbe5e968783d5dd7520c3.png" alt="\gamma"/> parameter above</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pybayes.pdfs.InverseGammaCPdf">
+<em class="property">class </em><tt class="descclassname">pybayes.pdfs.</tt><tt class="descname">InverseGammaCPdf</tt><big>(</big><em>gamma</em>, <em>rv=None</em>, <em>cond_rv=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#InverseGammaCPdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.InverseGammaCPdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conditional pdf based on <a class="reference internal" href="#pybayes.pdfs.InverseGammaPdf" title="pybayes.pdfs.InverseGammaPdf"><tt class="xref py py-class docutils literal"><span class="pre">InverseGammaPdf</span></tt></a> tuned in a way to have mean
+<img class="math" src="_images/math/2d8c833ed800824727cd7bd2fb9de1a12ad7e674.png" alt="\mu"/> and standard deviation <img class="math" src="_images/math/23ed7aaff57916aeb17a4c830a5aa17b911d6a7d.png" alt="\gamma \mu"/>. In other words,
+<img class="math" src="_images/math/075e2a039b1bc5015f9bab6ddd65958948cc7883.png" alt="\text{InverseGammaCpdf}(\mu, \gamma) = \text{InverseGammaPdf}\left(
+\alpha = \gamma^{-2} + 2, \beta = \left( \gamma^{-2} + 1 \right) \mu \right)"/></p>
+<p>The <img class="math" src="_images/math/66981fa3920210c6ad8dbe5e968783d5dd7520c3.png" alt="\gamma"/> parameter is specified in constructor and the <img class="math" src="_images/math/2d8c833ed800824727cd7bd2fb9de1a12ad7e674.png" alt="\mu"/>
+parameter is the conditioning variable.</p>
+<dl class="method">
+<dt id="pybayes.pdfs.InverseGammaCPdf.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>gamma</em>, <em>rv=None</em>, <em>cond_rv=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#InverseGammaCPdf.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.InverseGammaCPdf.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialise conditional inverse gamma pdf.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gamma</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; <img class="math" src="_images/math/66981fa3920210c6ad8dbe5e968783d5dd7520c3.png" alt="\gamma"/> parameter above</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="pybayes.pdfs.ProdCPdf">
 <em class="property">class </em><tt class="descclassname">pybayes.pdfs.</tt><tt class="descname">ProdCPdf</tt><big>(</big><em>factors</em>, <em>rv=None</em>, <em>cond_rv=None</em><big>)</big><a class="reference internal" href="_modules/pybayes/pdfs.html#ProdCPdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pybayes.pdfs.ProdCPdf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Pdf that is formed as a chain rule of multiple conditional pdfs.
@@ -1041,7 +1091,7 @@ cond_rv will be inferred automatically when not specified.</em></p>
         <li class="right" >
           <a href="ChangeLog.html" title="PyBayes Change Log"
              >previous</a> |</li>
-        <li><a href="index.html">PyBayes 0.3-57-g96e3913 documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyBayes 0.3-59-g6493e4c documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pybayes.pdfs &mdash; PyBayes 0.3-57-g96e3913 documentation</title>
+    <title>pybayes.pdfs &mdash; PyBayes 0.3-59-g6493e4c documentation</title>
     
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.3-57-g96e3913',
+        VERSION:     '0.3-59-g6493e4c',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyBayes 0.3-57-g96e3913 documentation" href="../../index.html" />
+    <link rel="top" title="PyBayes 0.3-59-g6493e4c documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
   <body>
@@ -38,7 +38,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">PyBayes 0.3-57-g96e3913 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">PyBayes 0.3-59-g6493e4c documentation</a> &raquo;</li>
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -1264,6 +1264,88 @@
         <span class="k">return</span> <span class="bp">True</span>
 
 </div>
+<div class="viewcode-block" id="GammaCPdf"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.GammaCPdf">[docs]</a><span class="k">class</span> <span class="nc">GammaCPdf</span><span class="p">(</span><span class="n">CPdf</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Conditional pdf based on :class:`GammaPdf` tuned in a way to have mean</span>
+<span class="sd">    :math:`\mu` and standard deviation :math:`\gamma \mu`. In other words,</span>
+<span class="sd">    :math:`\text{GammaCpdf}(\mu, \gamma) = \text{GammaPdf}\left(</span>
+<span class="sd">    k = \gamma^{-2}, \theta = \gamma^2 \mu \right)`</span>
+
+<span class="sd">    The :math:`\gamma` parameter is specified in constructor and the :math:`\mu`</span>
+<span class="sd">    parameter is the conditioning variable.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="GammaCPdf.__init__"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.GammaCPdf.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">rv</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">cond_rv</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialise conditional gamma pdf.</span>
+
+<span class="sd">        :param float gamma: :math:`\gamma` parameter above</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="n">gamma</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gamma_pdf</span> <span class="o">=</span> <span class="n">GammaPdf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mf">2.</span><span class="p">),</span> <span class="mf">1.</span><span class="p">)</span>  <span class="c"># theta is set later</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_rvs</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">rv</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">cond_rv</span><span class="p">)</span>
+</div>
+    <span class="k">def</span> <span class="nf">mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_cond</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma_pdf</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">variance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_cond</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma_pdf</span><span class="o">.</span><span class="n">variance</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">eval_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_cond</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span>
+        <span class="c"># x is checked in self.igamma_pdf</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma_pdf</span><span class="o">.</span><span class="n">eval_log</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_cond</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma_pdf</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_set_cond</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_cond</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gamma_pdf</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">**</span><span class="mf">2.</span> <span class="o">*</span> <span class="n">cond</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+</div>
+<div class="viewcode-block" id="InverseGammaCPdf"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.InverseGammaCPdf">[docs]</a><span class="k">class</span> <span class="nc">InverseGammaCPdf</span><span class="p">(</span><span class="n">CPdf</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Conditional pdf based on :class:`InverseGammaPdf` tuned in a way to have mean</span>
+<span class="sd">    :math:`\mu` and standard deviation :math:`\gamma \mu`. In other words,</span>
+<span class="sd">    :math:`\text{InverseGammaCpdf}(\mu, \gamma) = \text{InverseGammaPdf}\left(</span>
+<span class="sd">    \alpha = \gamma^{-2} + 2, \beta = \left( \gamma^{-2} + 1 \right) \mu \right)`</span>
+
+<span class="sd">    The :math:`\gamma` parameter is specified in constructor and the :math:`\mu`</span>
+<span class="sd">    parameter is the conditioning variable.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="InverseGammaCPdf.__init__"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.InverseGammaCPdf.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">rv</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">cond_rv</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialise conditional inverse gamma pdf.</span>
+
+<span class="sd">        :param float gamma: :math:`\gamma` parameter above</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="n">gamma</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">igamma_pdf</span> <span class="o">=</span> <span class="n">InverseGammaPdf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mf">2.</span><span class="p">)</span> <span class="o">+</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)</span>  <span class="c"># beta is set later</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_rvs</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">rv</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">cond_rv</span><span class="p">)</span>
+</div>
+    <span class="k">def</span> <span class="nf">mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_cond</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">igamma_pdf</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">variance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_cond</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">igamma_pdf</span><span class="o">.</span><span class="n">variance</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">eval_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_cond</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span>
+        <span class="c"># x is checked in self.igamma_pdf</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">igamma_pdf</span><span class="o">.</span><span class="n">eval_log</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_cond</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">igamma_pdf</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_set_cond</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cond</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_cond</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">igamma_pdf</span><span class="o">.</span><span class="n">beta</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mf">2.</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.</span><span class="p">)</span><span class="o">*</span><span class="n">cond</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+</div>
 <div class="viewcode-block" id="ProdCPdf"><a class="viewcode-back" href="../../pdfs.html#pybayes.pdfs.ProdCPdf">[docs]</a><span class="k">class</span> <span class="nc">ProdCPdf</span><span class="p">(</span><span class="n">CPdf</span><span class="p">):</span>
     <span class="sd">r&quot;&quot;&quot;Pdf that is formed as a chain rule of multiple conditional pdfs.</span>
 <span class="sd">    Extends :class:`CPdf`.</span>
@@ -1475,7 +1557,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">PyBayes 0.3-57-g96e3913 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">PyBayes 0.3-59-g6493e4c documentation</a> &raquo;</li>
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
