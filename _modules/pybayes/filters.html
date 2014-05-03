@@ -8,7 +8,8 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pybayes.filters &mdash; PyBayes 0.3-59-g6493e4c documentation</title>
+    <title>pybayes.filters &mdash; PyBayes 0.3-96-g0efa257
+ documentation</title>
     
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -16,7 +17,8 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.3-59-g6493e4c',
+        VERSION:     '0.3-96-g0efa257
+',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +27,8 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyBayes 0.3-59-g6493e4c documentation" href="../../index.html" />
+    <link rel="top" title="PyBayes 0.3-96-g0efa257
+ documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
   <body>
@@ -38,7 +41,8 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">PyBayes 0.3-59-g6493e4c documentation</a> &raquo;</li>
+        <li><a href="../../index.html">PyBayes 0.3-96-g0efa257
+ documentation</a> &raquo;</li>
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -64,9 +68,11 @@
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">exp</span>
 
-<span class="kn">import</span> <span class="nn">wrappers._linalg</span> <span class="kn">as</span> <span class="nn">linalg</span>
-<span class="kn">import</span> <span class="nn">wrappers._numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">pybayes.pdfs</span> <span class="kn">import</span> <span class="n">CPdf</span><span class="p">,</span> <span class="n">Pdf</span><span class="p">,</span> <span class="n">GaussPdf</span><span class="p">,</span> <span class="n">EmpPdf</span><span class="p">,</span> <span class="n">MarginalizedEmpPdf</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">empty</span>
+
+<span class="kn">from</span> <span class="nn">.wrappers</span> <span class="kn">import</span> <span class="n">_linalg</span> <span class="k">as</span> <span class="n">linalg</span>
+<span class="kn">from</span> <span class="nn">.wrappers</span> <span class="kn">import</span> <span class="n">_numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">from</span> <span class="nn">.pdfs</span> <span class="kn">import</span> <span class="n">CPdf</span><span class="p">,</span> <span class="n">Pdf</span><span class="p">,</span> <span class="n">GaussPdf</span><span class="p">,</span> <span class="n">EmpPdf</span><span class="p">,</span> <span class="n">MarginalizedEmpPdf</span>
 
 
 <div class="viewcode-block" id="Filter"><a class="viewcode-back" href="../../filters.html#pybayes.filters.Filter">[docs]</a><span class="k">class</span> <span class="nc">Filter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -84,7 +90,7 @@
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Derived classes must implement this method&quot;</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Filter.posterior"><a class="viewcode-back" href="../../filters.html#pybayes.filters.Filter.posterior">[docs]</a>    <span class="k">def</span> <span class="nf">posterior</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return posterior probability density funcion (:class:`~pybayes.pdfs.Pdf`).</span>
+        <span class="sd">&quot;&quot;&quot;Return posterior probability density funcion (:class:`~pybayes.pdfs.CPdf`).</span>
 
 <span class="sd">        :return: posterior density</span>
 <span class="sd">        :rtype: :class:`~pybayes.pdfs.Pdf`</span>
@@ -180,19 +186,17 @@
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">matrices</span><span class="p">:</span>
             <span class="n">matrix</span> <span class="o">=</span> <span class="n">matrices</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s">&#39;B&#39;</span> <span class="ow">and</span> <span class="n">matrix</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>  <span class="c"># we allow B to be unspecified</span>
-                <span class="n">matrices</span><span class="p">[</span><span class="s">&#39;B&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">matrix</span> <span class="o">=</span> <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">))</span>
+                <span class="k">continue</span>
             <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s">&#39;D&#39;</span> <span class="ow">and</span> <span class="n">matrix</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>  <span class="c"># we allow D to be unspecified</span>
-                <span class="n">matrices</span><span class="p">[</span><span class="s">&#39;D&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">matrix</span> <span class="o">=</span> <span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">C</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">))</span>
+                <span class="k">continue</span>
 
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;{0} must be numpy.ndarray, {1} given&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">matrix</span><span class="p">)))</span>
             <span class="k">if</span> <span class="n">matrix</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;{0} must have 2 dimensions (forming a matrix) {1} given&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                                  <span class="n">name</span><span class="p">,</span> <span class="n">matrix</span><span class="o">.</span><span class="n">ndim</span><span class="p">))</span>
 
         <span class="c"># remember vector shapes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="n">state_pdf</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span>  <span class="c"># dimension of state vector</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c"># dimension of control vector</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">B</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c"># dimension of control vector</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">j</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c"># dimension of observation vector</span>
 
         <span class="c"># dict of required matrice shapes (sizes)</span>
@@ -207,7 +211,10 @@
         <span class="c"># check input matrix sizes</span>
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">matrices</span><span class="p">:</span>
             <span class="n">matrix</span> <span class="o">=</span> <span class="n">matrices</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">matrix</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">shapes</span><span class="p">[</span><span class="n">name</span><span class="p">]:</span>
+            <span class="n">element_count</span> <span class="o">=</span> <span class="n">shapes</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">shapes</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">element_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">assert</span><span class="p">(</span><span class="n">matrix</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">matrix</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">shapes</span><span class="p">[</span><span class="n">name</span><span class="p">]:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Given shapes of state_pdf, B and C, matrix &quot;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span>
                                  <span class="s">&quot; must have shape &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">shapes</span><span class="p">[</span><span class="n">name</span><span class="p">])</span> <span class="o">+</span> <span class="s">&quot;, &quot;</span> <span class="o">+</span>
                                  <span class="nb">str</span><span class="p">(</span><span class="n">matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; given&quot;</span><span class="p">)</span>
@@ -236,12 +243,13 @@
     <span class="k">def</span> <span class="nf">__deepcopy__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">memo</span><span class="p">):</span>
         <span class="c"># type(self) is used because this method may be called for a derived class</span>
         <span class="n">ret</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
-        <span class="n">ret</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">,</span> <span class="n">memo</span><span class="p">)</span>  <span class="c"># numpy arrays:</span>
-        <span class="n">ret</span><span class="o">.</span><span class="n">B</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">,</span> <span class="n">memo</span><span class="p">)</span>
-        <span class="n">ret</span><span class="o">.</span><span class="n">C</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="p">,</span> <span class="n">memo</span><span class="p">)</span>
-        <span class="n">ret</span><span class="o">.</span><span class="n">D</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="p">,</span> <span class="n">memo</span><span class="p">)</span>
-        <span class="n">ret</span><span class="o">.</span><span class="n">Q</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Q</span><span class="p">,</span> <span class="n">memo</span><span class="p">)</span>
-        <span class="n">ret</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="n">memo</span><span class="p">)</span>
+        <span class="c"># numeric arrays:</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">B</span> <span class="o">=</span> <span class="bp">None</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">B</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">C</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">D</span> <span class="o">=</span> <span class="bp">None</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">B</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">Q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">ret</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span>  <span class="c"># no need to copy integers</span>
         <span class="n">ret</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span>
         <span class="n">ret</span><span class="o">.</span><span class="n">j</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">j</span>
@@ -249,7 +257,7 @@
         <span class="n">ret</span><span class="o">.</span><span class="n">S</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="p">,</span> <span class="n">memo</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">ret</span>
 
-<div class="viewcode-block" id="KalmanFilter.bayes"><a class="viewcode-back" href="../../filters.html#pybayes.filters.KalmanFilter.bayes">[docs]</a>    <span class="k">def</span> <span class="nf">bayes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yt</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">0</span><span class="p">)):</span>
+<div class="viewcode-block" id="KalmanFilter.bayes"><a class="viewcode-back" href="../../filters.html#pybayes.filters.KalmanFilter.bayes">[docs]</a>    <span class="k">def</span> <span class="nf">bayes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yt</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Perform exact bayes rule.</span>
 
 <span class="sd">        :param yt: observation at time t</span>
@@ -259,29 +267,39 @@
 <span class="sd">        :type cond: 1D :class:`numpy.ndarray`</span>
 <span class="sd">        :return: always returns True (see :meth:`~Filter.posterior` to get posterior density)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">yt</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;yt must be and instance of numpy.ndarray ({0} given)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">yt</span><span class="p">)))</span>
         <span class="k">if</span> <span class="n">yt</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">yt</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">j</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;yt must have shape {0}. ({1} given)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">j</span><span class="p">,),</span> <span class="p">(</span><span class="n">yt</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],)))</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cond</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;cond must be and instance of numpy.ndarray ({0} given)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">cond</span><span class="p">)))</span>
-        <span class="k">if</span> <span class="n">cond</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">cond</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;cond must have shape {0}. ({1} given)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">,),</span> <span class="p">(</span><span class="n">cond</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],)))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">cond</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">cond</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;cond must have shape {0}. ({1} given)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">,),</span> <span class="p">(</span><span class="n">cond</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],)))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">cond</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;cond must be None as k == 0&quot;</span><span class="p">)</span>
 
         <span class="c"># predict</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">mu</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">,</span> <span class="n">cond</span><span class="p">)</span>  <span class="c"># prior state mean estimate</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">R</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">R</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q</span>  <span class="c"># prior state covariance estimate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot_mv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">mu</span><span class="p">)</span>  <span class="c"># prior state mean estimate</span>
+        <span class="k">if</span> <span class="n">cond</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">add_vv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">mu</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot_mv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">,</span> <span class="n">cond</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">mu</span><span class="p">)</span>  <span class="c"># self.P.mu += self.B * cond</span>
+        <span class="c"># prior state covariance estimate:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot_mm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot_mm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">R</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>  <span class="c"># self.P.R = self.A * self.P.R * self.A&#39;</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">add_mm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">R</span><span class="p">)</span>  <span class="c"># self.P.R += self.Q</span>
 
         <span class="c"># data update</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">mu</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="p">,</span> <span class="n">cond</span><span class="p">)</span>  <span class="c"># prior observation mean estimate</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">R</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span>  <span class="c"># prior observation covariance estimate</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">dot_mv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">mu</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">mu</span><span class="p">)</span>  <span class="c"># prior observation mean estimate; self.S.mu = self.C * self.P.mu</span>
+        <span class="k">if</span> <span class="n">cond</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">add_vv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">mu</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot_mv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="p">,</span> <span class="n">cond</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">mu</span><span class="p">)</span>  <span class="c"># self.S.mu += self.D * cond</span>
+        <span class="c"># prior observation covariance estimate:</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">dot_mm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot_mm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">R</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">R</span><span class="p">)</span>  <span class="c"># self.S.R = self.C * self.P.R * self.C&#39;</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">add_mm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">R</span><span class="p">)</span>  <span class="c"># self.S.R += self.R</span>
 
         <span class="c"># kalman gain</span>
-        <span class="n">K</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">R</span><span class="p">))</span>
+        <span class="n">K</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot_mm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot_mm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">R</span><span class="p">))</span>
 
         <span class="c"># update according to observation</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">mu</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="p">(</span><span class="n">yt</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">mu</span><span class="p">))</span>  <span class="c"># posterior state mean estimate</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">R</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">R</span><span class="p">)</span>  <span class="c"># posterior state covariance estimate</span>
+        <span class="c"># posterior state mean estimate:</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">add_vv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">mu</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot_mv</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">subtract_vv</span><span class="p">(</span><span class="n">yt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">mu</span><span class="p">)),</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">mu</span><span class="p">)</span>  <span class="c"># self.P.mu += K * (yt - self.S.mu)</span>
+        <span class="c"># posterior state covariance estimate:</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">subtract_mm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot_mm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot_mm</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">R</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">.</span><span class="n">R</span><span class="p">)</span>  <span class="c"># self.P.R -= K * self.C * self.P.R</span>
         <span class="k">return</span> <span class="bp">True</span>
 </div>
     <span class="k">def</span> <span class="nf">posterior</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -292,26 +310,32 @@
 
 </div>
 <div class="viewcode-block" id="ParticleFilter"><a class="viewcode-back" href="../../filters.html#pybayes.filters.ParticleFilter">[docs]</a><span class="k">class</span> <span class="nc">ParticleFilter</span><span class="p">(</span><span class="n">Filter</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Standard particle filter implementation with resampling.</span>
+    <span class="sd">r&quot;&quot;&quot;Standard particle filter (or SIR filter, SMC method) implementation with resampling</span>
+<span class="sd">    and optional support for proposal density.</span>
 
-<span class="sd">    Specifying proposal density is currently unsupported, but planned; speak up if you want it!</span>
 <span class="sd">    Posterior pdf is represented using :class:`~pybayes.pdfs.EmpPdf` and takes following form:</span>
 
 <span class="sd">    .. math:: p(x_t|y_{1:t}) = \sum_{i=1}^n \omega_i \delta ( x_t - x_t^{(i)} )</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="ParticleFilter.__init__"><a class="viewcode-back" href="../../filters.html#pybayes.filters.ParticleFilter.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">init_pdf</span><span class="p">,</span> <span class="n">p_xt_xtp</span><span class="p">,</span> <span class="n">p_yt_xt</span><span class="p">,</span> <span class="n">emp</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ParticleFilter.__init__"><a class="viewcode-back" href="../../filters.html#pybayes.filters.ParticleFilter.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">init_pdf</span><span class="p">,</span> <span class="n">p_xt_xtp</span><span class="p">,</span> <span class="n">p_yt_xt</span><span class="p">,</span> <span class="n">proposal</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Initialise particle filter.</span>
 
 <span class="sd">        :param int n: number of particles</span>
-<span class="sd">        :param init_pdf: probability density which initial particles are sampled from</span>
+<span class="sd">        :param init_pdf: either :class:`~pybayes.pdfs.EmpPdf` instance that will be used</span>
+<span class="sd">            directly as a posterior (and should already have initial particles sampled) or</span>
+<span class="sd">            any other probability density which initial particles are sampled from</span>
 <span class="sd">        :type init_pdf: :class:`~pybayes.pdfs.Pdf`</span>
 <span class="sd">        :param p_xt_xtp: :math:`p(x_t|x_{t-1})` cpdf of state in *t* given state in *t-1*</span>
 <span class="sd">        :type p_xt_xtp: :class:`~pybayes.pdfs.CPdf`</span>
 <span class="sd">        :param p_yt_xt: :math:`p(y_t|x_t)` cpdf of observation in *t* given state in *t*</span>
 <span class="sd">        :type p_yt_xt: :class:`~pybayes.pdfs.CPdf`</span>
-<span class="sd">        :param emp: (optional) instance of :class:`~pybayes.pdfs.EmpPdf` (sublass) to use</span>
-<span class="sd">            as posterior pdf. Otherwise *emp* is constructed as ``EmpPdf(init_pdf.samples(n))``</span>
+<span class="sd">        :param proposal: (optional) a filter whose posterior will be used to sample</span>
+<span class="sd">            particles in :meth:`bayes` from (and to correct their weights). More specifically,</span>
+<span class="sd">            its :meth:`bayes &lt;Filter.bayes&gt;` :math:`\left(y_t, x_{t-1}^{(i)}\right)` method is called before sampling</span>
+<span class="sd">            i-th particle. Each call to ``bayes()`` should therefore reset any effects of</span>
+<span class="sd">            the previous call.</span>
+<span class="sd">        :type proposal: :class:`Filter`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;n must be a positive integer&quot;</span><span class="p">)</span>
@@ -319,6 +343,8 @@
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;init_pdf must be an instance ot the Pdf class&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">p_xt_xtp</span><span class="p">,</span> <span class="n">CPdf</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">p_yt_xt</span><span class="p">,</span> <span class="n">CPdf</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;both p_xt_xtp and p_yt_xt must be instances of the CPdf class&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">proposal</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">proposal</span><span class="p">,</span> <span class="n">Filter</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;proposal must by Filter instance&quot;</span><span class="p">)</span>
 
         <span class="n">dim</span> <span class="o">=</span> <span class="n">init_pdf</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span>  <span class="c"># dimension of state</span>
         <span class="k">if</span> <span class="n">p_xt_xtp</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span> <span class="o">!=</span> <span class="n">dim</span> <span class="ow">or</span> <span class="n">p_xt_xtp</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">dim</span><span class="p">:</span>
@@ -331,16 +357,15 @@
                 <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">p_yt_xt</span><span class="o">.</span><span class="n">cond_shape</span><span class="p">()))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">p_yt_xt</span> <span class="o">=</span> <span class="n">p_yt_xt</span>
 
-        <span class="k">if</span> <span class="n">emp</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="c"># generate initial particles:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">emp</span> <span class="o">=</span> <span class="n">EmpPdf</span><span class="p">(</span><span class="n">init_pdf</span><span class="o">.</span><span class="n">samples</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">init_pdf</span><span class="p">,</span> <span class="n">EmpPdf</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">emp</span> <span class="o">=</span> <span class="n">init_pdf</span>  <span class="c"># use directly</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">emp</span><span class="p">,</span> <span class="n">EmpPdf</span><span class="p">)</span>
-            <span class="k">assert</span> <span class="n">emp</span><span class="o">.</span><span class="n">shape</span><span class="p">()</span> <span class="o">==</span> <span class="n">dim</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">emp</span> <span class="o">=</span> <span class="n">emp</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">emp</span> <span class="o">=</span> <span class="n">EmpPdf</span><span class="p">(</span><span class="n">init_pdf</span><span class="o">.</span><span class="n">samples</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">proposal</span> <span class="o">=</span> <span class="n">proposal</span>
+
 </div>
 <div class="viewcode-block" id="ParticleFilter.bayes"><a class="viewcode-back" href="../../filters.html#pybayes.filters.ParticleFilter.bayes">[docs]</a>    <span class="k">def</span> <span class="nf">bayes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yt</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
-        <span class="sd">r&quot;&quot;&quot;Perform Bayes rule for new measurement :math:`y_t`.</span>
+        <span class="sd">r&quot;&quot;&quot;Perform Bayes rule for new measurement :math:`y_t`; *cond* is ignored.</span>
 
 <span class="sd">        :param numpy.ndarray cond: optional condition that is passed to :math:`p(x_t|x_{t-1})`</span>
 <span class="sd">          after :math:`x_{t-1}` so that is can be rewritten as: :math:`p(x_t|x_{t-1}, c)`.</span>
@@ -355,15 +380,26 @@
 <span class="sd">        4. resample particles</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">emp</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-            <span class="c"># generate new ith particle:</span>
-            <span class="k">if</span> <span class="n">cond</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-                <span class="n">aggregate_cond</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emp</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">proposal</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">proposal</span><span class="o">.</span><span class="n">bayes</span><span class="p">(</span><span class="n">yt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">emp</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="n">proposal_pdf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proposal</span><span class="o">.</span><span class="n">posterior</span><span class="p">()</span>  <span class="c"># gives unconditional Pdf, doesn&#39;t hurt</span>
+                <span class="n">x_tp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emp</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>  <span class="c"># we need to save previous particle in this case</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">aggregate_cond</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">emp</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">cond</span><span class="p">))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">emp</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">p_xt_xtp</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">aggregate_cond</span><span class="p">)</span>
+                <span class="n">proposal_pdf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">p_xt_xtp</span>  <span class="c"># naive (transition) proposal</span>
+
+            <span class="c"># generate new ith particle:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">emp</span><span class="o">.</span><span class="n">transition_using</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">proposal_pdf</span><span class="p">)</span>
 
             <span class="c"># recompute ith weight:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">emp</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*=</span> <span class="n">exp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p_yt_xt</span><span class="o">.</span><span class="n">eval_log</span><span class="p">(</span><span class="n">yt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">emp</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">proposal</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="c"># non-naive proposal was used, corrent the weight</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">emp</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*=</span> <span class="n">exp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p_xt_xtp</span><span class="o">.</span><span class="n">eval_log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">emp</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">x_tp</span><span class="p">))</span>
+                <span class="n">denom</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="n">proposal_pdf</span><span class="o">.</span><span class="n">eval_log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">emp</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+                <span class="k">if</span> <span class="n">denom</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">emp</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/=</span> <span class="n">denom</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">emp</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>  <span class="c"># TODO: what to do in this case?</span>
 
         <span class="c"># assure that weights are normalised</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">emp</span><span class="o">.</span><span class="n">normalise_weights</span><span class="p">()</span>
@@ -435,8 +471,8 @@
         <span class="n">init_particles</span> <span class="o">=</span> <span class="n">init_pdf</span><span class="o">.</span><span class="n">samples</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
 
         <span class="c"># create all Kalman filters first</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">kalmans</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">KalmanFilter</span><span class="p">)</span> <span class="c"># array of references to Kalman filters</span>
-        <span class="n">gausses</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">GaussPdf</span><span class="p">)</span> <span class="c"># array of Kalman filter state pdfs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kalmans</span> <span class="o">=</span> <span class="n">empty</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">KalmanFilter</span><span class="p">)</span> <span class="c"># array of references to Kalman filters</span>
+        <span class="n">gausses</span> <span class="o">=</span> <span class="n">empty</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">GaussPdf</span><span class="p">)</span> <span class="c"># array of Kalman filter state pdfs</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
             <span class="n">gausses</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">GaussPdf</span><span class="p">(</span><span class="n">init_particles</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="n">a_shape</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.</span><span class="p">]]))</span>
             <span class="n">kalman_args</span><span class="p">[</span><span class="s">&#39;state_pdf&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gausses</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
@@ -489,8 +525,8 @@
 </div>
     <span class="k">def</span> <span class="nf">_resample</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">memp</span><span class="o">.</span><span class="n">get_resample_indices</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">kalmans</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kalmans</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>  <span class="c"># resample kalman filters (makes references, not hard copies)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">memp</span><span class="o">.</span><span class="n">particles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">memp</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>  <span class="c"># resample particles</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">reindex_vv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kalmans</span><span class="p">,</span> <span class="n">indices</span><span class="p">)</span>  <span class="c"># resample kalman filters (makes references, not hard copies)</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">reindex_mv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">memp</span><span class="o">.</span><span class="n">particles</span><span class="p">,</span> <span class="n">indices</span><span class="p">)</span>  <span class="c"># resample particles</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kalmans</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
             <span class="k">if</span> <span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">i</span><span class="p">:</span>  <span class="c"># copy only when needed</span>
                 <span class="k">continue</span>
@@ -535,7 +571,8 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">PyBayes 0.3-59-g6493e4c documentation</a> &raquo;</li>
+        <li><a href="../../index.html">PyBayes 0.3-96-g0efa257
+ documentation</a> &raquo;</li>
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>

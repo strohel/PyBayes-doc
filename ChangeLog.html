@@ -8,7 +8,8 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>PyBayes Change Log &mdash; PyBayes 0.3-59-g6493e4c documentation</title>
+    <title>PyBayes Change Log &mdash; PyBayes 0.3-96-g0efa257
+ documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -16,7 +17,8 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3-59-g6493e4c',
+        VERSION:     '0.3-96-g0efa257
+',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +27,8 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="PyBayes 0.3-59-g6493e4c documentation" href="index.html" />
+    <link rel="top" title="PyBayes 0.3-96-g0efa257
+ documentation" href="index.html" />
     <link rel="next" title="Probability Density Functions" href="pdfs.html" />
     <link rel="prev" title="PyBayes" href="README.html" /> 
   </head>
@@ -45,7 +48,8 @@
         <li class="right" >
           <a href="README.html" title="PyBayes"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">PyBayes 0.3-59-g6493e4c documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyBayes 0.3-96-g0efa257
+ documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -56,12 +60,22 @@
             
   <div class="section" id="pybayes-change-log">
 <h1>PyBayes Change Log<a class="headerlink" href="#pybayes-change-log" title="Permalink to this headline">¶</a></h1>
-<p>This file mentions important changes between PyBayes version that are important for its users. Most
+<p>This file mentions changes between PyBayes versions that are important for its users. Most
 recent versions are mentioned on top.</p>
 <div class="section" id="changes-between-0-3-and-0-4">
 <h2>Changes between 0.3 and 0.4<a class="headerlink" href="#changes-between-0-3-and-0-4" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>Test-suite no longer needs PyBayes to be installed, yay! (no privilege problems etc.)</li>
+<li><cite>Filter.posterior</cite>&#8216;s signature was changed to return <cite>CPdf</cite> instead of <cite>Pdf</cite>. It is more
+versatile - it for example allows you you to return zero-condition <cite>ProdCPdf</cite>.</li>
+<li>The optimised Cython PyBayes version was turned to use Cython memoryviews (with help
+from <a class="reference external" href="https://github.com/strohel/Ceygen">Ceygen</a>) instead of NumPy arrays where it makes sense. Cython memoryviews and NumPy
+arrays are mostly mutually compatible, but you may need to use <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.asarray.html#numpy.asarray" title="(in NumPy v1.8)"><tt class="xref py py-func docutils literal"><span class="pre">np.asarray(...)</span></tt></a> or convert your code to use e.g. <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.sum.html#numpy.sum" title="(in NumPy v1.8)"><tt class="xref py py-func docutils literal"><span class="pre">np.sum(pybayes_result)</span></tt></a> instead of <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.sum.html#numpy.ndarray.sum" title="(in NumPy v1.8)"><tt class="xref py py-obj docutils literal"><span class="pre">pybayes_result.sum()</span></tt></a>. Alternatively,
+you can convert your code to use Cython memoryviews too.</li>
+<li>Use of bundled Tokyo is replaced by the <a class="reference external" href="https://github.com/strohel/Ceygen">Ceygen</a> project and Tokyo submodule is removed.</li>
+<li>ParticleFilter.bayes() now ignores cond completely. Yell if you need it.</li>
+<li>ParticleFilter lost last emp_pdf argument. Pass the same object as the init_pdf argument
+to achieve the same thing.</li>
+<li>Test- and stress-suite no longer need PyBayes to be installed. (no privilege problems etc.)</li>
 <li>Build-system was rewritten so that it is no longer an ugly hack. .pxd and .py files are now
 installed along .so (.dll) files for interoperability and additional openness. Better parsing of
 setup.py arguments and custom parameters visible in the &#8211;help command.</li>
@@ -129,7 +143,8 @@ not implement these methods. This is a backwards compatible change API-wise.</li
         <li class="right" >
           <a href="README.html" title="PyBayes"
              >previous</a> |</li>
-        <li><a href="index.html">PyBayes 0.3-59-g6493e4c documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyBayes 0.3-96-g0efa257
+ documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

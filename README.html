@@ -8,7 +8,8 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>PyBayes &mdash; PyBayes 0.3-59-g6493e4c documentation</title>
+    <title>PyBayes &mdash; PyBayes 0.3-96-g0efa257
+ documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -16,7 +17,8 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3-59-g6493e4c',
+        VERSION:     '0.3-96-g0efa257
+',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +27,8 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="PyBayes 0.3-59-g6493e4c documentation" href="index.html" />
+    <link rel="top" title="PyBayes 0.3-96-g0efa257
+ documentation" href="index.html" />
     <link rel="next" title="PyBayes Change Log" href="ChangeLog.html" />
     <link rel="prev" title="PyBayes API Documentation" href="index.html" /> 
   </head>
@@ -45,7 +48,8 @@
         <li class="right" >
           <a href="index.html" title="PyBayes API Documentation"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">PyBayes 0.3-59-g6493e4c documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyBayes 0.3-96-g0efa257
+ documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -63,7 +67,7 @@ estimation (Bayesian filtering) that is convenient to use. Already implemented a
 Kalman filter, particle filter and marginalized particle filter, all built atop of
 a light framework of probability density functions. PyBayes can optionally use Cython
 for large speed gains (Cython build can be several times faster in some situations).</p>
-<p>PyBayes is tested with Python 2.7 and 3.2 (using 2to3). Future plans include
+<p>PyBayes is tested with Python 2.7, 3.2 and 3.3 (using 2to3). Future plans include
 more specialised variants of Kalman/particle filters and speed optimisations.</p>
 <p>PyBayes is being developed by Matěj Laitl, feel free to send me a mail to matej at laitl dot cz.
 See ChangeLog.rst file to review a list of most important changes in recent versions.</p>
@@ -78,28 +82,16 @@ PyBayes in e.g. BSD-licensed project? Ask!)</p>
 </div>
 <div class="section" id="obtaining-pybayes">
 <h2>Obtaining PyBayes<a class="headerlink" href="#obtaining-pybayes" title="Permalink to this headline">¶</a></h2>
-<p>PyBayes releases can be found in .tar.gz format at <a class="reference external" href="https://github.com/strohel/PyBayes/downloads">github</a> or <a class="reference external" href="http://pypi.python.org/pypi/PyBayes">PyPI</a>. These releases bundle the Tokyo
-project for convenience. Binary packages for CentOS, Debian, Fedora, RHEL, OpenSUSE and Ubuntu can
-be downloaded from the <a class="reference external" href="https://build.opensuse.org/package/show?package=python-pybayes&amp;project=home%3Astrohel">OpenSUSE Build Service</a>; these packages are fast Cython builds. (with no
-requirement to install Cython for building)</p>
+<p>PyBayes releases can be found in .tar.gz format at <a class="reference external" href="https://github.com/strohel/PyBayes/downloads">github</a> or <a class="reference external" href="http://pypi.python.org/pypi/PyBayes">PyPI</a>. Binary packages for
+CentOS, Debian, Fedora, RHEL, OpenSUSE and Ubuntu can be downloaded from the
+<a class="reference external" href="https://build.opensuse.org/package/show?package=python-pybayes&amp;project=home%3Astrohel">OpenSUSE Build Service</a>; these packages are fast Cython builds. (with no requirement to
+install Cython for building)</p>
 <p>Development of PyBayes happens on <a class="reference external" href="http://github.com/strohel/PyBayes">http://github.com/strohel/PyBayes</a> using git VCS
-and the most fresh development sources can be obtained using git. It should be noted that
-PyBayes uses git submodule to bundle Tokyo library, so the proper way to clone
-PyBayes repository would be:</p>
-<div class="highlight-python"><pre># cd path/to/projects
-# git clone git://github.com/strohel/PyBayes.git
-Cloning into PyBayes...
-(...)
-# cd PyBayes
-# git submodule update --init
-Submodule 'tokyo' (git://github.com/strohel/Tokyo.git) registered for path 'tokyo'
-Cloning into tokyo...
-(...)
-Submodule path 'tokyo': checked out '896d046b62cf50faf7faa7e58a8705fb2f22f19a'</pre>
+and the most fresh development sources can be obtained using git:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># cd path/to/projects</span>
+<span class="c"># git clone git://github.com/strohel/PyBayes.git</span>
+</pre></div>
 </div>
-<p>When updating your repository (using <tt class="docutils literal"><span class="pre">git</span> <span class="pre">pull</span></tt>), git should inform you that
-some submodules have became outdated. In that case you should issue
-<tt class="docutils literal"><span class="pre">git</span> <span class="pre">submodule</span> <span class="pre">update</span></tt>.</p>
 </div>
 <div class="section" id="installing-pybayes">
 <h2>Installing PyBayes<a class="headerlink" href="#installing-pybayes" title="Permalink to this headline">¶</a></h2>
@@ -129,18 +121,18 @@ directory <a class="footnote-reference" href="#alternate-install" id="id1">[1]</
 faster</em>, please read the following section.</p>
 <div class="section" id="advanced-installation-options">
 <h3>Advanced installation options<a class="headerlink" href="#advanced-installation-options" title="Permalink to this headline">¶</a></h3>
-<p>PyBayes can use Cython to build itself into binary Python
-module. Such binary modules are transparent to Python in a way that Python
-treats then as any other modules (you can <tt class="docutils literal"><span class="pre">import</span></tt> them as usual).
-Interpreter overhead is avoided and many other optimisation options arise this
-way.</p>
+<p>PyBayes can use Cython to build itself into binary Python module. Such binary modules are
+transparent to Python in a way that Python treats then as any other modules (you can
+<tt class="docutils literal"><span class="pre">import</span></tt> them as usual). Interpreter overhead is avoided and many other optimisation
+options arise this way.</p>
 <p>In order to build optimised PyBayes, you&#8217;ll additionally need:</p>
 <ul class="simple">
-<li><a class="reference external" href="http://www.cython.org/">Cython</a> Python to C compiler, version <strong>0.14.1</strong> or newer</li>
+<li><a class="reference external" href="http://www.cython.org/">Cython</a> Python to C compiler, version <strong>0.18</strong> or newer is recommended</li>
 <li>working C compiler (GCC on Unix-like systems, MinGW or Microsoft Visual C on
 Windows <a class="footnote-reference" href="#install-cython" id="id2">[2]</a>)</li>
 <li><a class="reference external" href="http://numpy.scipy.org/">NumPy</a> numerical library for Python, version 1.5 or greater (NumPy is needed
 also in Python build, but older version suffice in that case)</li>
+<li><a class="reference external" href="https://github.com/strohel/Ceygen">Ceygen</a> Python package 0.3 or greater installed to a standard location</li>
 <li>On some Debian-based Linux distributions (Ubuntu) you&#8217;ll need python-dev
 package that contains <tt class="docutils literal"><span class="pre">Python.h</span></tt> file that is needed by PyBayes</li>
 </ul>
@@ -201,13 +193,14 @@ your PyBayes build works as expected.</p>
 <p>Since version 0.4, testing is integrated into the <cite>setup.py</cite> script and can be run without
 installing PyBayes. In order to run PyBayes test-suite, simply issue <tt class="docutils literal"><span class="pre">./setup.py</span> <span class="pre">test</span></tt> from within
 the source directory. To run tests during installation procedure, simply install like this:
-<tt class="docutils literal"><span class="pre">./setup.py</span> <span class="pre">build</span> <span class="pre">test</span> <span class="pre">install</span></tt>. Failing tests cause installation to fail, but this can be
-overriden using <cite>&#8211;non-fatal</cite> option of the <cite>test</cite> command.</p>
+<tt class="docutils literal"><span class="pre">./setup.py</span> <span class="pre">build</span> <span class="pre">test</span> <span class="pre">install</span></tt>. With this command, failing tests prevent installation.</p>
 <p>If you want to test your already installed PyBayes instance, simply issue
 <tt class="docutils literal"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pybayes.tests</span></tt> anytime, anywhere. :-)</p>
 <div class="section" id="stress-testing">
 <h3>Stress-testing<a class="headerlink" href="#stress-testing" title="Permalink to this headline">¶</a></h3>
-<p>Stress testing is not yet ported to the <cite>setup.py</cite>, see the <cite>support/run_stresses.py</cite> script.</p>
+<p>Stress-testing works similarly to unit testing since version 0.4, run it using <tt class="docutils literal"><span class="pre">./setup.py</span>
+<span class="pre">stress</span></tt> from the source directory. Already installed PyBayes can be stress-tested using
+<tt class="docutils literal"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pybayes.stresses</span></tt>.</p>
 </div>
 </div>
 </div>
@@ -282,7 +275,8 @@ overriden using <cite>&#8211;non-fatal</cite> option of the <cite>test</cite> co
         <li class="right" >
           <a href="index.html" title="PyBayes API Documentation"
              >previous</a> |</li>
-        <li><a href="index.html">PyBayes 0.3-59-g6493e4c documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyBayes 0.3-96-g0efa257
+ documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
